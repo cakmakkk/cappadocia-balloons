@@ -1,7 +1,7 @@
 import type { APIRoute } from 'astro';
-import { absolute } from '../lib/paths';
+import { asset } from '../lib/paths.ts';
 
 export const GET: APIRoute = ({ site }) =>
-  new Response(`User-agent: *\nAllow: /\n\nSitemap: ${absolute('/sitemap-index.xml', site)}\n`, {
+  new Response(`User-agent: *\nAllow: /\n\nSitemap: ${new URL(asset('/sitemap.xml'), site).href}\n`, {
     headers: { 'Content-Type': 'text/plain; charset=utf-8' },
   });

@@ -1,0 +1,84 @@
+---
+import { shortDay } from '../i18n/format.ts';
+import { messages } from '../i18n/index.ts';
+import type { Locale } from '../i18n/locales.ts';
+import { href } from '../lib/paths.ts';
+import type { DayOutcome } from '../lib/status.ts';
+
+interface Props {
+  locale: Locale;
+  /** Oldest first. */
+  days: { date: string; outcome: DayOutcome }[];
+}
+
+const { locale, days } = Astro.props;
+const t = messages(locale);
+---
+
+<ol class="strip">
+  {
+    days.map(({ date, outcome }) => {
+      const { weekday, day } = shortDay(locale, date);
+      return (
+        <li>
+          <a href={`${href(locale, '/history/')}#d-${date}`} class={`day day-${outcome}`} title={t.outcome[outcome]}>
+            <span class="weekday">{weekday}</span>
+            <span class="date">{day}</span>
+            <span class="dot" aria-hidden="true" />
+            <span class="visually-hidden">{t.outcome[outcome]}</span>
+          </a>
+        </li>
+      );
+    })
+  }
+</ol>
+
+<style>
+  .strip {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: 0.4rem;
+    overflow-x: auto;
+    padding-bottom: 0.25rem;
+  }
+
+  .day {
+    display: grid;
+    justify-items: center;
+    gap: 0.1rem;
+    min-width: 3rem;
+    padding: 0.45rem 0.3rem;
+    border-radius: 12px;
+    border: 1px solid var(--line);
+    background: var(--surface);
+    color: var(--ink);
+    text-decoration: none;
+    font-size: 0.85rem;
+  }
+
+  .weekday {
+    color: var(--muted);
+  }
+
+  .date {
+    font-weight: 700;
+    font-size: 1rem;
+  }
+
+  .dot {
+    width: 0.65rem;
+    height: 0.65rem;
+    border-radius: 50%;
+    background: var(--line);
+  }
+
+  .day-flew .dot {
+    background: var(--go);
+  }
+
+  .day-grounded .dot {
+    background: var(--stop);
+  }
+</style>

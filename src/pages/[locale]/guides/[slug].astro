@@ -1,0 +1,20 @@
+---
+import { otherLocalePaths, type Locale } from '../../../i18n/locales.ts';
+import { docsIn, slugOf } from '../../../lib/docs.ts';
+import Doc from '../../../views/Doc.astro';
+
+export async function getStaticPaths() {
+  const paths = [];
+  for (const { params } of otherLocalePaths()) {
+    for (const doc of await docsIn(params.locale, 'guide')) {
+      paths.push({ params: { locale: params.locale, slug: slugOf(doc) } });
+    }
+  }
+  return paths;
+}
+
+const { slug } = Astro.params;
+const locale = Astro.params.locale as Locale;
+---
+
+<Doc locale={locale} slug={slug} />

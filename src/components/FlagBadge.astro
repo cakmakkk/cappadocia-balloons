@@ -1,11 +1,14 @@
 ---
-import { FLAG_LABEL, type Flag } from '../lib/status';
+import { messages } from '../i18n/index.ts';
+import type { Locale } from '../i18n/locales.ts';
+import type { Flag } from '../lib/status.ts';
 
 interface Props {
+  locale: Locale;
   flag: Flag;
 }
 
-const { flag } = Astro.props;
+const { locale, flag } = Astro.props;
 ---
 
-<span class={`flag flag-${flag}`}>{FLAG_LABEL[flag]}</span>
+<span class={`flag flag-${flag}`}>{messages(locale).flag[flag]}</span>

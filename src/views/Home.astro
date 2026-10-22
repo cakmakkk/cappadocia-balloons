@@ -1,0 +1,232 @@
+---
+import DayStrip from '../components/DayStrip.astro';
+import FlagBadge from '../components/FlagBadge.astro';
+import ForecastCard from '../components/ForecastCard.astro';
+import SectorMap from '../components/SectorMap.astro';
+import Skyline from '../components/Skyline.astro';
+import StatusCard from '../components/StatusCard.astro';
+import { longDate, timeRange } from '../i18n/format.ts';
+import { messages } from '../i18n/index.ts';
+import { localeInfo, type Locale } from '../i18n/locales.ts';
+import Base from '../layouts/Base.astro';
+import { docsIn, slugOf } from '../lib/docs.ts';
+import { loadForecast } from '../lib/forecast.ts';
+import { absolute, href } from '../lib/paths.ts';
+import { homeState, loadHistory, loadLatest, localDate, outcomeOf, sceneOf } from '../lib/status.ts';
+import { sunriseOn } from '../lib/sun.ts';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = messages(locale);
+
+const now = new Date();
+const history = loadHistory();
+const latest = loadLatest(history);
+const state = homeState(latest, history, now);
+const scene = sceneOf(state);
+const today = localDate(now);
+
+const mapWindow = latest?.sectors[0]?.window ?? null;
+const mapFlags = Object.fromEntries((latest?.sectors ?? []).map((s) => [s.id, s.flag]));
+const mapIntro =
+  mapWindow &&
+  (mapWindow.date === today
+    ? t.home.mapIntro(timeRange(locale, mapWindow.start, mapWindow.end))
+    : t.home.mapIntroEarlier(longDate(locale, mapWindow.date), timeRange(locale, mapWindow.start, mapWindow.end)));
+const next = loadForecast()?.mornings.find((m) => Date.parse(m.window.start) > now.getTime()) ?? null;
+const recent = history
+  .slice(0, 14)
+  .map((day) => ({ date: day.date, outcome: outcomeOf(day) }))
+  .reverse();
+const guides = await docsIn(locale, 'guide');
+
+const structuredData = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: t.siteName,
+    url: absolute(locale, '/', Astro.site),
+    inLanguage: localeInfo(locale).hreflang,
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    name: t.home.title,
+    description: t.home.description,
+    inLanguage: localeInfo(locale).hreflang,
+    ...(latest && { dateModified: latest.checkedAt }),
+  },
+];
+---
+
+<Base locale={locale} path="/" title={t.home.title} description={t.home.description} structuredData={structuredData}>
+  <section slot="hero" class={`hero hero-${scene}`}>
+    <Skyline scene={scene} />
+    <div class="hero-text">
+      <h1>{t.home.h1}</h1>
+      <p class="hero-date">{longDate(locale, today)}</p>
+    </div>
+  </section>
+
+  <div class="lift">
+    <StatusCard locale={locale} state={state} checkedAt={latest?.checkedAt ?? null} sunrise={sunriseOn(today)} />
+  </div>
+
+  {
+    next && (
+      <section>
+        <h2>{next.date === today ? t.home.thisMorningTitle : t.home.tomorrowTitle}</h2>
+        <div class="card">
+          <ForecastCard locale={locale} morning={next} />
+          <p class="card-link">
+            <a href={href(locale, '/tomorrow/')}>{t.home.tomorrowLink} →</a>
+          </p>
+        </div>
+      </section>
+    )
+  }
+
+  {
+    mapWindow && (
+      <section>
+        <h2>{t.home.mapTitle}</h2>
+        <p class="muted">{mapIntro}</p>
+        <SectorMap locale={locale} flags={mapFlags} />
+      </section>
+    )
+  }
+
+  {
+    latest && latest.secondary.length > 0 && (
+      <section>
+        <h2>{t.home.secondaryTitle}</h2>
+        <p class="muted">{t.home.secondaryIntro}</p>
+        <ul class="regions">
+          {latest.secondary.map((area) => (
+            <li>
+              <span>{t.home.region(area.id)}</span>
+              <FlagBadge locale={locale} flag={area.flag} />
+            </li>
+          ))}
+        </ul>
+      </section>
+    )
+  }
+
+  {
+    recent.length > 0 && (
+      <section>
+        <h2>{t.home.recentTitle}</h2>
+        <DayStrip locale={locale} days={recent} />
+        <p class="card-link">
+          <a href={href(locale, '/history/')}>{t.home.allHistory} →</a>
+        </p>
+      </section>
+    )
+  }
+
+  <section>
+    <h2>{t.home.guidesTitle}</h2>
+    <ul class="guide-links">
+      {
+        guides.map((doc) => (
+          <li>
+            <a href={href(locale, `/guides/${slugOf(doc)}/`)}>{doc.data.title}</a>
+            <span class="muted">{doc.data.description}</span>
+          </li>
+        ))
+      }
+    </ul>
+    <p class="muted source-note">{t.home.sourceNote}</p>
+  </section>
+</Base>
+
+<style>
+  .hero {
+    position: relative;
+  }
+
+  .hero-text {
+    position: absolute;
+    inset: 0 0 auto;
+    max-width: 48rem;
+    margin: 0 auto;
+    padding: clamp(0.75rem, 3vw, 2rem) 16px 0;
+    color: #2b2118;
+    text-shadow: 0 1px 12px rgb(255 245 230 / 0.8);
+  }
+
+  .hero-night .hero-text {
+    color: #fff7ec;
+    text-shadow: 0 1px 12px rgb(10 10 30 / 0.7);
+  }
+
+  .hero-text h1 {
+    margin: 0;
+    max-width: 18ch;
+  }
+
+  .hero-date {
+    margin: 0.4rem 0 0;
+    font-weight: 600;
+    opacity: 0.85;
+  }
+
+  .lift {
+    margin-top: -3.5rem;
+    position: relative;
+  }
+
+  .card-link {
+    margin: 0.75rem 0 0;
+  }
+
+  .regions {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr));
+    gap: 0.5rem;
+  }
+
+  .regions span {
+    white-space: nowrap;
+  }
+
+  .regions li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 0.5rem 0.75rem;
+  }
+
+  .guide-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 0.9rem;
+  }
+
+  .guide-links li {
+    display: grid;
+  }
+
+  .guide-links a {
+    font-weight: 600;
+    font-size: 1.05rem;
+  }
+
+  .source-note {
+    margin-top: 1.5rem;
+    font-size: 0.92rem;
+  }
+</style>

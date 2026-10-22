@@ -1,0 +1,38 @@
+---
+import { messages } from '../i18n/index.ts';
+import { LOCALES } from '../i18n/locales.ts';
+import Base from '../layouts/Base.astro';
+import { href } from '../lib/paths.ts';
+
+const t = messages('en');
+---
+
+<Base locale="en" path="/404.html" title={t.notFound.title} description={t.notFound.text} standalone>
+  <h1>{t.notFound.title}</h1>
+  <p>{t.notFound.text}</p>
+  <ul class="langs">
+    {
+      LOCALES.map((l) => (
+        <li lang={l.hreflang}>
+          <a href={href(l.code, '/')}>{messages(l.code).notFound.back}</a>
+          <span class="muted">{l.name}</span>
+        </li>
+      ))
+    }
+  </ul>
+</Base>
+
+<style>
+  .langs {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    gap: 0.5rem;
+  }
+
+  .langs li {
+    display: flex;
+    gap: 0.75rem;
+    align-items: baseline;
+  }
+</style>

@@ -25,3 +25,4 @@ pnpm-debug.log*
 
 # latest check (rebuilt on every run)
 data/latest.json
+data/forecast.json

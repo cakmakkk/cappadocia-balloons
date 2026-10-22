@@ -1,0 +1,66 @@
+---
+import { messages } from '../i18n/index.ts';
+import type { Locale } from '../i18n/locales.ts';
+import Base from '../layouts/Base.astro';
+import { docsIn, slugOf } from '../lib/docs.ts';
+import { absolute, href } from '../lib/paths.ts';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = messages(locale);
+const guides = await docsIn(locale, 'guide');
+
+const structuredData = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: t.nav.today, item: absolute(locale, '/', Astro.site) },
+      { '@type': 'ListItem', position: 2, name: t.nav.guides, item: absolute(locale, '/guides/', Astro.site) },
+    ],
+  },
+];
+---
+
+<Base locale={locale} path="/guides/" title={t.guides.title} description={t.guides.description} structuredData={structuredData}>
+  <h1>{t.guides.h1}</h1>
+  <p class="lead">{t.guides.intro}</p>
+  <ul class="guides">
+    {
+      guides.map((doc) => (
+        <li class="card">
+          <h2>
+            <a href={href(locale, `/guides/${slugOf(doc)}/`)}>{doc.data.title}</a>
+          </h2>
+          <p>{doc.data.description}</p>
+        </li>
+      ))
+    }
+  </ul>
+</Base>
+
+<style>
+  .lead {
+    font-size: 1.1rem;
+  }
+
+  .guides {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    gap: 1rem;
+  }
+
+  .guides h2 {
+    margin: 0 0 0.4rem;
+    font-size: 1.25rem;
+  }
+
+  .guides p {
+    margin: 0;
+    color: var(--muted);
+  }
+</style>

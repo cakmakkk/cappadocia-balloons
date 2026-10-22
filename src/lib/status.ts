@@ -1,7 +1,9 @@
-// Build-time access to the status data written by scripts/fetch-status.mjs.
+// Build-time access to the status data written by scripts/fetch-status.mjs,
+// and the rules that turn it into "what's happening today".
 
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
+import { sunriseOn } from './sun.ts';
 
 export type Flag = 'green' | 'yellow' | 'red' | 'unknown';
 
@@ -42,8 +44,7 @@ function readJson<T>(path: string): T {
 }
 
 /** Days with recorded states, newest first. */
-export function loadHistory(): DayHistory[] {
-  const dir = join(dataDir, 'history');
+export function loadHistory(dir = join(dataDir, 'history')): DayHistory[] {
   if (!existsSync(dir)) return [];
   return readdirSync(dir)
     .filter((name) => name.endsWith('.json'))
@@ -60,32 +61,30 @@ export function loadLatest(history = loadHistory()): Snapshot | null {
   return state ? { checkedAt: state.firstSeenAt, source: SOURCE_URL, ...state } : null;
 }
 
-/** Green anywhere means take-off is allowed there; red and yellow both mean no take-off. */
-export function isCleared(areas: Area[]): boolean {
-  return areas.some((area) => area.flag === 'green');
+/** Green means take-off is allowed there; red and yellow both mean no take-off. */
+export function greenSectors(areas: Area[]): string[] {
+  return areas.filter((area) => area.flag === 'green').map((area) => area.id);
 }
 
-export type Phase = 'active' | 'ended' | 'not-yet-published';
-
-/** Where `now` sits relative to the window the latest status applies to. */
-export function phaseOf(snapshot: Snapshot, now: Date): Phase {
-  const window = snapshot.sectors[0]?.window;
-  if (!window) return 'not-yet-published';
-  if (window.date < localDate(now)) return 'not-yet-published';
-  return now.getTime() > Date.parse(window.end) ? 'ended' : 'active';
+export interface WindowRecord {
+  window: Window;
+  /** The latest flag seen for each sector during this window. */
+  flags: Map<string, Flag>;
+  /** Sectors that had a green flag at any point during this window. */
+  everGreen: Set<string>;
 }
 
-/** Distinct primary-area windows recorded on a day, each with the flags it carried. */
-export function windowsOf(day: DayHistory) {
-  const byWindow = new Map<string, { window: Window; flags: Map<string, Flag> }>();
+/** Distinct primary-area windows recorded on a day, in time order. */
+export function windowsOf(day: DayHistory): WindowRecord[] {
+  const byWindow = new Map<string, WindowRecord>();
   for (const state of day.states) {
     for (const sector of state.sectors) {
       if (!sector.window) continue;
       const key = `${sector.window.start}/${sector.window.end}`;
-      const entry = byWindow.get(key) ?? { window: sector.window, flags: new Map() };
-      // A later state for the same window replaces the earlier flag.
-      entry.flags.set(sector.id, sector.flag);
-      byWindow.set(key, entry);
+      const record = byWindow.get(key) ?? { window: sector.window, flags: new Map(), everGreen: new Set() };
+      record.flags.set(sector.id, sector.flag);
+      if (sector.flag === 'green') record.everGreen.add(sector.id);
+      byWindow.set(key, record);
     }
   }
   return [...byWindow.values()].sort((a, b) => a.window.start.localeCompare(b.window.start));
@@ -96,31 +95,83 @@ export function localDate(date: Date): string {
   return new Intl.DateTimeFormat('en-CA', { timeZone: TIME_ZONE }).format(date);
 }
 
-export function localTime(iso: string): string {
-  return new Intl.DateTimeFormat('en-GB', {
-    timeZone: TIME_ZONE,
-    hour: '2-digit',
-    minute: '2-digit',
-  }).format(new Date(iso));
+/**
+ * The morning flight window opens around sunrise (e.g. 06:25 for a 06:57 sunrise);
+ * the next one usually starts mid-morning, so anything opening more than an
+ * hour after sunrise is not the morning flight.
+ */
+export function isMorningWindow(window: Window): boolean {
+  return Date.parse(window.start) <= Date.parse(sunriseOn(window.date)) + 60 * 60_000;
 }
 
-export function utcTime(iso: string): string {
-  return iso.slice(11, 16);
+export function morningOf(windows: WindowRecord[]): WindowRecord | undefined {
+  return windows.find((record) => isMorningWindow(record.window));
 }
 
-export function longDate(isoDate: string): string {
-  return new Intl.DateTimeFormat('en-GB', {
-    timeZone: 'UTC',
-    weekday: 'long',
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric',
-  }).format(new Date(`${isoDate}T00:00:00Z`));
+export type DayOutcome = 'flew' | 'grounded' | 'not-recorded';
+
+export function outcomeOf(day: DayHistory): DayOutcome {
+  const morning = morningOf(windowsOf(day));
+  if (!morning) return 'not-recorded';
+  return morning.everGreen.size > 0 ? 'flew' : 'grounded';
 }
 
-export const FLAG_LABEL: Record<Flag, string> = {
-  green: 'Green flag',
-  yellow: 'Yellow flag',
-  red: 'Red flag',
-  unknown: 'Unknown',
-};
+export interface LaterWindow {
+  window: Window;
+  green: string[];
+}
+
+export type HomeState =
+  | { kind: 'no-data' }
+  | { kind: 'waiting'; lastDate: string }
+  | { kind: 'flying-now' | 'grounded-now'; window: Window; green: string[] }
+  | { kind: 'flew-this-morning' | 'grounded-this-morning'; window: Window; green: string[]; later: LaterWindow | null }
+  | { kind: 'morning-not-recorded'; later: LaterWindow };
+
+/** What the home page should say at `now`. */
+export function homeState(latest: Snapshot | null, history: DayHistory[], now: Date): HomeState {
+  const current = latest?.sectors[0]?.window;
+  if (!latest || !current) return { kind: 'no-data' };
+
+  const today = localDate(now);
+  if (current.date < today) return { kind: 'waiting', lastDate: current.date };
+
+  const currentGreen = greenSectors(latest.sectors);
+  const isCurrent = (window: Window) => window.start === current.start && window.end === current.end;
+  const day = history.find((entry) => entry.date === today);
+  const morning = day ? morningOf(windowsOf(day)) : undefined;
+
+  if (morning && now.getTime() <= Date.parse(morning.window.end)) {
+    const green = isCurrent(morning.window) ? currentGreen : [...morning.everGreen].sort();
+    return { kind: green.length > 0 ? 'flying-now' : 'grounded-now', window: morning.window, green };
+  }
+
+  if (morning) {
+    const green = [...morning.everGreen].sort();
+    const later = isCurrent(morning.window) ? null : { window: current, green: currentGreen };
+    return { kind: green.length > 0 ? 'flew-this-morning' : 'grounded-this-morning', window: morning.window, green, later };
+  }
+
+  // Nothing recorded for this morning (for example on the first day of records).
+  if (isMorningWindow(current) && now.getTime() <= Date.parse(current.end)) {
+    return { kind: currentGreen.length > 0 ? 'flying-now' : 'grounded-now', window: current, green: currentGreen };
+  }
+  return { kind: 'morning-not-recorded', later: { window: current, green: currentGreen } };
+}
+
+export type Scene = 'flying' | 'grounded' | 'night';
+
+export function sceneOf(state: HomeState): Scene {
+  switch (state.kind) {
+    case 'flying-now':
+    case 'flew-this-morning':
+      return 'flying';
+    case 'grounded-now':
+    case 'grounded-this-morning':
+      return 'grounded';
+    case 'morning-not-recorded':
+      return state.later.green.length > 0 ? 'flying' : 'grounded';
+    default:
+      return 'night';
+  }
+}

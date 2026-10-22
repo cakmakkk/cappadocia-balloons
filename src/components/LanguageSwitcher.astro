@@ -1,0 +1,97 @@
+---
+import { messages } from '../i18n/index.ts';
+import { LOCALES, localeInfo, type Locale } from '../i18n/locales.ts';
+import { href } from '../lib/paths.ts';
+
+interface Props {
+  locale: Locale;
+  /** The current page without its language prefix, e.g. "/history/". */
+  path: string;
+}
+
+const { locale, path } = Astro.props;
+---
+
+<details class="lang">
+  <summary aria-label={messages(locale).nav.language}>
+    <svg viewBox="0 0 20 20" width="18" height="18" aria-hidden="true">
+      <circle cx="10" cy="10" r="8" fill="none" stroke="currentColor" stroke-width="1.5" />
+      <path d="M2 10h16M10 2c2.5 2.4 2.5 13.6 0 16M10 2c-2.5 2.4-2.5 13.6 0 16" fill="none" stroke="currentColor" stroke-width="1.5" />
+    </svg>
+    {localeInfo(locale).name}
+  </summary>
+  <ul>
+    {
+      LOCALES.map((l) => (
+        <li>
+          <a
+            href={href(l.code, path)}
+            hreflang={l.hreflang}
+            lang={l.hreflang}
+            aria-current={l.code === locale ? 'true' : undefined}
+          >
+            {l.name}
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</details>
+
+<style>
+  .lang {
+    position: relative;
+  }
+
+  summary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    cursor: pointer;
+    list-style: none;
+    white-space: nowrap;
+    color: var(--muted);
+    font-size: 0.95rem;
+    padding: 0.3rem 0.6rem;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: var(--surface);
+  }
+
+  summary::-webkit-details-marker {
+    display: none;
+  }
+
+  ul {
+    position: absolute;
+    right: 0;
+    top: calc(100% + 0.4rem);
+    z-index: 10;
+    margin: 0;
+    padding: 0.4rem;
+    list-style: none;
+    min-width: 10rem;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgb(43 33 24 / 0.12);
+  }
+
+  a {
+    display: block;
+    padding: 0.4rem 0.7rem;
+    border-radius: 8px;
+    color: var(--ink);
+    text-decoration: none;
+  }
+
+  a:hover,
+  a:focus-visible {
+    background: var(--bg);
+  }
+
+  a[aria-current] {
+    font-weight: 700;
+    color: var(--accent);
+  }
+</style>

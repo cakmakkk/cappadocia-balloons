@@ -1,0 +1,181 @@
+---
+// The three primary flight areas, drawn from the official polygons, each
+// coloured by its current flag, with the main towns marked.
+
+import { SECTOR_IDS, SECTOR_POLYGONS, TOWNS, townsIn, type SectorId } from '../data/sectors.ts';
+import { messages } from '../i18n/index.ts';
+import type { Locale } from '../i18n/locales.ts';
+import type { Flag } from '../lib/status.ts';
+import FlagBadge from './FlagBadge.astro';
+
+interface Props {
+  locale: Locale;
+  flags: Partial<Record<SectorId, Flag>>;
+}
+
+const { locale, flags } = Astro.props;
+const t = messages(locale);
+
+// Equirectangular projection around Cappadocia's latitude.
+const LON_MIN = 34.755;
+const LAT_MAX = 38.738;
+const SCALE = 2400; // pixels per degree of latitude
+const X_SCALE = SCALE * Math.cos((38.64 * Math.PI) / 180);
+const project = (lat: number, lon: number) => [(lon - LON_MIN) * X_SCALE + 10, (LAT_MAX - lat) * SCALE + 10];
+
+const sectors = SECTOR_IDS.map((id) => {
+  const points = SECTOR_POLYGONS[id].map(([lat, lon]) => project(lat, lon));
+  const ys = points.map(([, y]) => y);
+  return {
+    id,
+    flag: flags[id] ?? 'unknown',
+    points: points.map((p) => p.map((n) => n.toFixed(1)).join(',')).join(' '),
+    labelY: (Math.min(...ys) + Math.max(...ys)) / 2,
+  };
+});
+
+// Where each town's name sits relative to its dot, to keep labels apart.
+const LABEL_SIDE: Record<string, { dx: number; dy: number; anchor: 'start' | 'end' }> = {
+  avanos: { dx: 8, dy: 4, anchor: 'start' },
+  cavusin: { dx: 8, dy: 4, anchor: 'start' },
+  goreme: { dx: 8, dy: 4, anchor: 'start' },
+  uchisar: { dx: -8, dy: 16, anchor: 'start' },
+  ortahisar: { dx: 8, dy: 4, anchor: 'start' },
+  urgup: { dx: -8, dy: -8, anchor: 'end' },
+  mustafapasa: { dx: -8, dy: 4, anchor: 'end' },
+};
+
+const towns = TOWNS.map((town) => {
+  const [x, y] = project(town.lat, town.lon);
+  return { ...town, x, y, name: t.towns[town.id], ...LABEL_SIDE[town.id] };
+});
+---
+
+<figure class="sector-map">
+  <svg viewBox="0 0 390 470" role="img" aria-labelledby={`map-title-${locale}`}>
+    <title id={`map-title-${locale}`}>
+      {sectors.map((s) => `${t.sector(s.id)}: ${t.flag[s.flag]}`).join(', ')}
+    </title>
+    {
+      sectors.map((s) => (
+        <g class={`area area-${s.flag}`}>
+          <polygon points={s.points} />
+          <text x="40" y={s.labelY + 12} class="area-letter">
+            {s.id}
+          </text>
+        </g>
+      ))
+    }
+    {
+      towns.map((town) => (
+        <g class="town">
+          <circle cx={town.x} cy={town.y} r="4" />
+          <text x={town.x + town.dx} y={town.y + town.dy} text-anchor={town.anchor}>
+            {town.name}
+          </text>
+        </g>
+      ))
+    }
+  </svg>
+  <ul class="area-list">
+    {
+      sectors.map((s) => (
+        <li>
+          <span class="area-name">{t.sector(s.id)}</span>
+          <FlagBadge locale={locale} flag={s.flag} />
+          <span class="area-towns">{townsIn(s.id).map((id) => t.towns[id]).join(', ')}</span>
+        </li>
+      ))
+    }
+  </ul>
+  <slot />
+</figure>
+
+<style>
+  .sector-map {
+    margin: 0;
+    display: grid;
+    gap: 1rem 1.5rem;
+    align-items: center;
+  }
+
+  @media (min-width: 640px) {
+    .sector-map {
+      grid-template-columns: minmax(0, 20rem) 1fr;
+    }
+  }
+
+  svg {
+    width: 100%;
+    max-width: 20rem;
+    height: auto;
+  }
+
+  .area polygon {
+    stroke-width: 2;
+    stroke-linejoin: round;
+  }
+
+  .area-green polygon {
+    fill: var(--go-bg);
+    stroke: var(--go);
+  }
+
+  .area-yellow polygon {
+    fill: var(--hold-bg);
+    stroke: var(--hold);
+  }
+
+  .area-red polygon {
+    fill: var(--stop-bg);
+    stroke: var(--stop);
+  }
+
+  .area-unknown polygon {
+    fill: var(--surface);
+    stroke: var(--line);
+  }
+
+  .area-letter {
+    font: 700 34px var(--font-display);
+    fill: var(--ink);
+    opacity: 0.55;
+  }
+
+  .town circle {
+    fill: var(--ink);
+  }
+
+  .town text {
+    font-size: 15px;
+    fill: var(--ink);
+    paint-order: stroke;
+    stroke: var(--bg);
+    stroke-width: 4px;
+  }
+
+  .area-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0.75rem;
+  }
+
+  .area-list li {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.15rem 0.75rem;
+  }
+
+  .area-name {
+    font-weight: 600;
+  }
+
+  .area-towns {
+    flex-basis: 100%;
+    color: var(--muted);
+    font-size: 0.95rem;
+  }
+</style>

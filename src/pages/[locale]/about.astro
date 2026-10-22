@@ -1,0 +1,10 @@
+---
+import { otherLocalePaths, type Locale } from '../../i18n/locales.ts';
+import Doc from '../../views/Doc.astro';
+
+export const getStaticPaths = otherLocalePaths;
+
+const locale = Astro.params.locale as Locale;
+---
+
+<Doc locale={locale} slug="about" />

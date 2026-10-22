@@ -1,0 +1,72 @@
+---
+import { details as joinDetails, longDate, number, timeRange } from '../i18n/format.ts';
+import { messages } from '../i18n/index.ts';
+import type { Locale } from '../i18n/locales.ts';
+import type { Morning } from '../lib/forecast.ts';
+
+interface Props {
+  locale: Locale;
+  morning: Morning;
+  /** Show the date as a heading (the 7-day list) rather than a label. */
+  heading?: 'h2' | 'h3';
+}
+
+const { locale, morning, heading: Heading = 'h3' } = Astro.props;
+const t = messages(locale);
+const rating = t.tomorrow.rating[morning.rating];
+
+const details = [
+  t.tomorrow.wind(number(locale, morning.maxWind)),
+  t.tomorrow.gusts(number(locale, morning.maxGust)),
+  morning.minVisibility !== null &&
+    t.tomorrow.visibility(number(locale, morning.minVisibility / 1000, morning.minVisibility < 1000 ? 1 : 0)),
+  morning.precipitation > 0 && t.tomorrow.rain(number(locale, morning.precipitation, 1)),
+].filter((detail): detail is string => Boolean(detail));
+---
+
+<article class={`forecast rating-${morning.rating}`}>
+  <Heading class="forecast-date">{longDate(locale, morning.date)}</Heading>
+  <p class="forecast-rating">{rating.label}</p>
+  <p class="forecast-text">{rating.text}</p>
+  <p class="forecast-details">
+    {t.tomorrow.window(timeRange(locale, morning.window.start, morning.window.end))} · {joinDetails(locale, details)}
+  </p>
+</article>
+
+<style>
+  .forecast {
+    border-left: 5px solid var(--line);
+    padding: 0.2rem 0 0.2rem 0.9rem;
+  }
+
+  .rating-good {
+    border-left-color: var(--go);
+  }
+
+  .rating-borderline {
+    border-left-color: var(--hold);
+  }
+
+  .rating-poor {
+    border-left-color: var(--stop);
+  }
+
+  .forecast p {
+    margin: 0.15rem 0;
+  }
+
+  .forecast-date {
+    font: 600 1rem/1.4 var(--font-body);
+    margin: 0;
+    color: var(--muted);
+  }
+
+  .forecast-rating {
+    font: 600 1.25rem/1.3 var(--font-display);
+  }
+
+  .forecast-details {
+    color: var(--muted);
+    font-size: 0.9rem;
+  }
+</style>

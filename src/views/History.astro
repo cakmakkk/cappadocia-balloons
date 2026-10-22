@@ -1,0 +1,152 @@
+---
+import FlagBadge from '../components/FlagBadge.astro';
+import { fullDate, longDate, timeRange } from '../i18n/format.ts';
+import { messages } from '../i18n/index.ts';
+import { localeInfo, type Locale } from '../i18n/locales.ts';
+import Base from '../layouts/Base.astro';
+import { absolute } from '../lib/paths.ts';
+import { loadHistory, morningOf, outcomeOf, windowsOf } from '../lib/status.ts';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = messages(locale);
+
+const days = loadHistory().map((day) => {
+  const windows = windowsOf(day);
+  const morning = morningOf(windows);
+  return { date: day.date, outcome: outcomeOf(day), morning, later: windows.filter((w) => w !== morning) };
+});
+const first = days.at(-1)?.date;
+const last = days[0]?.date;
+const dataUrl = 'https://github.com/cakmakkk/cappadocia-balloons/tree/main/data/history';
+
+const structuredData = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: t.nav.today, item: absolute(locale, '/', Astro.site) },
+      { '@type': 'ListItem', position: 2, name: t.nav.history, item: absolute(locale, '/history/', Astro.site) },
+    ],
+  },
+  ...(first && last
+    ? [
+        {
+          '@context': 'https://schema.org',
+          '@type': 'Dataset',
+          name: t.history.title,
+          description: t.history.description,
+          inLanguage: localeInfo(locale).hreflang,
+          url: absolute(locale, '/history/', Astro.site),
+          isAccessibleForFree: true,
+          temporalCoverage: `${first}/${last}`,
+          spatialCoverage: { '@type': 'Place', name: 'Cappadocia, Türkiye', geo: { '@type': 'GeoCoordinates', latitude: 38.6431, longitude: 34.8289 } },
+          distribution: { '@type': 'DataDownload', encodingFormat: 'application/json', contentUrl: dataUrl },
+        },
+      ]
+    : []),
+];
+
+const sectorIds = ['A', 'B', 'C'];
+---
+
+<Base locale={locale} path="/history/" title={t.history.title} description={t.history.description} structuredData={structuredData}>
+  <h1>{t.history.h1}</h1>
+  <p class="lead">{t.history.intro}</p>
+  {first && <p class="muted">{t.history.startNote(fullDate(locale, first))} <a href={dataUrl}>{t.history.rawData}</a></p>}
+
+  {
+    days.length === 0 ? (
+      <p class="card">{t.history.empty}</p>
+    ) : (
+      days.map((day) => (
+        <section class="card day" id={`d-${day.date}`}>
+          <div class="day-head">
+            <h2>{longDate(locale, day.date)}</h2>
+            <span class={`outcome outcome-${day.outcome}`}>{t.outcome[day.outcome]}</span>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th scope="col">{t.history.window}</th>
+                  {sectorIds.map((id) => (
+                    <th scope="col">{t.sector(id)}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {[day.morning, ...day.later].filter(Boolean).map((record) => (
+                  <tr>
+                    <th scope="row">
+                      <span class="window-label">{record === day.morning ? t.history.morning : t.history.laterWindows}</span>
+                      {timeRange(locale, record!.window.start, record!.window.end)}
+                    </th>
+                    {sectorIds.map((id) => (
+                      <td>{record!.flags.has(id) ? <FlagBadge locale={locale} flag={record!.flags.get(id)!} /> : '–'}</td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </section>
+      ))
+    )
+  }
+</Base>
+
+<style>
+  .lead {
+    font-size: 1.1rem;
+  }
+
+  .day {
+    margin-top: 1rem;
+  }
+
+  .day-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+  }
+
+  .day h2 {
+    margin: 0;
+    font-size: 1.2rem;
+  }
+
+  .outcome {
+    font-weight: 700;
+    padding: 0.1rem 0.7rem;
+    border-radius: 999px;
+    background: var(--line);
+  }
+
+  .outcome-flew {
+    color: var(--go);
+    background: var(--go-bg);
+  }
+
+  .outcome-grounded {
+    color: var(--stop);
+    background: var(--stop-bg);
+  }
+
+  tbody th {
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .window-label {
+    display: block;
+    font-weight: 400;
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+</style>

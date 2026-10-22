@@ -1,0 +1,137 @@
+---
+import { render } from 'astro:content';
+import SectorMap from '../components/SectorMap.astro';
+import { fullDate } from '../i18n/format.ts';
+import { messages } from '../i18n/index.ts';
+import { localeInfo, type Locale } from '../i18n/locales.ts';
+import Base from '../layouts/Base.astro';
+import { docIn, docsIn, slugOf } from '../lib/docs.ts';
+import { absolute, href } from '../lib/paths.ts';
+import { loadLatest } from '../lib/status.ts';
+
+interface Props {
+  locale: Locale;
+  slug: string;
+}
+
+const { locale, slug } = Astro.props;
+const t = messages(locale);
+const doc = await docIn(locale, slug);
+const { Content } = await render(doc);
+
+const isAbout = doc.data.section === 'about';
+const path = isAbout ? '/about/' : `/guides/${slug}/`;
+const related = isAbout ? [] : (await docsIn(locale, 'guide')).filter((d) => slugOf(d) !== slug);
+const mapFlags = Object.fromEntries((loadLatest()?.sectors ?? []).map((s) => [s.id, s.flag]));
+const updated = fullDate(locale, doc.data.updated.toISOString().slice(0, 10));
+
+const crumbs = isAbout
+  ? [{ name: t.nav.about, path }]
+  : [
+      { name: t.nav.guides, path: '/guides/' },
+      { name: doc.data.title, path },
+    ];
+
+const structuredData = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [{ name: t.nav.today, path: '/' }, ...crumbs].map((crumb, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      name: crumb.name,
+      item: absolute(locale, crumb.path, Astro.site),
+    })),
+  },
+  ...(isAbout
+    ? []
+    : [
+        {
+          '@context': 'https://schema.org',
+          '@type': 'Article',
+          headline: doc.data.title,
+          description: doc.data.description,
+          inLanguage: localeInfo(locale).hreflang,
+          dateModified: doc.data.updated.toISOString().slice(0, 10),
+          mainEntityOfPage: absolute(locale, path, Astro.site),
+        },
+      ]),
+];
+---
+
+<Base locale={locale} path={path} title={doc.data.title} description={doc.data.description} structuredData={structuredData}>
+  {
+    !isAbout && (
+      <nav class="crumbs" aria-label="Breadcrumb">
+        <a href={href(locale, '/guides/')}>{t.nav.guides}</a>
+      </nav>
+    )
+  }
+  <article class="prose">
+    <h1>{doc.data.title}</h1>
+    <p class="muted updated">{t.guides.updated(updated)}</p>
+    {
+      slug === 'flags-and-sectors' && (
+        <div class="map card">
+          <SectorMap locale={locale} flags={mapFlags} />
+          <p class="muted caption">{t.guides.mapCaption}</p>
+        </div>
+      )
+    }
+    <Content />
+  </article>
+
+  {
+    related.length > 0 && (
+      <aside class="related">
+        <h2>{t.home.guidesTitle}</h2>
+        <ul>
+          {related.map((d) => (
+            <li>
+              <a href={href(locale, `/guides/${slugOf(d)}/`)}>{d.data.title}</a>
+            </li>
+          ))}
+          <li>
+            <a href={href(locale, '/')}>{t.home.h1}</a>
+          </li>
+          <li>
+            <a href={href(locale, '/tomorrow/')}>{t.tomorrow.h1}</a>
+          </li>
+        </ul>
+      </aside>
+    )
+  }
+</Base>
+
+<style>
+  .crumbs {
+    font-size: 0.92rem;
+    margin-top: 0.5rem;
+  }
+
+  .updated {
+    margin-top: -0.5rem;
+    font-size: 0.9rem;
+  }
+
+  .map {
+    margin: 1.5rem 0;
+  }
+
+  .caption {
+    margin: 0.75rem 0 0;
+    font-size: 0.9rem;
+  }
+
+  .prose :global(h2) {
+    margin-top: 2rem;
+  }
+
+  .prose :global(li) {
+    margin: 0.35rem 0;
+  }
+
+  .related ul {
+    padding-left: 1.1rem;
+  }
+</style>

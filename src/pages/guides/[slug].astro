@@ -1,0 +1,12 @@
+---
+import { docsIn, slugOf } from '../../lib/docs.ts';
+import Doc from '../../views/Doc.astro';
+
+export async function getStaticPaths() {
+  return (await docsIn('en', 'guide')).map((doc) => ({ params: { slug: slugOf(doc) } }));
+}
+
+const { slug } = Astro.params;
+---
+
+<Doc locale="en" slug={slug} />

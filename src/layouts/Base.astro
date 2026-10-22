@@ -1,122 +1,229 @@
 ---
-import { href } from '../lib/paths';
+import '@fontsource-variable/lora/wght.css';
+import LanguageSwitcher from '../components/LanguageSwitcher.astro';
+import { messages } from '../i18n/index.ts';
+import { DEFAULT_LOCALE, LOCALES, localeInfo, type Locale } from '../i18n/locales.ts';
+import { absolute, alternates, asset, href } from '../lib/paths.ts';
+import { SOURCE_URL } from '../lib/status.ts';
 
 interface Props {
+  locale: Locale;
+  /** The page without its language prefix, e.g. "/history/". */
+  path: string;
   title: string;
   description: string;
   /** Extra JSON-LD objects for this page. */
   structuredData?: Record<string, unknown>[];
+  /** Pages like 404 have no language versions. */
+  standalone?: boolean;
 }
 
-const { title, description, structuredData = [] } = Astro.props;
-const canonical = new URL(Astro.url.pathname, Astro.site);
-const siteName = 'Cappadocia Balloon Status';
+const { locale, path, title, description, structuredData = [], standalone = false } = Astro.props;
+const t = messages(locale);
+const info = localeInfo(locale);
+const canonical = absolute(locale, path, Astro.site);
+const languageVersions = alternates(path, Astro.site);
+// Pages without language versions send language links to each language's home page.
+const switchPath = standalone ? '/' : path;
+
 const nav = [
-  { path: href('/'), label: 'Today' },
-  { path: href('/history/'), label: 'History' },
-  { path: href('/flags/'), label: 'Flags explained' },
-  { path: href('/about/'), label: 'About' },
+  { path: '/', label: t.nav.today },
+  { path: '/tomorrow/', label: t.nav.tomorrow },
+  { path: '/history/', label: t.nav.history },
+  { path: '/guides/', label: t.nav.guides },
+  { path: '/about/', label: t.nav.about },
 ];
+const isCurrent = (navPath: string) => (navPath === '/' ? path === '/' : path.startsWith(navPath));
+
+// Each language's own invitation to switch, for the hint banner.
+const hints = Object.fromEntries(
+  LOCALES.map((l) => [l.code, { url: href(l.code, switchPath), text: messages(l.code).langHint, close: messages(l.code).dismiss }]),
+);
+
+const verification = {
+  'google-site-verification': import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION,
+  'msvalidate.01': import.meta.env.PUBLIC_BING_SITE_VERIFICATION,
+  'naver-site-verification': import.meta.env.PUBLIC_NAVER_SITE_VERIFICATION,
+  'yandex-verification': import.meta.env.PUBLIC_YANDEX_VERIFICATION,
+};
+
+const ogImage = new URL(asset('/og.png'), Astro.site).href;
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang={info.hreflang}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
-    <link rel="icon" type="image/svg+xml" href={href('/favicon.svg')} />
-    <link rel="sitemap" href={href('/sitemap-index.xml')} />
-    <meta name="theme-color" content="#f6f1ea" media="(prefers-color-scheme: light)" />
-    <meta name="theme-color" content="#16130f" media="(prefers-color-scheme: dark)" />
+    {
+      !standalone && (
+        <>
+          {languageVersions.map(({ locale: l, url }) => (
+            <link rel="alternate" hreflang={l.hreflang} href={url} />
+          ))}
+          <link rel="alternate" hreflang="x-default" href={absolute(DEFAULT_LOCALE, path, Astro.site)} />
+        </>
+      )
+    }
+    <link rel="icon" type="image/svg+xml" href={asset('/favicon.svg')} />
+    <link rel="sitemap" href={asset('/sitemap.xml')} />
+    <meta name="theme-color" content="#faf3ea" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#15131c" media="(prefers-color-scheme: dark)" />
     <meta property="og:type" content="website" />
-    <meta property="og:site_name" content={siteName} />
+    <meta property="og:site_name" content={t.siteName} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
-    <meta name="twitter:card" content="summary" />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:locale" content={info.og} />
+    {!standalone && LOCALES.filter((l) => l.code !== locale).map((l) => <meta property="og:locale:alternate" content={l.og} />)}
+    <meta name="twitter:card" content="summary_large_image" />
+    {Object.entries(verification).map(([name, content]) => content && <meta name={name} content={content} />)}
     {structuredData.map((data) => <script type="application/ld+json" set:html={JSON.stringify(data)} />)}
   </head>
   <body>
+    <div class="lang-hint" hidden data-hints={JSON.stringify(hints)} data-current={locale}>
+      <a href="#"></a>
+      <button type="button"></button>
+    </div>
+
     <header class="site-header">
-      <a class="brand" href={href('/')}>{siteName}</a>
-      <nav aria-label="Main">
-        {nav.map(({ path, label }) => (
-          <a href={path} aria-current={Astro.url.pathname === path ? 'page' : undefined}>{label}</a>
+      <div class="header-top">
+        <a class="brand" href={href(locale, '/')}>
+          <img src={asset('/favicon.svg')} alt="" width="28" height="28" />
+          {t.siteName}
+        </a>
+        <LanguageSwitcher locale={locale} path={switchPath} />
+      </div>
+      <nav aria-label={t.siteName}>
+        {nav.map((item) => (
+          <a href={href(locale, item.path)} aria-current={isCurrent(item.path) ? 'page' : undefined}>{item.label}</a>
         ))}
       </nav>
     </header>
+
+    <slot name="hero" />
+
     <main>
       <slot />
     </main>
+
     <footer class="site-footer">
-      <p>
-        Unofficial page. Flight status comes from the public page of the
-        <a href="https://shmkapadokya.kapadokya.edu.tr/en/" rel="nofollow">Kapadokya Slot Service Center</a>.
-        Not affiliated with the DGCA (SHGM), Kapadokya University or any balloon company. Your operator makes the final
-        call on every flight.
-      </p>
+      <svg class="ridge" viewBox="0 0 600 40" preserveAspectRatio="none" aria-hidden="true">
+        <path
+          d="M0,40 L0,30 C40,30 46,8 58,8 C70,8 74,30 110,30 C150,30 160,14 170,14 C180,14 186,30 240,30 C290,30 300,2 314,2 C328,2 334,30 380,30 C420,30 430,16 440,16 C450,16 456,30 500,30 C540,30 548,10 560,10 C572,10 576,30 600,30 L600,40 Z"
+        />
+      </svg>
+      <div class="footer-inner">
+        <p>{t.footer.independent}</p>
+        <p class="footer-links">
+          <a href={SOURCE_URL} rel="nofollow">{t.footer.source}</a>
+          <a href="https://github.com/cakmakkk/cappadocia-balloons/tree/main/data">{t.footer.data}</a>
+        </p>
+      </div>
     </footer>
+
+    <script>
+      // Offer the visitor's own language once, without redirecting anyone.
+      const hint = document.querySelector<HTMLElement>('.lang-hint');
+      const KEY = 'lang-hint-dismissed';
+      let dismissed = false;
+      try {
+        dismissed = localStorage.getItem(KEY) === '1';
+      } catch {}
+      if (hint && !dismissed) {
+        const hints = JSON.parse(hint.dataset.hints!) as Record<string, { url: string; text: string; close: string }>;
+        const preferred = navigator.languages.map((l) => l.toLowerCase().split('-')[0]).find((code) => code in hints);
+        if (preferred && preferred !== hint.dataset.current) {
+          const link = hint.querySelector('a')!;
+          const button = hint.querySelector('button')!;
+          link.href = hints[preferred].url;
+          link.textContent = `${hints[preferred].text} →`;
+          button.textContent = '×';
+          button.setAttribute('aria-label', hints[preferred].close);
+          button.addEventListener('click', () => {
+            hint.hidden = true;
+            try {
+              localStorage.setItem(KEY, '1');
+            } catch {}
+          });
+          hint.hidden = false;
+        }
+      }
+    </script>
   </body>
 </html>
 
 <style is:global>
   :root {
-    --bg: #f6f1ea;
-    --surface: #fffdf9;
-    --text: #231d16;
-    --muted: #6b5f52;
-    --border: #e4dacd;
-    --accent: #b4532a;
-    --green: #1d7a3e;
-    --green-bg: #e3f4e8;
-    --yellow: #8a6200;
-    --yellow-bg: #fbf0cf;
-    --red: #b42318;
-    --red-bg: #fde7e4;
-    --unknown: #5b5b5b;
-    --unknown-bg: #ececec;
+    --bg: #faf3ea;
+    --surface: #fffaf3;
+    --ink: #2b2118;
+    --muted: #74655a;
+    --line: #eadccb;
+    --accent: #b9532f;
+    --go: #2d7a4d;
+    --go-bg: #dff0e4;
+    --hold: #9a6400;
+    --hold-bg: #fbecc9;
+    --stop: #b0402c;
+    --stop-bg: #fbe1da;
+    --font-display: 'Lora Variable', Georgia, 'Times New Roman', serif;
+    --font-body: system-ui, -apple-system, 'Segoe UI', Roboto, 'Noto Sans', 'Apple SD Gothic Neo', 'Hiragino Sans',
+      'PingFang SC', 'Microsoft YaHei', sans-serif;
     color-scheme: light;
   }
 
   @media (prefers-color-scheme: dark) {
     :root:not([data-theme='light']) {
-      --bg: #16130f;
-      --surface: #201b16;
-      --text: #f2ebe2;
-      --muted: #b3a697;
-      --border: #3a3129;
-      --accent: #e98a5c;
-      --green: #6fd394;
-      --green-bg: #173322;
-      --yellow: #f1c75b;
-      --yellow-bg: #3a2f12;
-      --red: #ff8a7d;
-      --red-bg: #3f1d19;
-      --unknown: #c4c4c4;
-      --unknown-bg: #2f2f2f;
+      --bg: #15131c;
+      --surface: #1f1c28;
+      --ink: #f3ebe2;
+      --muted: #b9aea4;
+      --line: #353043;
+      --accent: #ef9a6f;
+      --go: #7fd3a0;
+      --go-bg: #1c3426;
+      --hold: #f1c46a;
+      --hold-bg: #3a2f15;
+      --stop: #ff9a85;
+      --stop-bg: #3d201c;
       color-scheme: dark;
     }
   }
 
   :root[data-theme='dark'] {
-    --bg: #16130f;
-    --surface: #201b16;
-    --text: #f2ebe2;
-    --muted: #b3a697;
-    --border: #3a3129;
-    --accent: #e98a5c;
-    --green: #6fd394;
-    --green-bg: #173322;
-    --yellow: #f1c75b;
-    --yellow-bg: #3a2f12;
-    --red: #ff8a7d;
-    --red-bg: #3f1d19;
-    --unknown: #c4c4c4;
-    --unknown-bg: #2f2f2f;
+    --bg: #15131c;
+    --surface: #1f1c28;
+    --ink: #f3ebe2;
+    --muted: #b9aea4;
+    --line: #353043;
+    --accent: #ef9a6f;
+    --go: #7fd3a0;
+    --go-bg: #1c3426;
+    --hold: #f1c46a;
+    --hold-bg: #3a2f15;
+    --stop: #ff9a85;
+    --stop-bg: #3d201c;
     color-scheme: dark;
+  }
+
+  /* Korean, Japanese and Chinese headings use the system's own fonts. */
+  :root:lang(ko),
+  :root:lang(ja),
+  :root:lang(zh-Hans) {
+    --font-display: var(--font-body);
+  }
+
+  /* Korean breaks lines between words, not inside them. */
+  :root:lang(ko) {
+    word-break: keep-all;
+    overflow-wrap: anywhere;
   }
 
   * {
@@ -126,8 +233,9 @@ const nav = [
   body {
     margin: 0;
     background: var(--bg);
-    color: var(--text);
-    font: 17px/1.6 system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    color: var(--ink);
+    font: 17px/1.65 var(--font-body);
+    -webkit-font-smoothing: antialiased;
   }
 
   a {
@@ -136,60 +244,34 @@ const nav = [
 
   main,
   .site-header,
-  .site-footer {
-    max-width: 46rem;
+  .footer-inner {
+    max-width: 48rem;
     margin: 0 auto;
     padding: 0 16px;
   }
 
-  .site-header {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem 1.25rem;
-    align-items: baseline;
-    justify-content: space-between;
-    padding-top: 1.25rem;
-    padding-bottom: 1.25rem;
-  }
-
-  .brand {
-    font-weight: 700;
-    color: var(--text);
-    text-decoration: none;
-  }
-
-  .site-header nav {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.25rem 1rem;
-    font-size: 0.95rem;
-  }
-
-  .site-header nav a {
-    color: var(--muted);
-    text-decoration: none;
-  }
-
-  .site-header nav a[aria-current='page'] {
-    color: var(--text);
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
     font-weight: 600;
+    line-height: 1.2;
   }
 
   h1 {
-    font-size: clamp(1.8rem, 6vw, 2.5rem);
-    line-height: 1.15;
+    font-size: clamp(1.9rem, 6vw, 2.8rem);
     margin: 0.5rem 0 1rem;
   }
 
   h2 {
-    font-size: 1.3rem;
-    margin: 2.25rem 0 0.75rem;
+    font-size: 1.45rem;
+    margin: 2.5rem 0 0.75rem;
   }
 
   .card {
     background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 14px;
+    border: 1px solid var(--line);
+    border-radius: 16px;
     padding: 1.25rem;
   }
 
@@ -197,43 +279,52 @@ const nav = [
     color: var(--muted);
   }
 
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
   .flag {
     display: inline-flex;
     align-items: center;
     gap: 0.4rem;
-    padding: 0.1rem 0.6rem;
+    padding: 0.05rem 0.6rem;
     border-radius: 999px;
-    font-size: 0.9rem;
+    font-size: 0.88rem;
     font-weight: 600;
     white-space: nowrap;
   }
 
   .flag::before {
     content: '';
-    width: 0.6rem;
-    height: 0.6rem;
+    width: 0.55rem;
+    height: 0.55rem;
     border-radius: 50%;
     background: currentColor;
   }
 
   .flag-green {
-    color: var(--green);
-    background: var(--green-bg);
+    color: var(--go);
+    background: var(--go-bg);
   }
 
   .flag-yellow {
-    color: var(--yellow);
-    background: var(--yellow-bg);
+    color: var(--hold);
+    background: var(--hold-bg);
   }
 
   .flag-red {
-    color: var(--red);
-    background: var(--red-bg);
+    color: var(--stop);
+    background: var(--stop-bg);
   }
 
   .flag-unknown {
-    color: var(--unknown);
-    background: var(--unknown-bg);
+    color: var(--muted);
+    background: var(--line);
   }
 
   table {
@@ -244,8 +335,8 @@ const nav = [
   th,
   td {
     text-align: left;
-    padding: 0.6rem 0.5rem;
-    border-bottom: 1px solid var(--border);
+    padding: 0.55rem 0.5rem;
+    border-bottom: 1px solid var(--line);
     vertical-align: top;
   }
 
@@ -253,12 +344,109 @@ const nav = [
     overflow-x: auto;
   }
 
-  .site-footer {
-    margin-top: 3rem;
-    padding-top: 1.5rem;
-    padding-bottom: 2.5rem;
-    border-top: 1px solid var(--border);
-    font-size: 0.9rem;
+  .lang-hint {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.5rem 16px;
+    background: var(--ink);
+    color: var(--bg);
+    font-size: 0.95rem;
+  }
+
+  .lang-hint[hidden] {
+    display: none;
+  }
+
+  .lang-hint a {
+    color: inherit;
+    font-weight: 600;
+  }
+
+  .lang-hint button {
+    border: 0;
+    background: none;
+    color: inherit;
+    font-size: 1.3rem;
+    line-height: 1;
+    cursor: pointer;
+  }
+
+  .site-header {
+    padding-top: 1rem;
+    padding-bottom: 0.75rem;
+  }
+
+  .header-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font: 600 1.1rem/1.2 var(--font-display);
+    color: var(--ink);
+    text-decoration: none;
+  }
+
+  .site-header nav {
+    display: flex;
+    gap: 0.25rem 1.1rem;
+    margin-top: 0.6rem;
+    overflow-x: auto;
+    white-space: nowrap;
+    font-size: 0.97rem;
+  }
+
+  .site-header nav a {
     color: var(--muted);
+    text-decoration: none;
+    padding: 0.2rem 0;
+    border-bottom: 2px solid transparent;
+  }
+
+  .site-header nav a[aria-current='page'] {
+    color: var(--ink);
+    border-bottom-color: var(--accent);
+  }
+
+  .site-footer {
+    margin-top: 4rem;
+    color: var(--muted);
+    font-size: 0.9rem;
+  }
+
+  .ridge {
+    display: block;
+    width: 100%;
+    height: 40px;
+    fill: var(--line);
+  }
+
+  .footer-inner {
+    padding-top: 1rem;
+    padding-bottom: 2.5rem;
+    background: var(--line);
+    max-width: none;
+  }
+
+  .footer-inner p {
+    max-width: 48rem;
+    margin: 0.3rem auto;
+  }
+
+  .footer-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 1.25rem;
+  }
+
+  .footer-links a {
+    color: var(--ink);
   }
 </style>
