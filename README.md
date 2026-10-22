@@ -33,11 +33,15 @@ morning decisions are made, and hourly otherwise. GitHub may start scheduled run
 
 ## Deploying
 
-Not set up yet. Build with `SITE_URL` set to the real domain so canonical links, the sitemap and robots.txt point to it:
+The same workflow builds and deploys to GitHub Pages on every run, and on every push to `main`, so the "last checked"
+time on the site stays fresh. Commits pushed with the workflow's `GITHUB_TOKEN` don't trigger new runs.
+
+`SITE_URL` and `BASE_PATH` come from `actions/configure-pages`, so canonical links, the sitemap and robots.txt follow
+the Pages URL (`https://cakmakkk.github.io/cappadocia-balloons/`) and switch automatically to a custom domain once one
+is set in the repository's Pages settings. Use `href()` from `src/lib/paths.ts` for every internal link.
+
+To reproduce the Pages build locally (in Git Bash, `MSYS_NO_PATHCONV=1` stops it rewriting the path):
 
 ```sh
-SITE_URL=https://example.com npm run build
+MSYS_NO_PATHCONV=1 SITE_URL=https://cakmakkk.github.io BASE_PATH=/cappadocia-balloons npm run build
 ```
-
-Commits pushed by the workflow's `GITHUB_TOKEN` don't trigger other workflows, so a deploy step should run inside
-`fetch-status.yml` after the fetch (build and publish on every run, so the "last checked" time stays fresh).

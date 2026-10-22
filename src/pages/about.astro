@@ -1,5 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
+import { href } from '../lib/paths';
 import { SOURCE_URL } from '../lib/status';
 
 const title = 'About Cappadocia Balloon Status';
@@ -18,7 +19,7 @@ const description =
   <h2>How often it checks</h2>
   <p>
     Every 15 minutes between 04:00 and 12:00 Türkiye time, when the morning decisions are made, and once an hour
-    otherwise. Each change is recorded on the <a href="/history/">history page</a>.
+    otherwise. Each change is recorded on the <a href={href('/history/')}>history page</a>.
   </p>
 
   <h2>Limits</h2>

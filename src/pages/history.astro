@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import FlagBadge from '../components/FlagBadge.astro';
+import { absolute } from '../lib/paths';
 import { loadHistory, localTime, longDate, windowsOf } from '../lib/status';
 
 const days = loadHistory().map((day) => ({ date: day.date, windows: windowsOf(day) }));
@@ -19,8 +20,8 @@ const description =
       '@context': 'https://schema.org',
       '@type': 'BreadcrumbList',
       itemListElement: [
-        { '@type': 'ListItem', position: 1, name: 'Today', item: Astro.site?.href },
-        { '@type': 'ListItem', position: 2, name: 'History', item: new URL('/history/', Astro.site).href },
+        { '@type': 'ListItem', position: 1, name: 'Today', item: absolute('/', Astro.site) },
+        { '@type': 'ListItem', position: 2, name: 'History', item: absolute('/history/', Astro.site) },
       ],
     },
   ]}

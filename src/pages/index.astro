@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import FlagBadge from '../components/FlagBadge.astro';
+import { absolute, href } from '../lib/paths';
 import {
   isCleared,
   loadHistory,
@@ -63,7 +64,7 @@ const structuredData = [
     '@context': 'https://schema.org',
     '@type': 'WebSite',
     name: 'Cappadocia Balloon Status',
-    url: Astro.site?.href,
+    url: absolute('/', Astro.site),
   },
   {
     '@context': 'https://schema.org',
@@ -162,7 +163,7 @@ const structuredData = [
           ))}
         </ul>
         <p>
-          <a href="/history/">Full history</a>
+          <a href={href('/history/')}>Full history</a>
         </p>
       </>
     )
@@ -176,7 +177,7 @@ const structuredData = [
   </p>
   <p>
     A green flag means take-off is allowed, and the pilot and the operator make the final decision. Red and yellow
-    flags mean no take-off. <a href="/flags/">What each flag means</a>.
+    flags mean no take-off. <a href={href('/flags/')}>What each flag means</a>.
   </p>
   <p>
     Always confirm with your balloon company: they can still cancel on a green day, and this page can only be as current
