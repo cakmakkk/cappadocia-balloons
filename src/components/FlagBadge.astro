@@ -1,0 +1,11 @@
+---
+import { FLAG_LABEL, type Flag } from '../lib/status';
+
+interface Props {
+  flag: Flag;
+}
+
+const { flag } = Astro.props;
+---
+
+<span class={`flag flag-${flag}`}>{FLAG_LABEL[flag]}</span>

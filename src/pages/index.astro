@@ -1,0 +1,255 @@
+---
+import Base from '../layouts/Base.astro';
+import FlagBadge from '../components/FlagBadge.astro';
+import {
+  isCleared,
+  loadHistory,
+  loadLatest,
+  localTime,
+  longDate,
+  phaseOf,
+  utcTime,
+  windowsOf,
+} from '../lib/status';
+
+const history = loadHistory();
+const latest = loadLatest(history);
+const now = new Date();
+const phase = latest ? phaseOf(latest, now) : 'not-yet-published';
+const cleared = latest ? isCleared(latest.sectors) : false;
+const window = latest?.sectors[0]?.window ?? null;
+const greenSectors = latest?.sectors.filter((s) => s.flag === 'green').map((s) => s.id) ?? [];
+
+const windowText = window ? `${localTime(window.start)}–${localTime(window.end)}` : '';
+
+let answer: { tone: 'yes' | 'no' | 'wait'; headline: string; detail: string };
+if (!latest || !window) {
+  answer = { tone: 'wait', headline: 'No status recorded yet', detail: 'The first check has not run yet.' };
+} else if (phase === 'not-yet-published') {
+  answer = {
+    tone: 'wait',
+    headline: 'No status published for today yet',
+    detail: `The latest published status is for ${longDate(window.date)}. Check back early in the morning, Türkiye time.`,
+  };
+} else if (phase === 'ended') {
+  answer = {
+    tone: 'wait',
+    headline: "Today's flight window is over",
+    detail: `The last status for today (${windowText}) was ${cleared ? `cleared to fly in sector ${greenSectors.join(', ')}` : 'no take-off in any sector'}. The next status is published for tomorrow's flights.`,
+  };
+} else if (cleared) {
+  answer = {
+    tone: 'yes',
+    headline: 'Yes, balloons are cleared to fly',
+    detail: `Green flag in sector ${greenSectors.join(', ')} for ${windowText}. The pilot and the operator still make the final call.`,
+  };
+} else {
+  answer = {
+    tone: 'no',
+    headline: 'No, balloons are not cleared to fly',
+    detail: `No sector has a green flag for ${windowText}, so take-off is not allowed.`,
+  };
+}
+
+const recentDays = history.slice(0, 7).map((day) => ({ date: day.date, windows: windowsOf(day) }));
+
+const title = 'Are Cappadocia balloons flying today? Live flight status';
+const description = latest
+  ? `${answer.headline}. Live Cappadocia hot air balloon flight status from the official flag page, checked every 15 minutes in the morning.`
+  : 'Live Cappadocia hot air balloon flight status from the official flag page.';
+
+const structuredData = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: 'Cappadocia Balloon Status',
+    url: Astro.site?.href,
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    name: title,
+    description,
+    ...(latest && { dateModified: latest.checkedAt }),
+  },
+];
+---
+
+<Base title={title} description={description} structuredData={structuredData}>
+  <h1>Are Cappadocia balloons flying today?</h1>
+
+  <section class={`card answer answer-${answer.tone}`} aria-live="polite">
+    <p class="answer-headline">{answer.headline}</p>
+    <p>{answer.detail}</p>
+    {
+      latest && (
+        <p class="muted checked" data-checked-at={latest.checkedAt}>
+          Last checked at {localTime(latest.checkedAt)} Türkiye time.
+          <span class="checked-ago" />
+        </p>
+      )
+    }
+  </section>
+
+  {
+    latest && window && (
+      <>
+        <h2>Main flight area</h2>
+        <p class="muted">
+          Status for {longDate(window.date)}, {windowText} Türkiye time ({utcTime(window.start)}–{utcTime(window.end)} UTC
+          as published).
+        </p>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th scope="col">Sector</th>
+                <th scope="col">Flag</th>
+                <th scope="col">Official update</th>
+              </tr>
+            </thead>
+            <tbody>
+              {latest.sectors.map((sector) => (
+                <tr>
+                  <td>Sector {sector.id}</td>
+                  <td>
+                    <FlagBadge flag={sector.flag} />
+                  </td>
+                  <td>{sector.updatedAt ? localTime(sector.updatedAt) : '–'}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        {latest.secondary.length > 0 && (
+          <>
+            <h2>Secondary flight regions</h2>
+            <p class="muted">
+              Secondary flights need separate take-off confirmation from the Slot Service Center.
+            </p>
+            <ul class="areas">
+              {latest.secondary.map((area) => (
+                <li>
+                  <span>Region {area.id}</span>
+                  <FlagBadge flag={area.flag} />
+                </li>
+              ))}
+            </ul>
+          </>
+        )}
+      </>
+    )
+  }
+
+  {
+    recentDays.length > 0 && (
+      <>
+        <h2>Recent days</h2>
+        <ul class="days">
+          {recentDays.map(({ date, windows }) => (
+            <li>
+              <strong>{longDate(date)}</strong>
+              <ul>
+                {windows.map(({ window, flags }) => (
+                  <li>
+                    {localTime(window.start)}–{localTime(window.end)}:{' '}
+                    {[...flags.values()].includes('green') ? 'cleared in some sectors' : 'no take-off'}
+                  </li>
+                ))}
+              </ul>
+            </li>
+          ))}
+        </ul>
+        <p>
+          <a href="/history/">Full history</a>
+        </p>
+      </>
+    )
+  }
+
+  <h2>How this page works</h2>
+  <p>
+    Every morning the civil aviation authority's coordination office in Nevşehir decides whether balloons may take off,
+    sector by sector, and publishes the result as coloured flags. This page reads that official page every 15 minutes
+    during the morning and hourly for the rest of the day, and keeps a record of each change.
+  </p>
+  <p>
+    A green flag means take-off is allowed, and the pilot and the operator make the final decision. Red and yellow
+    flags mean no take-off. <a href="/flags/">What each flag means</a>.
+  </p>
+  <p>
+    Always confirm with your balloon company: they can still cancel on a green day, and this page can only be as current
+    as its last check.
+  </p>
+</Base>
+
+<script>
+  // Show how old the last check is, and warn when the page is clearly stale.
+  const el = document.querySelector<HTMLElement>('[data-checked-at]');
+  const ago = el?.querySelector('.checked-ago');
+  if (el && ago) {
+    const minutes = Math.round((Date.now() - Date.parse(el.dataset.checkedAt!)) / 60000);
+    ago.textContent =
+      minutes < 1 ? '(just now)' : minutes < 120 ? `(${minutes} min ago)` : '(over 2 hours ago, this page may be out of date)';
+  }
+</script>
+
+<style>
+  .answer {
+    border-left: 6px solid var(--unknown);
+  }
+
+  .answer-yes {
+    border-left-color: var(--green);
+  }
+
+  .answer-no {
+    border-left-color: var(--red);
+  }
+
+  .answer-wait {
+    border-left-color: var(--yellow);
+  }
+
+  .answer p {
+    margin: 0.25rem 0;
+  }
+
+  .answer-headline {
+    font-size: 1.35rem;
+    font-weight: 700;
+  }
+
+  .checked {
+    font-size: 0.9rem;
+  }
+
+  .areas {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr));
+    gap: 0.5rem;
+  }
+
+  .areas li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 0.5rem 0.75rem;
+  }
+
+  .days {
+    padding-left: 1.1rem;
+  }
+
+  .days ul {
+    padding-left: 1.1rem;
+    margin: 0.2rem 0 0.75rem;
+  }
+</style>

@@ -1,0 +1,262 @@
+---
+interface Props {
+  title: string;
+  description: string;
+  /** Extra JSON-LD objects for this page. */
+  structuredData?: Record<string, unknown>[];
+}
+
+const { title, description, structuredData = [] } = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const siteName = 'Cappadocia Balloon Status';
+const nav = [
+  { href: '/', label: 'Today' },
+  { href: '/history/', label: 'History' },
+  { href: '/flags/', label: 'Flags explained' },
+  { href: '/about/', label: 'About' },
+];
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <meta name="theme-color" content="#f6f1ea" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#16130f" media="(prefers-color-scheme: dark)" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={siteName} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta name="twitter:card" content="summary" />
+    {structuredData.map((data) => <script type="application/ld+json" set:html={JSON.stringify(data)} />)}
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="/">{siteName}</a>
+      <nav aria-label="Main">
+        {nav.map(({ href, label }) => (
+          <a href={href} aria-current={Astro.url.pathname === href ? 'page' : undefined}>{label}</a>
+        ))}
+      </nav>
+    </header>
+    <main>
+      <slot />
+    </main>
+    <footer class="site-footer">
+      <p>
+        Unofficial page. Flight status comes from the public page of the
+        <a href="https://shmkapadokya.kapadokya.edu.tr/en/" rel="nofollow">Kapadokya Slot Service Center</a>.
+        Not affiliated with the DGCA (SHGM), Kapadokya University or any balloon company. Your operator makes the final
+        call on every flight.
+      </p>
+    </footer>
+  </body>
+</html>
+
+<style is:global>
+  :root {
+    --bg: #f6f1ea;
+    --surface: #fffdf9;
+    --text: #231d16;
+    --muted: #6b5f52;
+    --border: #e4dacd;
+    --accent: #b4532a;
+    --green: #1d7a3e;
+    --green-bg: #e3f4e8;
+    --yellow: #8a6200;
+    --yellow-bg: #fbf0cf;
+    --red: #b42318;
+    --red-bg: #fde7e4;
+    --unknown: #5b5b5b;
+    --unknown-bg: #ececec;
+    color-scheme: light;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme='light']) {
+      --bg: #16130f;
+      --surface: #201b16;
+      --text: #f2ebe2;
+      --muted: #b3a697;
+      --border: #3a3129;
+      --accent: #e98a5c;
+      --green: #6fd394;
+      --green-bg: #173322;
+      --yellow: #f1c75b;
+      --yellow-bg: #3a2f12;
+      --red: #ff8a7d;
+      --red-bg: #3f1d19;
+      --unknown: #c4c4c4;
+      --unknown-bg: #2f2f2f;
+      color-scheme: dark;
+    }
+  }
+
+  :root[data-theme='dark'] {
+    --bg: #16130f;
+    --surface: #201b16;
+    --text: #f2ebe2;
+    --muted: #b3a697;
+    --border: #3a3129;
+    --accent: #e98a5c;
+    --green: #6fd394;
+    --green-bg: #173322;
+    --yellow: #f1c75b;
+    --yellow-bg: #3a2f12;
+    --red: #ff8a7d;
+    --red-bg: #3f1d19;
+    --unknown: #c4c4c4;
+    --unknown-bg: #2f2f2f;
+    color-scheme: dark;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font: 17px/1.6 system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  }
+
+  a {
+    color: var(--accent);
+  }
+
+  main,
+  .site-header,
+  .site-footer {
+    max-width: 46rem;
+    margin: 0 auto;
+    padding: 0 16px;
+  }
+
+  .site-header {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.25rem;
+    align-items: baseline;
+    justify-content: space-between;
+    padding-top: 1.25rem;
+    padding-bottom: 1.25rem;
+  }
+
+  .brand {
+    font-weight: 700;
+    color: var(--text);
+    text-decoration: none;
+  }
+
+  .site-header nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 1rem;
+    font-size: 0.95rem;
+  }
+
+  .site-header nav a {
+    color: var(--muted);
+    text-decoration: none;
+  }
+
+  .site-header nav a[aria-current='page'] {
+    color: var(--text);
+    font-weight: 600;
+  }
+
+  h1 {
+    font-size: clamp(1.8rem, 6vw, 2.5rem);
+    line-height: 1.15;
+    margin: 0.5rem 0 1rem;
+  }
+
+  h2 {
+    font-size: 1.3rem;
+    margin: 2.25rem 0 0.75rem;
+  }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 1.25rem;
+  }
+
+  .muted {
+    color: var(--muted);
+  }
+
+  .flag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.1rem 0.6rem;
+    border-radius: 999px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .flag::before {
+    content: '';
+    width: 0.6rem;
+    height: 0.6rem;
+    border-radius: 50%;
+    background: currentColor;
+  }
+
+  .flag-green {
+    color: var(--green);
+    background: var(--green-bg);
+  }
+
+  .flag-yellow {
+    color: var(--yellow);
+    background: var(--yellow-bg);
+  }
+
+  .flag-red {
+    color: var(--red);
+    background: var(--red-bg);
+  }
+
+  .flag-unknown {
+    color: var(--unknown);
+    background: var(--unknown-bg);
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  th,
+  td {
+    text-align: left;
+    padding: 0.6rem 0.5rem;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+
+  .table-wrap {
+    overflow-x: auto;
+  }
+
+  .site-footer {
+    margin-top: 3rem;
+    padding-top: 1.5rem;
+    padding-bottom: 2.5rem;
+    border-top: 1px solid var(--border);
+    font-size: 0.9rem;
+    color: var(--muted);
+  }
+</style>

@@ -1,0 +1,30 @@
+---
+import Base from '../layouts/Base.astro';
+import { SOURCE_URL } from '../lib/status';
+
+const title = 'About Cappadocia Balloon Status';
+const description =
+  'Where the Cappadocia balloon flight status on this site comes from, how often it is checked, and its limits.';
+---
+
+<Base title={title} description={description}>
+  <h1>About this site</h1>
+  <p>
+    Cappadocia Balloon Status answers one question for visitors: will the balloons fly this morning? It reads the public
+    status page of the <a href={SOURCE_URL} rel="nofollow">Kapadokya Slot Service Center</a>, where the official flight
+    flags are published, and shows them in plain language with times converted to Türkiye time.
+  </p>
+
+  <h2>How often it checks</h2>
+  <p>
+    Every 15 minutes between 04:00 and 12:00 Türkiye time, when the morning decisions are made, and once an hour
+    otherwise. Each change is recorded on the <a href="/history/">history page</a>.
+  </p>
+
+  <h2>Limits</h2>
+  <ul>
+    <li>This is an unofficial page and is not affiliated with the DGCA (SHGM), Kapadokya University or any operator.</li>
+    <li>A green flag allows take-off, but your pilot and balloon company still make the final decision.</li>
+    <li>Between checks the official status may already have changed. Your operator has the latest word.</li>
+  </ul>
+</Base>

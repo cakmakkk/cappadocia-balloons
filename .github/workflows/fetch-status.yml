@@ -1,0 +1,41 @@
+name: Fetch balloon status
+
+on:
+  schedule:
+    # Morning decisions: every 15 minutes, 04:00–11:45 Türkiye time (UTC+3).
+    - cron: '*/15 1-8 * * *'
+    # Rest of the day: hourly.
+    - cron: '0 0,9-23 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: fetch-status
+  cancel-in-progress: false
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm test
+      - run: npm run fetch
+      - name: Commit new states
+        run: |
+          git add data/history
+          if git diff --cached --quiet; then
+            echo "No new state"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "data: balloon status $(date -u +%Y-%m-%dT%H:%MZ)"
+          git push
