@@ -82,6 +82,7 @@ export default {
     secondaryTitle: 'Regiones secundarias',
     secondaryIntro: 'Zonas más pequeñas alrededor de los valles principales, que necesitan su propia autorización de despegue.',
     region: (id) => `Región ${id}`,
+    regions: (range) => `Regiones ${range}`,
     tomorrowTitle: 'Mañana por la mañana',
     thisMorningTitle: 'El tiempo de esta mañana',
     tomorrowLink: 'Ver las próximas 7 mañanas',

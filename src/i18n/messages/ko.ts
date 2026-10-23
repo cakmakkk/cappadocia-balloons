@@ -81,6 +81,7 @@ export default {
     secondaryTitle: '보조 구역',
     secondaryIntro: '주요 계곡 주변의 작은 구역으로, 따로 이륙 승인을 받아야 해요.',
     region: (id) => `${id}번 구역`,
+    regions: (range) => `${range}번 구역`,
     tomorrowTitle: '내일 아침',
     thisMorningTitle: '오늘 아침 날씨',
     tomorrowLink: '앞으로 7일 보기',

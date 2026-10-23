@@ -81,6 +81,7 @@ export default {
     secondaryTitle: 'サブエリア',
     secondaryIntro: '主要な谷の周辺にある小さなエリアで、個別の離陸承認が必要です。',
     region: (id) => `エリア${id}`,
+    regions: (range) => `エリア${range}`,
     tomorrowTitle: '明日の朝',
     thisMorningTitle: '今朝の天気',
     tomorrowLink: 'この先7日間を見る',

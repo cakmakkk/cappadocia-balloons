@@ -81,6 +81,7 @@ export default {
     secondaryTitle: 'Secondary regions',
     secondaryIntro: 'Smaller areas around the main valleys, which need their own take-off approval.',
     region: (id) => `Region ${id}`,
+    regions: (range) => `Regions ${range}`,
     tomorrowTitle: 'Tomorrow morning',
     thisMorningTitle: "This morning's weather",
     tomorrowLink: 'See the next 7 mornings',

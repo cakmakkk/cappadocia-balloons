@@ -78,6 +78,7 @@ export default {
     secondaryTitle: '次要区域',
     secondaryIntro: '主要山谷周边的较小区域，需要单独的起飞许可。',
     region: (id) => `${id}号区域`,
+    regions: (range) => `${range}号区域`,
     tomorrowTitle: '明天早上',
     thisMorningTitle: '今天早上的天气',
     tomorrowLink: '查看未来7天',

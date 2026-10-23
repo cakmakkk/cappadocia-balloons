@@ -81,6 +81,7 @@ export default {
     secondaryTitle: 'Regiões secundárias',
     secondaryIntro: 'Áreas menores ao redor dos vales principais, que precisam de uma autorização de decolagem própria.',
     region: (id) => `Região ${id}`,
+    regions: (range) => `Regiões ${range}`,
     tomorrowTitle: 'Amanhã cedo',
     thisMorningTitle: 'O tempo nesta manhã',
     tomorrowLink: 'Ver as próximas 7 manhãs',

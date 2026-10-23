@@ -82,6 +82,7 @@ export default {
     secondaryTitle: 'Zone secondarie',
     secondaryIntro: 'Aree più piccole intorno alle valli principali, che richiedono un’autorizzazione al decollo separata.',
     region: (id) => `Zona ${id}`,
+    regions: (range) => `Zone ${range}`,
     tomorrowTitle: 'Domattina',
     thisMorningTitle: 'Il meteo di stamattina',
     tomorrowLink: 'Vedi le prossime 7 mattine',

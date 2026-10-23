@@ -81,6 +81,7 @@ export default {
     secondaryTitle: 'İkincil bölgeler',
     secondaryIntro: 'Ana vadilerin çevresindeki, ayrıca kalkış onayı gereken küçük bölgeler.',
     region: (id) => `${id}. bölge`,
+    regions: (range) => `${range}. bölgeler`,
     tomorrowTitle: 'Yarın sabah',
     thisMorningTitle: 'Bu sabahın havası',
     tomorrowLink: 'Önümüzdeki 7 sabahı gör',

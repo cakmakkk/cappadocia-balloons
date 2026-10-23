@@ -104,14 +104,23 @@ const structuredData = [
       <section>
         <h2>{t.home.secondaryTitle}</h2>
         <p class="muted">{t.home.secondaryIntro}</p>
-        <ul class="regions">
-          {latest.secondary.map((area) => (
-            <li>
-              <span>{t.home.region(area.id)}</span>
-              <FlagBadge locale={locale} flag={area.flag} />
-            </li>
-          ))}
-        </ul>
+        {new Set(latest.secondary.map((area) => area.flag)).size === 1 ? (
+          <p class="regions-all">
+            <span>
+              {t.home.regions(`${latest.secondary[0].id}–${latest.secondary.at(-1)!.id}`)}
+            </span>
+            <FlagBadge locale={locale} flag={latest.secondary[0].flag} />
+          </p>
+        ) : (
+          <ul class="regions">
+            {latest.secondary.map((area) => (
+              <li>
+                <span>{t.home.region(area.id)}</span>
+                <FlagBadge locale={locale} flag={area.flag} />
+              </li>
+            ))}
+          </ul>
+        )}
       </section>
     )
   }
@@ -189,16 +198,21 @@ const structuredData = [
     padding: 0;
     margin: 0;
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 15rem), 1fr));
     gap: 0.5rem;
   }
 
-  .regions span {
-    white-space: nowrap;
+  .regions-all {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 0.75rem;
+    font-weight: 600;
   }
 
   .regions li {
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-between;
     align-items: center;
     gap: 0.5rem;

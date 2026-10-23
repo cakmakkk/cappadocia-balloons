@@ -81,6 +81,7 @@ export default {
     secondaryTitle: 'Дополнительные зоны',
     secondaryIntro: 'Небольшие районы вокруг главных долин, для которых нужно отдельное разрешение на взлёт.',
     region: (id) => `Зона ${id}`,
+    regions: (range) => `Зоны ${range}`,
     tomorrowTitle: 'Завтра утром',
     thisMorningTitle: 'Погода этим утром',
     tomorrowLink: 'Прогноз на 7 дней',

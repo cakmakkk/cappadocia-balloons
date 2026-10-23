@@ -81,6 +81,7 @@ export default {
     secondaryTitle: 'Nebengebiete',
     secondaryIntro: 'Kleinere Gebiete rund um die Haupttäler, die eine eigene Startfreigabe brauchen.',
     region: (id) => `Gebiet ${id}`,
+    regions: (range) => `Gebiete ${range}`,
     tomorrowTitle: 'Morgen früh',
     thisMorningTitle: 'Das Wetter heute Morgen',
     tomorrowLink: 'Die nächsten 7 Morgen ansehen',

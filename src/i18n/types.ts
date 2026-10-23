@@ -56,6 +56,8 @@ export interface Messages {
     secondaryTitle: string;
     secondaryIntro: string;
     region: (id: string) => string;
+    /** All secondary regions at once, e.g. "Regions 2–5". */
+    regions: (range: string) => string;
     tomorrowTitle: string;
     /** Same card, between midnight and the morning window. */
     thisMorningTitle: string;
