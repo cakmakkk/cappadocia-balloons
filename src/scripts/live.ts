@@ -29,6 +29,9 @@ interface LiveData {
 }
 
 const REFRESH_EVERY = 5 * 60_000;
+// The official page often takes several seconds to answer.
+const TIMEOUT = 15_000;
+const RETRY_AFTER = 30_000;
 const STALE_AFTER = 120 * 60_000;
 const FLAGS: Flag[] = ['green', 'yellow', 'red', 'unknown'];
 // One small chunk per language, loaded only for the page's own language.
@@ -37,7 +40,7 @@ const messageFiles = import.meta.glob<{ default: Messages }>('../i18n/messages/*
 const live = (name: string) => document.querySelector<HTMLElement>(`[data-live="${name}"]`);
 
 async function readOfficialPage() {
-  const response = await fetch(SOURCE_URL, { cache: 'no-store', signal: AbortSignal.timeout(8000) });
+  const response = await fetch(SOURCE_URL, { cache: 'no-store', signal: AbortSignal.timeout(TIMEOUT) });
   if (!response.ok) throw new Error(`Official page returned HTTP ${response.status}`);
   const html = await response.text();
   return parseShmDocument(new DOMParser().parseFromString(html, 'text/html'), html);
@@ -157,6 +160,7 @@ function start(data: LiveData) {
   let known = data.latest;
   let checkedText = checked?.textContent ?? '';
   let lastTry = 0;
+  let failures = 0;
 
   async function update() {
     lastTry = Date.now();
@@ -167,13 +171,16 @@ function start(data: LiveData) {
       const now = new Date();
       known = { checkedAt: now.toISOString(), source: SOURCE_URL, sectors, secondary };
       render(t, data.locale, known, withReading(data.days, known, localDate(now)), now);
+      failures = 0;
       checkedText = t.home.liveAt(time(data.locale, known.checkedAt));
       if (checked) {
         checked.textContent = checkedText;
         checked.classList.remove('is-stale');
       }
     } catch {
-      // Give the answer the last known flags give at this moment, and say so once they are old.
+      // A slow moment on the official side is common: try once more soon.
+      if (++failures === 1) setTimeout(update, RETRY_AFTER);
+      // Meanwhile give the answer the last known flags give at this moment, and say so once they are old.
       if (!known) return;
       const now = new Date();
       render(t, data.locale, known, data.days, now);
