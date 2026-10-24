@@ -31,9 +31,15 @@ export default {
   },
   turkeyTime: 'türkische Zeit',
   photoCredit: (author, license) => `Foto: ${author}, ${license}`,
+  photoAlt: {
+    flying: 'Heißluftballons steigen bei Sonnenaufgang über den Felsformationen Kappadokiens auf',
+    grounded: 'Täler und Feenkamine bei Uçhisar unter klarem Himmel',
+    night: 'Ein einzelner Heißluftballon als Silhouette vor dem Sonnenaufgang über Kappadokien',
+  },
 
   home: {
     title: 'Fliegen heute die Ballons in Kappadokien? Live-Status',
+    titleDated: (date) => `Fliegen heute die Ballons in Kappadokien? Live-Status · ${date}`,
     description:
       'Live-Status der Heißluftballons in Kappadokien, direkt von der offiziellen Flaggenseite: welche Gebiete heute Morgen fliegen dürfen, die Aussichten für morgen und alle vergangenen Tage.',
     h1: 'Fliegen heute die Ballons in Kappadokien?',
@@ -77,7 +83,7 @@ export default {
     sunrise: (time) => `Sonnenaufgang ${time}`,
     checkedAt: (time) => `Geprüft um ${time}`,
     stale: 'Möglicherweise veraltet. Seite neu laden.',
-    mapTitle: 'Die drei Fluggebiete',
+    mapTitle: 'Fluggebiete: Sektoren A, B und C',
     mapIntro: (window) => `Flaggen für ${window}, türkische Zeit.`,
     mapIntroEarlier: (date, window) =>
       `Zuletzt veröffentlichte Flaggen: ${date}, ${window}. Die von heute erscheinen hier, sobald sie da sind.`,
@@ -86,14 +92,41 @@ export default {
     secondaryIntro: 'Kleinere Gebiete rund um die Haupttäler, die eine eigene Startfreigabe brauchen.',
     region: (id) => `Gebiet ${id}`,
     regions: (range) => `Gebiete ${range}`,
-    tomorrowTitle: 'Morgen früh',
+    tomorrowTitle: 'Ballon-Aussichten für morgen früh',
     thisMorningTitle: 'Das Wetter heute Morgen',
     tomorrowLink: 'Die nächsten 7 Morgen ansehen',
-    recentTitle: 'Die letzten zwei Wochen',
+    recentTitle: 'Ballonflüge der letzten zwei Wochen',
     allHistory: 'Alle erfassten Tage',
     sourceNote:
       'Direkt von der offiziellen Flaggenseite des Kapadokya Slot Service Center, morgens alle 10 Minuten geprüft.',
     guidesTitle: 'Gut zu wissen',
+    faqTitle: 'Häufige Fragen',
+    faq: [
+      {
+        q: 'Wer entscheidet, ob die Ballons fliegen?',
+        a: 'Das Büro der türkischen Zivilluftfahrtbehörde (SHGM) in Nevşehir prüft jeden Morgen das Wetter und veröffentlicht auf der Seite des Slot Service Center eine Flagge für jedes Fluggebiet. Diese Seite liest sie aus.',
+      },
+      {
+        q: 'Um wie viel Uhr kommt die Entscheidung?',
+        a: 'Kurz vor Sonnenaufgang. In unseren ersten Aufzeichnungen erschienen die Morgenflaggen 35 bis 40 Minuten vor Sonnenaufgang, das Flugfenster öffnete etwa eine halbe Stunde davor.',
+      },
+      {
+        q: 'Was bedeutet eine gelbe Flagge?',
+        a: 'Kein Start, genau wie bei Rot. Nur eine grüne Flagge erlaubt den Start.',
+      },
+      {
+        q: 'Kann mein Flug an einem grünen Morgen trotzdem ausfallen?',
+        a: 'Ja. Eine grüne Flagge erlaubt den Start, aber die letzte Entscheidung treffen Pilot und Ballonfirma.',
+      },
+      {
+        q: 'Fliegen die Ballons morgen?',
+        a: 'Die offizielle Entscheidung kommt erst morgen früh. Bis dahin bewertet unsere 7-Tage-Aussicht das Wetter für jeden Morgen.',
+      },
+      {
+        q: 'Ist das eine offizielle Seite?',
+        a: 'Nein. Es ist eine unabhängige Seite, die die offiziellen Flaggen ausliest und speichert. Sie verkauft keine Ballonfahrten.',
+      },
+    ],
   },
 
   tomorrow: {
@@ -148,6 +181,9 @@ export default {
     intro: 'Was man wissen sollte, bevor in Kappadokien der Wecker klingelt.',
     updated: (date) => `Aktualisiert am ${date}`,
     mapCaption: 'Die drei Fluggebiete nach der offiziellen Karte, mit den aktuellen Flaggen.',
+    sunriseCaption: 'Sonnenaufgang in Göreme am 15. jedes Monats, türkische Zeit.',
+    monthColumn: 'Monat',
+    sunriseColumn: 'Sonnenaufgang',
   },
 
   footer: {
@@ -155,6 +191,7 @@ export default {
       'Eine unabhängige Seite. Nicht betrieben von der Zivilluftfahrtbehörde, der Universität Kappadokien oder einer Ballonfirma.',
     source: 'Offizielle Flaggenseite',
     data: 'Daten auf GitHub',
+    languages: 'Andere Sprachen',
   },
 
   langHint: 'Diese Seite auf Deutsch lesen',

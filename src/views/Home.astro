@@ -10,6 +10,7 @@ import { longDate, timeRange } from '../i18n/format.ts';
 import { messages } from '../i18n/index.ts';
 import { localeInfo, type Locale } from '../i18n/locales.ts';
 import Base from '../layouts/Base.astro';
+import { describe } from '../lib/describe.ts';
 import { docsIn, slugOf } from '../lib/docs.ts';
 import { loadForecast } from '../lib/forecast.ts';
 import { absolute, href } from '../lib/paths.ts';
@@ -46,30 +47,57 @@ const recent = history
   .reverse();
 const guides = await docsIn(locale, 'guide');
 
+// The title carries today's date and the description today's answer, so a
+// search result shows the current status before anyone clicks.
+const sunrise = sunriseOn(today);
+const status = describe(locale, state, sunrise);
+const title = t.home.titleDated(longDate(locale, today));
+const description = `${status.headline}. ${status.detail}`;
+
+const homeUrl = absolute(locale, '/', Astro.site);
 const structuredData = [
   {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
     name: t.siteName,
-    url: absolute(locale, '/', Astro.site),
+    url: homeUrl,
     inLanguage: localeInfo(locale).hreflang,
+    publisher: { '@type': 'Organization', name: t.siteName, url: homeUrl },
   },
   {
     '@context': 'https://schema.org',
     '@type': 'WebPage',
-    name: t.home.title,
-    description: t.home.description,
+    name: title,
+    description,
+    url: homeUrl,
     inLanguage: localeInfo(locale).hreflang,
     ...(latest && { dateModified: latest.checkedAt }),
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    inLanguage: localeInfo(locale).hreflang,
+    mainEntity: t.home.faq.map(({ q, a }) => ({
+      '@type': 'Question',
+      name: q,
+      acceptedAnswer: { '@type': 'Answer', text: a },
+    })),
   },
 ];
 ---
 
-<Base locale={locale} path="/" title={t.home.title} description={t.home.description} structuredData={structuredData}>
+<Base
+  locale={locale}
+  path="/"
+  title={title}
+  description={description}
+  ogDescription={t.home.description}
+  structuredData={structuredData}
+>
   <section slot="hero" class="hero">
     <Picture
       src={photo.src}
-      alt=""
+      alt={t.photoAlt[scene]}
       widths={[640, 1024, 1440, 1800]}
       sizes="100vw"
       formats={['avif', 'webp']}
@@ -90,7 +118,7 @@ const structuredData = [
       locale={locale}
       state={state}
       checkedAt={latest?.checkedAt ?? null}
-      sunrise={sunriseOn(today)}
+      sunrise={sunrise}
       updates={todaysUpdates}
     />
   </div>
@@ -170,6 +198,18 @@ const structuredData = [
       }
     </ul>
     <p class="muted source-note">{t.home.sourceNote}</p>
+  </section>
+
+  <section class="faq">
+    <h2>{t.home.faqTitle}</h2>
+    {
+      t.home.faq.map(({ q, a }) => (
+        <div class="faq-item">
+          <h3>{q}</h3>
+          <p>{a}</p>
+        </div>
+      ))
+    }
   </section>
 </Base>
 
@@ -294,5 +334,21 @@ const structuredData = [
   .source-note {
     margin-top: 1.5rem;
     font-size: 0.92rem;
+  }
+
+  .faq-item {
+    padding: 0.9rem 0;
+    border-top: 1px solid var(--line);
+  }
+
+  .faq-item h3 {
+    margin: 0 0 0.3rem;
+    font-size: 1.05rem;
+    letter-spacing: -0.01em;
+  }
+
+  .faq-item p {
+    margin: 0;
+    color: var(--muted);
   }
 </style>

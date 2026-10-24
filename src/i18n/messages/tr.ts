@@ -31,9 +31,15 @@ export default {
   },
   turkeyTime: 'Türkiye saati',
   photoCredit: (author, license) => `Fotoğraf: ${author}, ${license}`,
+  photoAlt: {
+    flying: 'Gün doğumunda Kapadokya’nın kaya oluşumları üzerinde yükselen sıcak hava balonları',
+    grounded: 'Açık gökyüzü altında Uçhisar yakınlarındaki vadiler ve peri bacaları',
+    night: 'Kapadokya’da gün doğumuna karşı tek bir balonun silueti',
+  },
 
   home: {
     title: "Kapadokya'da balonlar bugün uçuyor mu? Canlı balon durumu",
+    titleDated: (date) => `Kapadokya'da balonlar bugün uçuyor mu? Canlı durum · ${date}`,
     description:
       'Kapadokya sıcak hava balonlarının canlı durumu, doğrudan resmî bayrak sayfasından: bu sabah hangi bölgeler uçabiliyor, yarın için tahmin ve geçmiş günler.',
     h1: "Kapadokya'da balonlar bugün uçuyor mu?",
@@ -77,7 +83,7 @@ export default {
     sunrise: (time) => `Gün doğumu ${time}`,
     checkedAt: (time) => `Son kontrol: ${time}`,
     stale: 'Bu bilgi eskimiş olabilir. Sayfayı yenileyin.',
-    mapTitle: 'Üç uçuş bölgesi',
+    mapTitle: 'Uçuş bölgeleri: A, B ve C',
     mapIntro: (window) => `${window} için bayraklar, Türkiye saatiyle.`,
     mapIntroEarlier: (date, window) =>
       `Son yayımlanan bayraklar: ${date}, ${window}. Bugünkü bayraklar çıkar çıkmaz burada görünecek.`,
@@ -86,14 +92,41 @@ export default {
     secondaryIntro: 'Ana vadilerin çevresindeki, ayrıca kalkış onayı gereken küçük bölgeler.',
     region: (id) => `${id}. bölge`,
     regions: (range) => `${range}. bölgeler`,
-    tomorrowTitle: 'Yarın sabah',
+    tomorrowTitle: 'Yarın sabah için balon tahmini',
     thisMorningTitle: 'Bu sabahın havası',
     tomorrowLink: 'Önümüzdeki 7 sabahı gör',
-    recentTitle: 'Son iki hafta',
+    recentTitle: 'Son iki haftada balon uçuşları',
     allHistory: 'Kayıtlı bütün günler',
     sourceNote:
       'Doğrudan Kapadokya Slot Hizmet Merkezi’nin resmî bayrak sayfasından, sabah boyunca 10 dakikada bir kontrol edilir.',
     guidesTitle: 'Bilmekte fayda var',
+    faqTitle: 'Sık sorulan sorular',
+    faq: [
+      {
+        q: 'Balonların uçup uçmayacağına kim karar veriyor?',
+        a: 'Sivil Havacılık Genel Müdürlüğü’nün (SHGM) Nevşehir ofisi her sabah havayı değerlendiriyor ve Slot Hizmet Merkezi’nin sayfasında her uçuş bölgesi için bir bayrak yayımlıyor. Bu site o sayfayı okuyor.',
+      },
+      {
+        q: 'Karar saat kaçta açıklanıyor?',
+        a: 'Gün doğumundan kısa bir süre önce. İlk kayıtlarımızda sabah bayrakları gün doğumundan 35–40 dakika önce çıktı, uçuş penceresi de gün doğumundan yaklaşık yarım saat önce açıldı.',
+      },
+      {
+        q: 'Sarı bayrak ne demek?',
+        a: 'Kırmızı bayrakta olduğu gibi kalkış yok. Balonlar sadece yeşil bayrakta kalkabilir.',
+      },
+      {
+        q: 'Yeşil bir sabahta da uçuşum iptal olabilir mi?',
+        a: 'Evet. Yeşil bayrak kalkışa izin verir, ama son kararı pilot ve balon şirketi verir.',
+      },
+      {
+        q: 'Balonlar yarın uçacak mı?',
+        a: 'Resmî karar ancak yarın sabah çıkacak. O zamana kadar 7 günlük tahminimiz her sabahın havasını değerlendiriyor.',
+      },
+      {
+        q: 'Bu resmî bir site mi?',
+        a: 'Hayır. Resmî bayrakları okuyup kaydeden bağımsız bir sayfa. Balon turu satmıyor.',
+      },
+    ],
   },
 
   tomorrow: {
@@ -147,12 +180,16 @@ export default {
     intro: 'Kapadokya’da erken kalkmadan önce bilmeye değer şeyler.',
     updated: (date) => `Güncelleme: ${date}`,
     mapCaption: 'Resmî haritadan çizilmiş üç uçuş bölgesi ve şu anki bayrakları.',
+    sunriseCaption: 'Her ayın 15’inde Göreme’de gün doğumu, Türkiye saatiyle.',
+    monthColumn: 'Ay',
+    sunriseColumn: 'Gün doğumu',
   },
 
   footer: {
     independent: 'Bağımsız bir sayfa. Sivil Havacılık, Kapadokya Üniversitesi ya da herhangi bir balon şirketiyle bağı yok.',
     source: 'Resmî bayrak sayfası',
     data: 'GitHub’daki veriler',
+    languages: 'Diğer diller',
   },
 
   langHint: 'Bu sayfayı Türkçe okuyun',

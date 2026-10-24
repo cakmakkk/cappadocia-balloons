@@ -31,9 +31,15 @@ export default {
   },
   turkeyTime: '튀르키예 시간',
   photoCredit: (author, license) => `사진: ${author}, ${license}`,
+  photoAlt: {
+    flying: '해 뜰 무렵 카파도키아의 바위 지형 위로 떠오르는 열기구',
+    grounded: '맑은 하늘 아래 우치히사르 근처의 계곡과 요정의 굴뚝',
+    night: '카파도키아의 일출을 배경으로 한 열기구 실루엣',
+  },
 
   home: {
     title: '오늘 카파도키아 열기구 뜨나요? 실시간 비행 현황',
+    titleDated: (date) => `오늘 카파도키아 열기구 뜨나요? 실시간 현황 · ${date}`,
     description:
       '공식 깃발 페이지에서 바로 가져온 카파도키아 열기구 실시간 현황. 오늘 아침 어느 구역이 비행할 수 있는지, 내일 전망과 지난 기록까지 확인하세요.',
     h1: '오늘 카파도키아 열기구 뜨나요?',
@@ -77,7 +83,7 @@ export default {
     sunrise: (time) => `일출 ${time}`,
     checkedAt: (time) => `${time} 확인`,
     stale: '정보가 오래됐을 수 있어요. 페이지를 새로고침하세요.',
-    mapTitle: '세 비행 구역',
+    mapTitle: '비행 구역: A·B·C 구역',
     mapIntro: (window) => `${window} 깃발, 튀르키예 시간 기준.`,
     mapIntroEarlier: (date, window) =>
       `마지막으로 발표된 깃발: ${date} ${window}. 오늘 깃발이 나오면 바로 여기에 표시돼요.`,
@@ -86,13 +92,40 @@ export default {
     secondaryIntro: '주요 계곡 주변의 작은 구역으로, 따로 이륙 승인을 받아야 해요.',
     region: (id) => `${id}번 구역`,
     regions: (range) => `${range}번 구역`,
-    tomorrowTitle: '내일 아침',
+    tomorrowTitle: '내일 아침 열기구 전망',
     thisMorningTitle: '오늘 아침 날씨',
     tomorrowLink: '앞으로 7일 보기',
-    recentTitle: '최근 2주',
+    recentTitle: '최근 2주 열기구 비행',
     allHistory: '전체 기록 보기',
     sourceNote: '카파도키아 슬롯 서비스 센터의 공식 깃발 페이지에서 바로 가져오며, 아침에는 10분마다 확인해요.',
     guidesTitle: '알아두면 좋은 정보',
+    faqTitle: '자주 묻는 질문',
+    faq: [
+      {
+        q: '열기구 비행 여부는 누가 결정하나요?',
+        a: '튀르키예 민간항공청(SHGM) 네브셰히르 사무소가 매일 아침 날씨를 판단하고, 슬롯 서비스 센터 페이지에 비행 구역마다 깃발을 올려요. 이 사이트는 그 페이지를 읽어 와요.',
+      },
+      {
+        q: '결정은 몇 시에 나오나요?',
+        a: '해 뜨기 조금 전이에요. 저희 첫 기록에서는 아침 깃발이 일출 35~40분 전에 올라왔고, 비행 시간대는 일출 약 30분 전에 열렸어요.',
+      },
+      {
+        q: '노란 깃발은 무슨 뜻인가요?',
+        a: '빨간 깃발과 마찬가지로 이륙할 수 없다는 뜻이에요. 초록 깃발일 때만 이륙할 수 있어요.',
+      },
+      {
+        q: '초록 깃발인 날에도 비행이 취소될 수 있나요?',
+        a: '네. 초록 깃발은 이륙을 허가할 뿐, 최종 결정은 조종사와 열기구 업체가 내려요.',
+      },
+      {
+        q: '내일 열기구가 뜰까요?',
+        a: '공식 결정은 내일 아침에야 나와요. 그 전까지는 저희 7일 전망이 아침마다 날씨를 평가해 드려요.',
+      },
+      {
+        q: '공식 사이트인가요?',
+        a: '아니요. 공식 깃발을 읽어 기록하는 독립 페이지예요. 열기구 투어를 팔지 않아요.',
+      },
+    ],
   },
 
   tomorrow: {
@@ -144,12 +177,16 @@ export default {
     intro: '카파도키아에서 새벽 알람을 맞추기 전에 알아두면 좋은 것들.',
     updated: (date) => `업데이트: ${date}`,
     mapCaption: '공식 지도를 바탕으로 그린 세 비행 구역과 현재 깃발.',
+    sunriseCaption: '매월 15일 괴레메의 일출 시각(튀르키예 시간).',
+    monthColumn: '월',
+    sunriseColumn: '일출',
   },
 
   footer: {
     independent: '독립적으로 운영되는 페이지예요. 민간항공청, 카파도키아 대학교, 열기구 업체와 관련이 없어요.',
     source: '공식 깃발 페이지',
     data: 'GitHub 데이터',
+    languages: '다른 언어',
   },
 
   langHint: '이 페이지를 한국어로 보기',

@@ -2,7 +2,7 @@
 title: Ballonfahrt in Kappadokien abgesagt? Was du jetzt tun kannst
 description: Warum Ballonfahrten in Kappadokien abgesagt werden, was meist mit deiner Buchung passiert und wie du deinen Aufenthalt planst, damit dich ein windiger Morgen nicht den Flug kostet.
 section: guide
-order: 2
+order: 4
 updated: 2026-10-23
 ---
 

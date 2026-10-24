@@ -31,9 +31,15 @@ export default {
   },
   turkeyTime: 'ora turca',
   photoCredit: (author, license) => `Foto: ${author}, ${license}`,
+  photoAlt: {
+    flying: 'Mongolfiere che salgono sopra le formazioni rocciose della Cappadocia all’alba',
+    grounded: 'Valli e camini delle fate vicino a Uçhisar sotto un cielo sereno',
+    night: 'La sagoma di una mongolfiera contro l’alba in Cappadocia',
+  },
 
   home: {
     title: 'Oggi volano le mongolfiere in Cappadocia? Stato in tempo reale',
+    titleDated: (date) => `Oggi volano le mongolfiere in Cappadocia? Stato in tempo reale · ${date}`,
     description:
       'Lo stato in tempo reale delle mongolfiere in Cappadocia, direttamente dalla pagina ufficiale delle bandiere: quali zone possono volare stamattina, le previsioni per domani e i giorni passati.',
     h1: 'Oggi volano le mongolfiere in Cappadocia?',
@@ -78,7 +84,7 @@ export default {
     sunrise: (time) => `Alba ${time}`,
     checkedAt: (time) => `Controllato alle ${time}`,
     stale: 'Potrebbe non essere aggiornato. Ricarica la pagina.',
-    mapTitle: 'Le tre zone di volo',
+    mapTitle: 'Zone di volo: settori A, B e C',
     mapIntro: (window) => `Bandiere per la fascia ${window}, ora turca.`,
     mapIntroEarlier: (date, window) =>
       `Ultime bandiere pubblicate: ${date}, ${window}. Quelle di oggi compariranno qui appena escono.`,
@@ -87,14 +93,41 @@ export default {
     secondaryIntro: 'Aree più piccole intorno alle valli principali, che richiedono un’autorizzazione al decollo separata.',
     region: (id) => `Zona ${id}`,
     regions: (range) => `Zone ${range}`,
-    tomorrowTitle: 'Domattina',
+    tomorrowTitle: 'Previsioni per domattina',
     thisMorningTitle: 'Il meteo di stamattina',
     tomorrowLink: 'Vedi le prossime 7 mattine',
-    recentTitle: 'Le ultime due settimane',
+    recentTitle: 'Voli in mongolfiera nelle ultime due settimane',
     allHistory: 'Tutti i giorni registrati',
     sourceNote:
       'Direttamente dalla pagina ufficiale delle bandiere dello Slot Service Center della Cappadocia, controllata ogni 10 minuti durante la mattina.',
     guidesTitle: 'Da sapere',
+    faqTitle: 'Domande frequenti',
+    faq: [
+      {
+        q: 'Chi decide se le mongolfiere volano?',
+        a: 'L’ufficio di Nevşehir dell’autorità dell’aviazione civile turca (SHGM) valuta il meteo ogni mattina e pubblica una bandiera per ogni zona di volo sulla pagina dello Slot Service Center. Questo sito legge quella pagina.',
+      },
+      {
+        q: 'A che ora viene pubblicata la decisione?',
+        a: 'Poco prima dell’alba. Nei nostri primi dati le bandiere del mattino sono comparse 35–40 minuti prima dell’alba, e la finestra di volo si è aperta circa mezz’ora prima.',
+      },
+      {
+        q: 'Cosa significa la bandiera gialla?',
+        a: 'Niente decollo, come con la bandiera rossa. Solo la bandiera verde consente il decollo.',
+      },
+      {
+        q: 'Il mio volo può essere annullato anche in una mattina verde?',
+        a: 'Sì. La bandiera verde consente il decollo, ma la decisione finale spetta al pilota e alla compagnia.',
+      },
+      {
+        q: 'Domani volano le mongolfiere?',
+        a: 'La decisione ufficiale arriva solo domattina. Fino ad allora, le nostre previsioni a 7 giorni valutano il meteo di ogni mattina.',
+      },
+      {
+        q: 'È un sito ufficiale?',
+        a: 'No. È una pagina indipendente che legge e registra le bandiere ufficiali. Non vende voli in mongolfiera.',
+      },
+    ],
   },
 
   tomorrow: {
@@ -149,6 +182,9 @@ export default {
     intro: 'Le cose da sapere prima di puntare la sveglia in Cappadocia.',
     updated: (date) => `Aggiornato il ${date}`,
     mapCaption: 'Le tre zone di volo, disegnate dalla mappa ufficiale, con le bandiere di adesso.',
+    sunriseCaption: 'Alba a Göreme il 15 di ogni mese, ora turca.',
+    monthColumn: 'Mese',
+    sunriseColumn: 'Alba',
   },
 
   footer: {
@@ -156,6 +192,7 @@ export default {
       'Una pagina indipendente. Non è gestita dall’autorità dell’aviazione civile, dall’Università della Cappadocia né da alcuna compagnia di mongolfiere.',
     source: 'Pagina ufficiale delle bandiere',
     data: 'Dati su GitHub',
+    languages: 'Altre lingue',
   },
 
   langHint: 'Leggi questa pagina in italiano',

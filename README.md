@@ -36,7 +36,7 @@ history and short guides.
 
 Hero photos are from Wikimedia Commons under CC BY-SA licences, credited on the page (`src/data/photos.ts`):
 Wolfgang Moroder (balloons flying), Bernard Gagnon (valley near Uçhisar) and MusikAnimal (sunrise, also used mirrored
-in `public/og.png`). Wolfgang Moroder asks not to use his photo on social media, so it stays out of the share image.
+in `public/og.jpg`). Wolfgang Moroder asks not to use his photo on social media, so it stays out of the share image.
 
 ## Data
 
@@ -79,6 +79,18 @@ Set only the token (the `content` value of the meta tag).
 
 On `*.github.io/<repo>/`, robots.txt isn't at the domain root, so search engines ignore it; submit
 `sitemap.xml` through each search engine's console instead.
+
+What the pages do for search:
+
+- Every page lists all ten language versions (hreflang plus x-default), in the page head and in `sitemap.xml`.
+- The home page title carries today's date and its meta description today's answer, rebuilt on every run.
+- JSON-LD: WebSite, WebPage, FAQPage (the visible questions on the home page), BreadcrumbList, Article for guides
+  and Dataset for the history.
+- Inter comes through Astro's Fonts API with a metric-matched fallback, CSS is inlined and only the subsets a
+  language needs are preloaded, which keeps layout shift at 0. Lighthouse (mobile): 94–97 performance, 100 for
+  accessibility, best practices and SEO.
+- After each push, the `indexnow` job sends every sitemap URL to IndexNow (Bing, Yandex, Naver and others). The key
+  is the 32-character `.txt` file in `public/`.
 
 The free Open-Meteo API is for non-commercial use only. Switch to a paid plan or another source before adding ads or
 affiliate links.

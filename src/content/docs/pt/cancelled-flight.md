@@ -2,7 +2,7 @@
 title: Voo de balão cancelado na Capadócia? O que fazer agora
 description: Por que os voos de balão na Capadócia são cancelados, o que costuma acontecer com a sua reserva e como planejar a viagem para que uma manhã de vento não custe o seu voo.
 section: guide
-order: 2
+order: 4
 updated: 2026-10-23
 ---
 

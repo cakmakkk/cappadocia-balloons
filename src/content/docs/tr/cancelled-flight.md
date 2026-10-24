@@ -2,7 +2,7 @@
 title: Kapadokya’da balon uçuşunuz mu iptal oldu? Şimdi ne yapmalı
 description: Kapadokya’da balon uçuşları neden iptal oluyor, rezervasyonunuza genelde ne oluyor ve tek bir rüzgârlı sabah uçuşu kaçırmanıza yol açmasın diye nasıl plan yapılır?
 section: guide
-order: 2
+order: 4
 updated: 2026-10-23
 ---
 

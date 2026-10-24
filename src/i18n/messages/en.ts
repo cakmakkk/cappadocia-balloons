@@ -31,9 +31,15 @@ export default {
   },
   turkeyTime: 'Türkiye time',
   photoCredit: (author, license) => `Photo: ${author}, ${license}`,
+  photoAlt: {
+    flying: 'Hot air balloons rising over the rock formations of Cappadocia at sunrise',
+    grounded: 'Valleys and fairy chimneys near Uçhisar under a clear sky',
+    night: 'A single hot air balloon in silhouette against the sunrise over Cappadocia',
+  },
 
   home: {
     title: 'Are Cappadocia balloons flying today? Live balloon status',
+    titleDated: (date) => `Are Cappadocia balloons flying today? Live status · ${date}`,
     description:
       'Live hot air balloon status for Cappadocia, straight from the official flag page: which areas can fly this morning, the outlook for tomorrow and every past day.',
     h1: 'Are Cappadocia balloons flying today?',
@@ -77,7 +83,7 @@ export default {
     sunrise: (time) => `Sunrise ${time}`,
     checkedAt: (time) => `Checked at ${time}`,
     stale: 'This may be out of date. Refresh the page.',
-    mapTitle: 'The three flight areas',
+    mapTitle: 'Flight areas: sectors A, B and C',
     mapIntro: (window) => `Flags for ${window}, Türkiye time.`,
     mapIntroEarlier: (date, window) =>
       `The last flags published, for ${date}, ${window}. Today's will show here as soon as they're out.`,
@@ -86,14 +92,41 @@ export default {
     secondaryIntro: 'Smaller areas around the main valleys, which need their own take-off approval.',
     region: (id) => `Region ${id}`,
     regions: (range) => `Regions ${range}`,
-    tomorrowTitle: 'Tomorrow morning',
+    tomorrowTitle: "Tomorrow's balloon outlook",
     thisMorningTitle: "This morning's weather",
     tomorrowLink: 'See the next 7 mornings',
-    recentTitle: 'The last two weeks',
+    recentTitle: 'Balloon flights in the last two weeks',
     allHistory: 'Every recorded day',
     sourceNote:
       'Straight from the official flag page of the Kapadokya Slot Service Center, checked every 10 minutes through the morning.',
     guidesTitle: 'Good to know',
+    faqTitle: 'Questions people ask',
+    faq: [
+      {
+        q: 'Who decides whether the balloons fly?',
+        a: "The Nevşehir office of Türkiye's civil aviation authority (SHGM) checks the weather every morning and publishes a flag for each flight area on the Slot Service Center's page. This site reads that page.",
+      },
+      {
+        q: 'What time is the decision published?',
+        a: 'Shortly before sunrise. In our first records, the morning flags appeared 35 to 40 minutes before sunrise, and the flight window opened about half an hour before sunrise.',
+      },
+      {
+        q: 'What does a yellow flag mean?',
+        a: 'No take-off, the same as a red flag. Only a green flag allows the balloons to take off.',
+      },
+      {
+        q: 'Can my flight still be cancelled on a green morning?',
+        a: 'Yes. A green flag allows take-off, but the pilot and the balloon company make the final decision.',
+      },
+      {
+        q: 'Will the balloons fly tomorrow?',
+        a: "The official decision only comes out tomorrow morning. Until then, our 7-day outlook rates each morning's weather.",
+      },
+      {
+        q: 'Is this an official website?',
+        a: "No. It is an independent page that reads and records the official flags. It doesn't sell balloon rides.",
+      },
+    ],
   },
 
   tomorrow: {
@@ -147,12 +180,16 @@ export default {
     intro: 'The things worth knowing before an early alarm in Cappadocia.',
     updated: (date) => `Updated ${date}`,
     mapCaption: 'The three flight areas, drawn from the official map, with right now’s flags.',
+    sunriseCaption: 'Sunrise in Göreme on the 15th of each month, Türkiye time.',
+    monthColumn: 'Month',
+    sunriseColumn: 'Sunrise',
   },
 
   footer: {
     independent: 'An independent page. Not run by the civil aviation authority, Kapadokya University or any balloon company.',
     source: 'Official flag page',
     data: 'Data on GitHub',
+    languages: 'Other languages',
   },
 
   langHint: 'Read this page in English',

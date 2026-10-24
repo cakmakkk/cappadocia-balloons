@@ -31,9 +31,15 @@ export default {
   },
   turkeyTime: 'horário da Turquia',
   photoCredit: (author, license) => `Foto: ${author}, ${license}`,
+  photoAlt: {
+    flying: 'Balões de ar quente subindo sobre as formações rochosas da Capadócia ao nascer do sol',
+    grounded: 'Vales e chaminés de fada perto de Uçhisar sob céu limpo',
+    night: 'A silhueta de um balão contra o nascer do sol na Capadócia',
+  },
 
   home: {
     title: 'Os balões da Capadócia voam hoje? Status ao vivo',
+    titleDated: (date) => `Os balões da Capadócia voam hoje? Status ao vivo · ${date}`,
     description:
       'Status ao vivo dos balões de ar quente na Capadócia, direto da página oficial de bandeiras: quais áreas podem voar nesta manhã, a previsão para amanhã e todos os dias anteriores.',
     h1: 'Os balões da Capadócia voam hoje?',
@@ -77,7 +83,7 @@ export default {
     sunrise: (time) => `Nascer do sol ${time}`,
     checkedAt: (time) => `Verificado às ${time}`,
     stale: 'Pode estar desatualizado. Recarregue a página.',
-    mapTitle: 'As três áreas de voo',
+    mapTitle: 'Áreas de voo: setores A, B e C',
     mapIntro: (window) => `Bandeiras para ${window}, horário da Turquia.`,
     mapIntroEarlier: (date, window) =>
       `Últimas bandeiras publicadas: ${date}, ${window}. As de hoje aparecem aqui assim que saírem.`,
@@ -86,14 +92,41 @@ export default {
     secondaryIntro: 'Áreas menores ao redor dos vales principais, que precisam de uma autorização de decolagem própria.',
     region: (id) => `Região ${id}`,
     regions: (range) => `Regiões ${range}`,
-    tomorrowTitle: 'Amanhã cedo',
+    tomorrowTitle: 'Previsão dos balões para amanhã',
     thisMorningTitle: 'O tempo nesta manhã',
     tomorrowLink: 'Ver as próximas 7 manhãs',
-    recentTitle: 'As últimas duas semanas',
+    recentTitle: 'Voos de balão nas últimas duas semanas',
     allHistory: 'Todos os dias registrados',
     sourceNote:
       'Direto da página oficial de bandeiras do Slot Service Center da Capadócia, verificada a cada 10 minutos durante a manhã.',
     guidesTitle: 'Bom saber',
+    faqTitle: 'Perguntas frequentes',
+    faq: [
+      {
+        q: 'Quem decide se os balões voam?',
+        a: 'O escritório de Nevşehir da autoridade de aviação civil da Turquia (SHGM) avalia o tempo toda manhã e publica uma bandeira para cada área de voo na página do Slot Service Center. Este site lê essa página.',
+      },
+      {
+        q: 'A que horas a decisão é publicada?',
+        a: 'Pouco antes do nascer do sol. Nos nossos primeiros registros, as bandeiras da manhã apareceram de 35 a 40 minutos antes do nascer do sol, e a janela de voo abriu cerca de meia hora antes.',
+      },
+      {
+        q: 'O que significa a bandeira amarela?',
+        a: 'Sem decolagem, como na bandeira vermelha. Só a bandeira verde permite decolar.',
+      },
+      {
+        q: 'Meu voo pode ser cancelado mesmo numa manhã verde?',
+        a: 'Pode. A bandeira verde libera a decolagem, mas a decisão final é do piloto e da empresa de balonismo.',
+      },
+      {
+        q: 'Os balões vão voar amanhã?',
+        a: 'A decisão oficial só sai amanhã de manhã. Até lá, nossa previsão de 7 dias avalia o tempo de cada manhã.',
+      },
+      {
+        q: 'Este site é oficial?',
+        a: 'Não. É uma página independente que lê e registra as bandeiras oficiais. Não vende voos de balão.',
+      },
+    ],
   },
 
   tomorrow: {
@@ -148,6 +181,9 @@ export default {
     intro: 'O que vale saber antes de programar o despertador na Capadócia.',
     updated: (date) => `Atualizado em ${date}`,
     mapCaption: 'As três áreas de voo, desenhadas a partir do mapa oficial, com as bandeiras de agora.',
+    sunriseCaption: 'Nascer do sol em Göreme no dia 15 de cada mês, horário da Turquia.',
+    monthColumn: 'Mês',
+    sunriseColumn: 'Nascer do sol',
   },
 
   footer: {
@@ -155,6 +191,7 @@ export default {
       'Uma página independente. Não é mantida pela autoridade de aviação civil, pela Universidade da Capadócia nem por nenhuma empresa de balonismo.',
     source: 'Página oficial de bandeiras',
     data: 'Dados no GitHub',
+    languages: 'Outros idiomas',
   },
 
   langHint: 'Leia esta página em português',

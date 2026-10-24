@@ -2,7 +2,7 @@
 title: Balloon flight cancelled in Cappadocia? What to do next
 description: Why balloon flights in Cappadocia get cancelled, what usually happens to your booking, and how to plan your stay so one windy morning doesn't cost you the flight.
 section: guide
-order: 2
+order: 4
 updated: 2026-10-23
 ---
 

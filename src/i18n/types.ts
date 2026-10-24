@@ -1,6 +1,6 @@
 import type { TownId } from '../data/sectors.ts';
 import type { Rating } from '../lib/forecast.ts';
-import type { DayOutcome, Flag } from '../lib/status.ts';
+import type { DayOutcome, Flag, Scene } from '../lib/status.ts';
 
 /**
  * Every piece of interface text. Each language file must provide all of it
@@ -31,9 +31,13 @@ export interface Messages {
   areas: { all: string; some: (list: string, count: number) => string };
   turkeyTime: string;
   photoCredit: (author: string, license: string) => string;
+  /** Alt text for the hero photo shown in each scene. */
+  photoAlt: Record<Scene, string>;
 
   home: {
     title: string;
+    /** The page title with today's date, e.g. "… · Saturday 24 October". */
+    titleDated: (date: string) => string;
     description: string;
     h1: string;
     status: {
@@ -71,6 +75,9 @@ export interface Messages {
     allHistory: string;
     sourceNote: string;
     guidesTitle: string;
+    faqTitle: string;
+    /** Shown on the page and as FAQPage structured data. Plain text only. */
+    faq: { q: string; a: string }[];
   };
 
   tomorrow: {
@@ -114,12 +121,16 @@ export interface Messages {
     intro: string;
     updated: (date: string) => string;
     mapCaption: string;
+    sunriseCaption: string;
+    monthColumn: string;
+    sunriseColumn: string;
   };
 
   footer: {
     independent: string;
     source: string;
     data: string;
+    languages: string;
   };
 
   /** Shown to visitors whose browser prefers this language, written in it. */

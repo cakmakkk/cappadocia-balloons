@@ -31,3 +31,5 @@ outlook for the coming mornings. See README.md for how the pieces fit together.
 - Hero photos come from Wikimedia Commons and are listed with their credits in `src/data/photos.ts`; every photo
   shown must carry its credit. Wolfgang Moroder's photo must not be used in the share image or on social media.
 - Keep pages light: no client-side frameworks and no third-party scripts. Small inline scripts are fine.
+- Nothing may move after load (CLS 0): don't insert content above or inside the status card from scripts; floating
+  UI like the language hint goes in a fixed position.

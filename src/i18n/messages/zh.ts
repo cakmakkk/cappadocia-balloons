@@ -31,9 +31,15 @@ export default {
   },
   turkeyTime: '土耳其时间',
   photoCredit: (author, license) => `照片：${author}，${license}`,
+  photoAlt: {
+    flying: '日出时分在卡帕多奇亚奇岩上空升起的热气球',
+    grounded: '晴空下乌奇希萨尔附近的山谷和精灵烟囱',
+    night: '卡帕多奇亚日出背景下的热气球剪影',
+  },
 
   home: {
     title: '今天卡帕多奇亚热气球能飞吗？实时飞行状态',
+    titleDated: (date) => `今天卡帕多奇亚热气球能飞吗？实时状态 · ${date}`,
     description:
       '直接来自官方旗帜页面的卡帕多奇亚热气球实时状态：今天早上哪些区域可以飞、明天的展望以及过去每一天的记录。',
     h1: '今天卡帕多奇亚热气球能飞吗？',
@@ -75,7 +81,7 @@ export default {
     sunrise: (time) => `日出 ${time}`,
     checkedAt: (time) => `${time} 检查`,
     stale: '信息可能已过时，请刷新页面。',
-    mapTitle: '三个飞行区',
+    mapTitle: '飞行区域：A、B、C区',
     mapIntro: (window) => `${window}的旗帜（土耳其时间）。`,
     mapIntroEarlier: (date, window) => `最近一次公布的旗帜：${date} ${window}。今天的旗帜一公布就会显示在这里。`,
     officialUpdate: (time) => `时刻服务中心于 ${time} 设定`,
@@ -83,13 +89,40 @@ export default {
     secondaryIntro: '主要山谷周边的较小区域，需要单独的起飞许可。',
     region: (id) => `${id}号区域`,
     regions: (range) => `${range}号区域`,
-    tomorrowTitle: '明天早上',
+    tomorrowTitle: '明天早上的热气球展望',
     thisMorningTitle: '今天早上的天气',
     tomorrowLink: '查看未来7天',
-    recentTitle: '最近两周',
+    recentTitle: '最近两周的热气球飞行',
     allHistory: '查看全部记录',
     sourceNote: '直接来自卡帕多奇亚时刻服务中心（Slot Service Center）的官方旗帜页面，早上每10分钟检查一次。',
     guidesTitle: '实用信息',
+    faqTitle: '常见问题',
+    faq: [
+      {
+        q: '由谁决定热气球能不能飞？',
+        a: '土耳其民航局（SHGM）内夫谢希尔办公室每天早上评估天气，并在时刻服务中心的页面上为每个飞行区公布一面旗帜。本站读取的就是这个页面。',
+      },
+      {
+        q: '决定几点公布？',
+        a: '日出前不久。在我们最初的记录中，早上的旗帜在日出前35到40分钟公布，飞行时段在日出前约半小时开始。',
+      },
+      {
+        q: '黄旗是什么意思？',
+        a: '和红旗一样，不能起飞。只有绿旗才允许起飞。',
+      },
+      {
+        q: '绿旗的早上我的航班还会取消吗？',
+        a: '会。绿旗表示允许起飞，但最终由飞行员和热气球公司决定。',
+      },
+      {
+        q: '明天热气球能飞吗？',
+        a: '官方决定要到明天早上才会公布。在那之前，我们的7天展望会评估每个早上的天气。',
+      },
+      {
+        q: '这是官方网站吗？',
+        a: '不是。这是一个读取并记录官方旗帜的独立网页，不销售热气球行程。',
+      },
+    ],
   },
 
   tomorrow: {
@@ -138,12 +171,16 @@ export default {
     intro: '在卡帕多奇亚定闹钟早起之前，值得了解的事。',
     updated: (date) => `更新于${date}`,
     mapCaption: '根据官方地图绘制的三个飞行区，显示当前旗帜。',
+    sunriseCaption: '格雷梅每月15日的日出时间（土耳其时间）。',
+    monthColumn: '月份',
+    sunriseColumn: '日出',
   },
 
   footer: {
     independent: '独立网站，与民航局、卡帕多奇亚大学及任何热气球公司均无关联。',
     source: '官方旗帜页面',
     data: 'GitHub 上的数据',
+    languages: '其他语言',
   },
 
   langHint: '用简体中文阅读本页',

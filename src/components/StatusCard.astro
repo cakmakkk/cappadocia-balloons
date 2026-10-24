@@ -1,7 +1,8 @@
 ---
-import { list, time, timeRange } from '../i18n/format.ts';
+import { time, timeRange } from '../i18n/format.ts';
 import { messages } from '../i18n/index.ts';
-import { localeInfo, type Locale } from '../i18n/locales.ts';
+import type { Locale } from '../i18n/locales.ts';
+import { describe } from '../lib/describe.ts';
 import { SOURCE_URL, type HomeState, type OfficialUpdate } from '../lib/status.ts';
 
 interface Props {
@@ -15,42 +16,8 @@ interface Props {
 
 const { locale, state, checkedAt, sunrise, updates } = Astro.props;
 const t = messages(locale);
-const s = t.home.status;
-
 const range = (w: { start: string; end: string }) => timeRange(locale, w.start, w.end);
-const areas = (green: string[]) => (green.length === 3 ? t.areas.all : t.areas.some(list(locale, green), green.length));
-
-let tone: 'go' | 'stop' | 'wait';
-let headline: string;
-let detail: string;
-let later: string | null = null;
-
-switch (state.kind) {
-  case 'flying-now':
-    [tone, headline, detail] = ['go', s.flyingNow.headline, s.flyingNow.detail(areas(state.green), range(state.window))];
-    break;
-  case 'grounded-now':
-    [tone, headline, detail] = ['stop', s.groundedNow.headline, s.groundedNow.detail(range(state.window))];
-    break;
-  case 'flew-this-morning':
-    [tone, headline, detail] = ['go', s.flewThisMorning.headline, s.flewThisMorning.detail(areas(state.green), range(state.window))];
-    break;
-  case 'grounded-this-morning':
-    [tone, headline, detail] = ['stop', s.groundedThisMorning.headline, s.groundedThisMorning.detail(range(state.window))];
-    break;
-  case 'morning-not-recorded':
-    [tone, headline, detail] = ['wait', s.morningNotRecorded.headline, s.morningNotRecorded.detail];
-    break;
-  case 'waiting':
-    [tone, headline, detail] = ['wait', s.waiting.headline, s.waiting.detail(time(locale, sunrise))];
-    break;
-  default:
-    [tone, headline, detail] = ['wait', s.noData.headline, s.noData.detail];
-}
-
-if ((state.kind === 'flew-this-morning' || state.kind === 'grounded-this-morning' || state.kind === 'morning-not-recorded') && state.later) {
-  later = t.home.laterWindow(range(state.later.window), state.later.green.length > 0);
-}
+const { tone, headline, detail, later } = describe(locale, state, sunrise);
 ---
 
 <section class={`status status-${tone}`} aria-live="polite">
@@ -90,9 +57,8 @@ if ((state.kind === 'flew-this-morning' || state.kind === 'grounded-this-morning
     <span>{t.home.sunrise(time(locale, sunrise))}</span>
     {
       checkedAt && (
-        <span data-checked-at={checkedAt} data-locale={localeInfo(locale).intl} data-stale={t.home.stale}>
+        <span data-checked-at={checkedAt} data-stale={t.home.stale}>
           {t.home.checkedAt(time(locale, checkedAt))}
-          <span class="ago" />
         </span>
       )
     }
@@ -102,18 +68,12 @@ if ((state.kind === 'flew-this-morning' || state.kind === 'grounded-this-morning
 </section>
 
 <script>
-  // "12 minutes ago" in the page's language, and a warning when the page is clearly stale.
+  // Warn when the page is clearly stale. Only then does the card change after
+  // load, so a fresh page never shifts.
   const el = document.querySelector<HTMLElement>('[data-checked-at]');
-  const ago = el?.querySelector('.ago');
-  if (el && ago) {
-    const minutes = Math.round((Date.now() - Date.parse(el.dataset.checkedAt!)) / 60000);
-    if (minutes > 120) {
-      ago.textContent = ` · ${el.dataset.stale}`;
-      el.classList.add('is-stale');
-    } else {
-      const rtf = new Intl.RelativeTimeFormat(el.dataset.locale, { numeric: 'auto' });
-      ago.textContent = ` (${rtf.format(-Math.max(minutes, 0), 'minute')})`;
-    }
+  if (el && Date.now() - Date.parse(el.dataset.checkedAt!) > 120 * 60_000) {
+    el.textContent += ` · ${el.dataset.stale}`;
+    el.classList.add('is-stale');
   }
 </script>
 

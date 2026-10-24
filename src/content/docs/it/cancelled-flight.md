@@ -2,7 +2,7 @@
 title: Volo in mongolfiera annullato in Cappadocia? Cosa fare adesso
 description: Perché i voli in mongolfiera in Cappadocia vengono annullati, cosa succede di solito alla prenotazione e come organizzare il soggiorno perché una mattina di vento non ti costi il volo.
 section: guide
-order: 2
+order: 4
 updated: 2026-10-23
 ---
 

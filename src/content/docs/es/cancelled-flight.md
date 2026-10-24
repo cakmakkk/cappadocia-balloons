@@ -2,7 +2,7 @@
 title: ¿Te han cancelado el vuelo en globo en Capadocia? Qué hacer ahora
 description: Por qué se cancelan los vuelos en globo en Capadocia, qué suele pasar con tu reserva y cómo organizar tu estancia para que una mañana de viento no te deje sin vuelo.
 section: guide
-order: 2
+order: 4
 updated: 2026-10-23
 ---
 

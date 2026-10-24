@@ -1,5 +1,5 @@
 ---
-import '@fontsource-variable/inter/wght.css';
+import { Font } from 'astro:assets';
 import LanguageSwitcher from '../components/LanguageSwitcher.astro';
 import { messages } from '../i18n/index.ts';
 import { DEFAULT_LOCALE, LOCALES, localeInfo, type Locale } from '../i18n/locales.ts';
@@ -12,13 +12,15 @@ interface Props {
   path: string;
   title: string;
   description: string;
+  /** For social shares, which outlive today's status; defaults to `description`. */
+  ogDescription?: string;
   /** Extra JSON-LD objects for this page. */
   structuredData?: Record<string, unknown>[];
   /** Pages like 404 have no language versions. */
   standalone?: boolean;
 }
 
-const { locale, path, title, description, structuredData = [], standalone = false } = Astro.props;
+const { locale, path, title, description, ogDescription = description, structuredData = [], standalone = false } = Astro.props;
 const t = messages(locale);
 const info = localeInfo(locale);
 const canonical = absolute(locale, path, Astro.site);
@@ -47,7 +49,11 @@ const verification = {
   'yandex-verification': import.meta.env.PUBLIC_YANDEX_VERIFICATION,
 };
 
-const ogImage = new URL(asset('/og.png'), Astro.site).href;
+const ogImage = new URL(asset('/og.jpg'), Astro.site).href;
+
+// Inter files worth preloading for this language; Korean, Japanese and Chinese use system fonts.
+const FONT_SUBSETS: Partial<Record<Locale, string[]>> = { ru: ['cyrillic'] };
+const fontSubsets = ['ko', 'ja', 'zh'].includes(locale) ? [] : (FONT_SUBSETS[locale] ?? ['latin']);
 ---
 
 <!doctype html>
@@ -55,8 +61,10 @@ const ogImage = new URL(asset('/og.png'), Astro.site).href;
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    {fontSubsets.length > 0 ? <Font cssVariable="--font-inter" preload={fontSubsets.map((subset) => ({ subset }))} /> : <Font cssVariable="--font-inter" />}
     <title>{title}</title>
     <meta name="description" content={description} />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
     <link rel="canonical" href={canonical} />
     {
       !standalone && (
@@ -69,13 +77,16 @@ const ogImage = new URL(asset('/og.png'), Astro.site).href;
       )
     }
     <link rel="icon" type="image/svg+xml" href={asset('/favicon.svg')} />
+    <link rel="icon" type="image/png" sizes="192x192" href={asset('/icon-192.png')} />
+    <link rel="apple-touch-icon" href={asset('/apple-touch-icon.png')} />
+    <link rel="manifest" href={asset('/manifest.webmanifest')} />
     <link rel="sitemap" href={asset('/sitemap.xml')} />
     <meta name="theme-color" content="#f6f4f1" media="(prefers-color-scheme: light)" />
     <meta name="theme-color" content="#121110" media="(prefers-color-scheme: dark)" />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content={t.siteName} />
     <meta property="og:title" content={title} />
-    <meta property="og:description" content={description} />
+    <meta property="og:description" content={ogDescription} />
     <meta property="og:url" content={canonical} />
     <meta property="og:image" content={ogImage} />
     <meta property="og:image:width" content="1200" />
@@ -115,6 +126,19 @@ const ogImage = new URL(asset('/og.png'), Astro.site).href;
 
     <footer class="site-footer">
       <div class="footer-inner">
+        <p class="footer-nav">
+          {nav.map((item) => <a href={href(locale, item.path)}>{item.label}</a>)}
+        </p>
+        <nav class="footer-langs" aria-label={t.footer.languages}>
+          <span>{t.footer.languages}:</span>
+          {
+            LOCALES.filter((l) => l.code !== locale).map((l) => (
+              <a href={href(l.code, switchPath)} hreflang={l.hreflang} lang={l.hreflang}>
+                {l.name}
+              </a>
+            ))
+          }
+        </nav>
         <p>{t.footer.independent}</p>
         <p class="footer-links">
           <a href={SOURCE_URL} rel="nofollow">{t.footer.source}</a>
@@ -162,15 +186,14 @@ const ogImage = new URL(asset('/og.png'), Astro.site).href;
     --muted: #6a635b;
     --line: #e6e1da;
     --accent: #a8451f;
-    --go: #17803d;
+    --go: #126b33;
     --go-bg: #e3f4e9;
     --hold: #9a5b00;
     --hold-bg: #fcefd8;
     --stop: #b42318;
     --stop-bg: #fde9e7;
-    --font-display: 'Inter Variable', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-    --font-body: 'Inter Variable', system-ui, -apple-system, 'Segoe UI', Roboto, 'Noto Sans', 'Apple SD Gothic Neo',
-      'Hiragino Sans', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    --font-display: var(--font-inter);
+    --font-body: var(--font-inter);
     color-scheme: light;
   }
 
@@ -342,15 +365,24 @@ const ogImage = new URL(asset('/og.png'), Astro.site).href;
     overflow-x: auto;
   }
 
+  /* Floats over the page instead of pushing it down when it appears. */
   .lang-hint {
+    position: fixed;
+    z-index: 50;
+    left: 50%;
+    bottom: 16px;
+    transform: translateX(-50%);
+    width: max-content;
+    max-width: calc(100% - 32px);
     display: flex;
-    justify-content: center;
     align-items: center;
     gap: 0.75rem;
-    padding: 0.5rem 16px;
+    padding: 0.6rem 0.6rem 0.6rem 1rem;
+    border-radius: 12px;
     background: var(--ink);
     color: var(--bg);
     font-size: 0.95rem;
+    box-shadow: 0 10px 30px rgb(0 0 0 / 0.25);
   }
 
   .lang-hint[hidden] {
@@ -432,10 +464,33 @@ const ogImage = new URL(asset('/og.png'), Astro.site).href;
     margin: 0.3rem auto;
   }
 
-  .footer-links {
+  .footer-links,
+  .footer-nav,
+  .footer-langs {
     display: flex;
     flex-wrap: wrap;
     gap: 0.25rem 1.25rem;
+    max-width: 48rem;
+    margin: 0.3rem auto;
+  }
+
+  .footer-nav {
+    margin-bottom: 0.9rem;
+    font-weight: 600;
+  }
+
+  .footer-nav a {
+    color: var(--ink);
+    text-decoration: none;
+  }
+
+  .footer-langs {
+    gap: 0.25rem 0.9rem;
+    margin-bottom: 0.9rem;
+  }
+
+  .footer-langs a {
+    color: var(--muted);
   }
 
   .footer-links a {

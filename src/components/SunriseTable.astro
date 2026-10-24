@@ -1,0 +1,67 @@
+---
+// Sunrise in Göreme on the 15th of every month of the current year.
+
+import { time } from '../i18n/format.ts';
+import { messages } from '../i18n/index.ts';
+import { localeInfo, type Locale } from '../i18n/locales.ts';
+import { sunriseOn } from '../lib/sun.ts';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = messages(locale);
+const year = new Date().getUTCFullYear();
+const monthName = new Intl.DateTimeFormat(localeInfo(locale).intl, { month: 'long', timeZone: 'UTC' });
+
+const rows = Array.from({ length: 12 }, (_, i) => {
+  const date = `${year}-${String(i + 1).padStart(2, '0')}-15`;
+  return { month: monthName.format(new Date(`${date}T00:00:00Z`)), sunrise: time(locale, sunriseOn(date)) };
+});
+---
+
+<div class="table-wrap card sunrise">
+  <table>
+    <caption>{t.guides.sunriseCaption}</caption>
+    <thead>
+      <tr>
+        <th scope="col">{t.guides.monthColumn}</th>
+        <th scope="col">{t.guides.sunriseColumn}</th>
+      </tr>
+    </thead>
+    <tbody>
+      {
+        rows.map((row) => (
+          <tr>
+            <th scope="row">{row.month}</th>
+            <td>{row.sunrise}</td>
+          </tr>
+        ))
+      }
+    </tbody>
+  </table>
+</div>
+
+<style>
+  .sunrise {
+    margin: 1.5rem 0;
+    padding: 0.5rem 1rem 1rem;
+  }
+
+  caption {
+    text-align: left;
+    padding: 0.5rem 0;
+    color: var(--muted);
+    font-size: 0.9rem;
+  }
+
+  tbody th {
+    font-weight: 500;
+  }
+
+  td {
+    font-variant-numeric: tabular-nums;
+    font-weight: 600;
+  }
+</style>

@@ -1,0 +1,14 @@
+{
+  "name": "Cappadocia Balloon Status",
+  "short_name": "Balloon Status",
+  "description": "Are Cappadocia balloons flying today? Live from the official flags.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "browser",
+  "background_color": "#f6f4f1",
+  "theme_color": "#f6f4f1",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}

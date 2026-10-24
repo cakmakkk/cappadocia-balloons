@@ -1,6 +1,6 @@
 // Hero photos from Wikimedia Commons, one per scene, credited on the page as
 // their licences require. Wolfgang Moroder asks that his photo is not used
-// on social media, so it stays out of the share image (public/og.png).
+// on social media, so it stays out of the share image (public/og.jpg).
 
 import type { ImageMetadata } from 'astro';
 import flying from '../assets/photos/flying.jpg';

@@ -1,12 +1,13 @@
 ---
 import { render } from 'astro:content';
 import SectorMap from '../components/SectorMap.astro';
+import SunriseTable from '../components/SunriseTable.astro';
 import { fullDate } from '../i18n/format.ts';
 import { messages } from '../i18n/index.ts';
 import { localeInfo, type Locale } from '../i18n/locales.ts';
 import Base from '../layouts/Base.astro';
 import { docIn, docsIn, slugOf } from '../lib/docs.ts';
-import { absolute, href } from '../lib/paths.ts';
+import { absolute, asset, href } from '../lib/paths.ts';
 import { loadLatest } from '../lib/status.ts';
 
 interface Props {
@@ -54,6 +55,9 @@ const structuredData = [
           inLanguage: localeInfo(locale).hreflang,
           dateModified: doc.data.updated.toISOString().slice(0, 10),
           mainEntityOfPage: absolute(locale, path, Astro.site),
+          image: new URL(asset('/og.jpg'), Astro.site).href,
+          author: { '@type': 'Organization', name: t.siteName, url: absolute(locale, '/about/', Astro.site) },
+          publisher: { '@type': 'Organization', name: t.siteName, url: absolute(locale, '/', Astro.site) },
         },
       ]),
 ];
@@ -79,6 +83,7 @@ const structuredData = [
       )
     }
     <Content />
+    {slug === 'what-time' && <SunriseTable locale={locale} />}
   </article>
 
   {

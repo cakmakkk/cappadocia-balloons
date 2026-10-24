@@ -31,9 +31,15 @@ export default {
   },
   turkeyTime: 'hora de Turquía',
   photoCredit: (author, license) => `Foto: ${author}, ${license}`,
+  photoAlt: {
+    flying: 'Globos aerostáticos elevándose sobre las formaciones rocosas de Capadocia al amanecer',
+    grounded: 'Valles y chimeneas de hadas cerca de Uçhisar bajo un cielo despejado',
+    night: 'La silueta de un globo frente al amanecer en Capadocia',
+  },
 
   home: {
     title: '¿Vuelan hoy los globos en Capadocia? Estado en directo',
+    titleDated: (date) => `¿Vuelan hoy los globos en Capadocia? Estado en directo · ${date}`,
     description:
       'Estado en directo de los globos aerostáticos de Capadocia, directamente de la página oficial de banderas: qué zonas pueden volar esta mañana, la previsión para mañana y los días anteriores.',
     h1: '¿Vuelan hoy los globos en Capadocia?',
@@ -78,7 +84,7 @@ export default {
     sunrise: (time) => `Amanecer ${time}`,
     checkedAt: (time) => `Comprobado a las ${time}`,
     stale: 'Puede que esté desactualizado. Recarga la página.',
-    mapTitle: 'Las tres zonas de vuelo',
+    mapTitle: 'Zonas de vuelo: sectores A, B y C',
     mapIntro: (window) => `Banderas de la franja ${window}, hora de Turquía.`,
     mapIntroEarlier: (date, window) =>
       `Últimas banderas publicadas: ${date}, ${window}. Las de hoy aparecerán aquí en cuanto salgan.`,
@@ -87,14 +93,41 @@ export default {
     secondaryIntro: 'Zonas más pequeñas alrededor de los valles principales, que necesitan su propia autorización de despegue.',
     region: (id) => `Región ${id}`,
     regions: (range) => `Regiones ${range}`,
-    tomorrowTitle: 'Mañana por la mañana',
+    tomorrowTitle: 'Previsión de globos para mañana',
     thisMorningTitle: 'El tiempo de esta mañana',
     tomorrowLink: 'Ver las próximas 7 mañanas',
-    recentTitle: 'Las últimas dos semanas',
+    recentTitle: 'Vuelos en globo de las últimas dos semanas',
     allHistory: 'Todos los días registrados',
     sourceNote:
       'Directamente de la página oficial de banderas del Centro de Servicios de Slots de Capadocia, revisada cada 10 minutos durante la mañana.',
     guidesTitle: 'Conviene saber',
+    faqTitle: 'Preguntas frecuentes',
+    faq: [
+      {
+        q: '¿Quién decide si vuelan los globos?',
+        a: 'La oficina de Nevşehir de la autoridad de aviación civil de Turquía (SHGM) evalúa el tiempo cada mañana y publica una bandera para cada zona de vuelo en la página del Centro de Servicios de Slots. Esta web lee esa página.',
+      },
+      {
+        q: '¿A qué hora se publica la decisión?',
+        a: 'Poco antes del amanecer. En nuestros primeros registros, las banderas de la mañana aparecieron entre 35 y 40 minutos antes del amanecer, y la ventana de vuelo se abrió una media hora antes.',
+      },
+      {
+        q: '¿Qué significa la bandera amarilla?',
+        a: 'Que no hay despegue, igual que con la bandera roja. Solo la bandera verde permite despegar.',
+      },
+      {
+        q: '¿Pueden cancelar mi vuelo en una mañana verde?',
+        a: 'Sí. La bandera verde permite el despegue, pero la decisión final es del piloto y de la empresa de globos.',
+      },
+      {
+        q: '¿Volarán mañana los globos?',
+        a: 'La decisión oficial no sale hasta mañana por la mañana. Mientras tanto, nuestra previsión de 7 días valora el tiempo de cada mañana.',
+      },
+      {
+        q: '¿Es una web oficial?',
+        a: 'No. Es una página independiente que lee y registra las banderas oficiales. No vende vuelos en globo.',
+      },
+    ],
   },
 
   tomorrow: {
@@ -149,6 +182,9 @@ export default {
     intro: 'Lo que conviene saber antes de poner el despertador en Capadocia.',
     updated: (date) => `Actualizado el ${date}`,
     mapCaption: 'Las tres zonas de vuelo, dibujadas a partir del mapa oficial, con las banderas de ahora mismo.',
+    sunriseCaption: 'Amanecer en Göreme el día 15 de cada mes, hora de Turquía.',
+    monthColumn: 'Mes',
+    sunriseColumn: 'Amanecer',
   },
 
   footer: {
@@ -156,6 +192,7 @@ export default {
       'Una página independiente. No la gestionan la autoridad de aviación civil, la Universidad de Capadocia ni ninguna empresa de globos.',
     source: 'Página oficial de banderas',
     data: 'Datos en GitHub',
+    languages: 'Otros idiomas',
   },
 
   langHint: 'Lee esta página en español',
