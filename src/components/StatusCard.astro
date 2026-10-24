@@ -1,4 +1,8 @@
 ---
+// The quick answer at the top of the home page. Rendered from the recorded
+// status at build time; src/scripts/live.ts replaces its text with a live
+// reading of the official page when the visitor opens it.
+
 import { time, timeRange } from '../i18n/format.ts';
 import { messages } from '../i18n/index.ts';
 import type { Locale } from '../i18n/locales.ts';
@@ -17,65 +21,47 @@ interface Props {
 const { locale, state, checkedAt, sunrise, updates } = Astro.props;
 const t = messages(locale);
 const range = (w: { start: string; end: string }) => timeRange(locale, w.start, w.end);
-const { tone, headline, detail, later } = describe(locale, state, sunrise);
+const { tone, headline, detail, later } = describe(t, locale, state, sunrise);
 ---
 
-<section class={`status status-${tone}`} aria-live="polite">
+<section class={`status status-${tone}`} aria-live="polite" data-live="status">
   <p class="eyebrow">{t.home.quickAnswer}</p>
   <p class="headline">
     <span class="signal" aria-hidden="true"></span>
-    {headline}
+    <span data-live="headline">{headline}</span>
   </p>
-  <p class="detail">{detail}</p>
-  {later && <p class="later">{later}</p>}
+  <p class="detail" data-live="detail">{detail}</p>
+  <p class="later" data-live="later" hidden={!later}>{later}</p>
 
-  {
-    updates.length > 0 && (
-      <div class="timeline">
-        <p class="timeline-title">{t.home.timelineTitle}</p>
-        <ol>
-          {updates.map((update) => (
-            <li>
-              <span class="when">{time(locale, update.at)}</span>
-              <span class="flags">
-                {update.flags.map(({ id, flag }) => (
-                  <span class={`chip chip-${flag}`} title={`${t.sector(id)}: ${t.flag[flag]}`}>
-                    {id}
-                    <span class="visually-hidden">{` ${t.flag[flag]}`}</span>
-                  </span>
-                ))}
-              </span>
-              {update.window && <span class="window">{range(update.window)}</span>}
-            </li>
-          ))}
-        </ol>
-      </div>
-    )
-  }
+  <div class="timeline" data-live="timeline" hidden={updates.length === 0}>
+    <p class="timeline-title">{t.home.timelineTitle}</p>
+    <ol>
+      {
+        updates.map((update) => (
+          <li>
+            <span class="when">{time(locale, update.at)}</span>
+            <span class="flags">
+              {update.flags.map(({ id, flag }) => (
+                <span class={`chip chip-${flag}`} title={`${t.sector(id)}: ${t.flag[flag]}`}>
+                  {id}
+                  <span class="visually-hidden">{` ${t.flag[flag]}`}</span>
+                </span>
+              ))}
+            </span>
+            {update.window && <span class="window">{range(update.window)}</span>}
+          </li>
+        ))
+      }
+    </ol>
+  </div>
 
   <p class="meta">
-    <span>{t.home.sunrise(time(locale, sunrise))}</span>
-    {
-      checkedAt && (
-        <span data-checked-at={checkedAt} data-stale={t.home.stale}>
-          {t.home.checkedAt(time(locale, checkedAt))}
-        </span>
-      )
-    }
+    <span data-live="sunrise">{t.home.sunrise(time(locale, sunrise))}</span>
+    {checkedAt && <span data-live="checked">{t.home.checkedAt(time(locale, checkedAt))}</span>}
     <span>{t.turkeyTime}</span>
     <a href={SOURCE_URL} rel="nofollow">{t.home.source}</a>
   </p>
 </section>
-
-<script>
-  // Warn when the page is clearly stale. Only then does the card change after
-  // load, so a fresh page never shifts.
-  const el = document.querySelector<HTMLElement>('[data-checked-at]');
-  if (el && Date.now() - Date.parse(el.dataset.checkedAt!) > 120 * 60_000) {
-    el.textContent += ` · ${el.dataset.stale}`;
-    el.classList.add('is-stale');
-  }
-</script>
 
 <style>
   .status {
@@ -89,6 +75,10 @@ const { tone, headline, detail, later } = describe(locale, state, sunrise);
 
   .status p {
     margin: 0.3rem 0;
+  }
+
+  .status [hidden] {
+    display: none;
   }
 
   .eyebrow {
@@ -146,6 +136,7 @@ const { tone, headline, detail, later } = describe(locale, state, sunrise);
     color: var(--muted);
   }
 
+  /* Rows are also built in the browser by the live update, so they are styled globally. */
   .timeline ol {
     list-style: none;
     margin: 0.4rem 0 0;
@@ -154,7 +145,7 @@ const { tone, headline, detail, later } = describe(locale, state, sunrise);
     gap: 0.45rem;
   }
 
-  .timeline li {
+  .timeline :global(li) {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
@@ -162,17 +153,17 @@ const { tone, headline, detail, later } = describe(locale, state, sunrise);
     font-variant-numeric: tabular-nums;
   }
 
-  .when {
+  .timeline :global(.when) {
     font-weight: 700;
     min-width: 3rem;
   }
 
-  .flags {
+  .timeline :global(.flags) {
     display: inline-flex;
     gap: 0.25rem;
   }
 
-  .chip {
+  .timeline :global(.chip) {
     display: inline-grid;
     place-items: center;
     width: 1.6rem;
@@ -184,19 +175,19 @@ const { tone, headline, detail, later } = describe(locale, state, sunrise);
     background: var(--muted);
   }
 
-  .chip-green {
+  .timeline :global(.chip-green) {
     background: var(--go);
   }
 
-  .chip-yellow {
+  .timeline :global(.chip-yellow) {
     background: var(--hold);
   }
 
-  .chip-red {
+  .timeline :global(.chip-red) {
     background: var(--stop);
   }
 
-  .window {
+  .timeline :global(.window) {
     color: var(--muted);
     font-size: 0.92rem;
   }
@@ -214,6 +205,12 @@ const { tone, headline, detail, later } = describe(locale, state, sunrise);
 
   .meta a {
     color: var(--muted);
+  }
+
+  /* On its own line, so the longer live label doesn't reflow the others. */
+  [data-live='checked'] {
+    order: -1;
+    flex-basis: 100%;
   }
 
   :global(.is-stale) {

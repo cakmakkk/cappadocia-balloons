@@ -38,7 +38,6 @@ export default {
   },
 
   home: {
-    title: 'Os balões da Capadócia voam hoje? Status ao vivo',
     titleDated: (date) => `Os balões da Capadócia voam hoje? Status ao vivo · ${date}`,
     description:
       'Status ao vivo dos balões de ar quente na Capadócia, direto da página oficial de bandeiras: quais áreas podem voar nesta manhã, a previsão para amanhã e todos os dias anteriores.',
@@ -68,7 +67,7 @@ export default {
       waiting: {
         headline: 'A decisão de hoje ainda não saiu',
         detail: (sunrise) =>
-          `Ainda é cedo em Göreme. As bandeiras da manhã costumam aparecer perto do nascer do sol (${sunrise}), e esta página verifica a cada 10 minutos.`,
+          `Ainda é cedo em Göreme. As bandeiras da manhã costumam aparecer perto do nascer do sol (${sunrise}). Deixe esta página aberta: ela verifica a página oficial a cada 5 minutos.`,
       },
       noData: {
         headline: 'Ainda sem status',
@@ -82,12 +81,12 @@ export default {
     source: 'Fonte: Slot Service Center (oficial)',
     sunrise: (time) => `Nascer do sol ${time}`,
     checkedAt: (time) => `Verificado às ${time}`,
-    stale: 'Pode estar desatualizado. Recarregue a página.',
+    liveAt: (time) => `Ao vivo da página oficial: ${time}`,
+    stale: 'Não foi possível acessar a página oficial, então isto pode estar desatualizado.',
     mapTitle: 'Áreas de voo: setores A, B e C',
     mapIntro: (window) => `Bandeiras para ${window}, horário da Turquia.`,
     mapIntroEarlier: (date, window) =>
       `Últimas bandeiras publicadas: ${date}, ${window}. As de hoje aparecem aqui assim que saírem.`,
-    officialUpdate: (time) => `Definida pelo Slot Service Center às ${time}`,
     secondaryTitle: 'Regiões secundárias',
     secondaryIntro: 'Áreas menores ao redor dos vales principais, que precisam de uma autorização de decolagem própria.',
     region: (id) => `Região ${id}`,
@@ -98,7 +97,7 @@ export default {
     recentTitle: 'Voos de balão nas últimas duas semanas',
     allHistory: 'Todos os dias registrados',
     sourceNote:
-      'Direto da página oficial de bandeiras do Slot Service Center da Capadócia, verificada a cada 10 minutos durante a manhã.',
+      'Direto da página oficial de bandeiras do Slot Service Center da Capadócia: esta página a lê ao vivo quando você a abre e a cada 5 minutos enquanto continuar aberta.',
     guidesTitle: 'Bom saber',
     faqTitle: 'Perguntas frequentes',
     faq: [

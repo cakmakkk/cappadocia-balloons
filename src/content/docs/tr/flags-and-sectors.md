@@ -3,7 +3,7 @@ title: Kapadokya balon bayrakları ve uçuş bölgeleri
 description: Kapadokya’da günlük balon kararı nasıl veriliyor, yeşil, sarı ve kırmızı bayraklar ne anlama geliyor, A, B ve C bölgelerinde hangi kasabalar var?
 section: guide
 order: 1
-updated: 2026-10-23
+updated: 2026-10-24
 ---
 
 Kapadokya’daki her balon uçuşu havaya bağlı ve hava her sabah yeniden değerlendiriliyor. Kararı Sivil Havacılık Genel Müdürlüğü’nün (SHGM) Nevşehir ofisi veriyor. Karar, Kapadokya Slot Hizmet Merkezi’nin herkese açık sayfasında, gökyüzünün her bölümü için renkli bir bayrakla yayımlanıyor.
@@ -34,4 +34,4 @@ Her bayrağın yanında ne zaman verildiği ve hangi saatleri kapsadığı UTC o
 
 ## Bu site nasıl takip ediyor
 
-Resmî sayfayı sabah boyunca 10 dakikada bir, günün geri kalanında saatte bir okuyor ve her değişikliği kaydediyoruz. Sonuçları gün gün [geçmiş sayfasında](../../history/) görebilirsiniz.
+Ana sayfayı her açtığınızda resmî sayfa doğrudan tarayıcınızdan okunur, sayfa açık kaldıkça da 5 dakikada bir yeniden okunur. Ayrıca sayfayı gün içinde birkaç kez kendimiz kontrol ediyor ve gördüğümüz her değişikliği kaydediyoruz. Sonuçları gün gün [geçmiş sayfasında](../../history/) görebilirsiniz.

@@ -1,6 +1,6 @@
 // Dates, times and lists in each language. Times are always Türkiye time.
 
-import { TIME_ZONE } from '../lib/status.ts';
+import { TIME_ZONE } from '../lib/status-core.ts';
 import { localeInfo, type Locale } from './locales.ts';
 
 const intl = (locale: Locale) => localeInfo(locale).intl;

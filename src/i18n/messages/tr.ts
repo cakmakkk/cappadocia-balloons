@@ -38,7 +38,6 @@ export default {
   },
 
   home: {
-    title: "Kapadokya'da balonlar bugün uçuyor mu? Canlı balon durumu",
     titleDated: (date) => `Kapadokya'da balonlar bugün uçuyor mu? Canlı durum · ${date}`,
     description:
       'Kapadokya sıcak hava balonlarının canlı durumu, doğrudan resmî bayrak sayfasından: bu sabah hangi bölgeler uçabiliyor, yarın için tahmin ve geçmiş günler.',
@@ -68,7 +67,7 @@ export default {
       waiting: {
         headline: 'Bugünün kararı henüz açıklanmadı',
         detail: (sunrise) =>
-          `Göreme'de daha sabah olmadı. Sabahın bayrakları genelde gün doğumuna doğru (${sunrise}) çıkar, bu sayfa da 10 dakikada bir kontrol eder.`,
+          `Göreme'de daha sabah olmadı. Sabahın bayrakları genelde gün doğumuna doğru (${sunrise}) çıkar. Sayfayı açık bırakın, resmî sayfayı 5 dakikada bir kontrol eder.`,
       },
       noData: {
         headline: 'Henüz durum yok',
@@ -82,12 +81,12 @@ export default {
     source: 'Kaynak: Slot Hizmet Merkezi (resmî)',
     sunrise: (time) => `Gün doğumu ${time}`,
     checkedAt: (time) => `Son kontrol: ${time}`,
-    stale: 'Bu bilgi eskimiş olabilir. Sayfayı yenileyin.',
+    liveAt: (time) => `Resmî sayfadan canlı: ${time}`,
+    stale: 'Resmî sayfaya ulaşılamadı, bu bilgi eskimiş olabilir.',
     mapTitle: 'Uçuş bölgeleri: A, B ve C',
     mapIntro: (window) => `${window} için bayraklar, Türkiye saatiyle.`,
     mapIntroEarlier: (date, window) =>
       `Son yayımlanan bayraklar: ${date}, ${window}. Bugünkü bayraklar çıkar çıkmaz burada görünecek.`,
-    officialUpdate: (time) => `Slot Hizmet Merkezi güncellemesi: ${time}`,
     secondaryTitle: 'İkincil bölgeler',
     secondaryIntro: 'Ana vadilerin çevresindeki, ayrıca kalkış onayı gereken küçük bölgeler.',
     region: (id) => `${id}. bölge`,
@@ -98,7 +97,7 @@ export default {
     recentTitle: 'Son iki haftada balon uçuşları',
     allHistory: 'Kayıtlı bütün günler',
     sourceNote:
-      'Doğrudan Kapadokya Slot Hizmet Merkezi’nin resmî bayrak sayfasından, sabah boyunca 10 dakikada bir kontrol edilir.',
+      'Doğrudan Kapadokya Slot Hizmet Merkezi’nin resmî bayrak sayfasından: bu sayfa onu açtığınızda canlı okur, açık kaldıkça da 5 dakikada bir yeniler.',
     guidesTitle: 'Bilmekte fayda var',
     faqTitle: 'Sık sorulan sorular',
     faq: [

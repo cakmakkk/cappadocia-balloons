@@ -38,7 +38,6 @@ export default {
   },
 
   home: {
-    title: '¿Vuelan hoy los globos en Capadocia? Estado en directo',
     titleDated: (date) => `¿Vuelan hoy los globos en Capadocia? Estado en directo · ${date}`,
     description:
       'Estado en directo de los globos aerostáticos de Capadocia, directamente de la página oficial de banderas: qué zonas pueden volar esta mañana, la previsión para mañana y los días anteriores.',
@@ -69,7 +68,7 @@ export default {
       waiting: {
         headline: 'La decisión de hoy aún no ha salido',
         detail: (sunrise) =>
-          `Todavía es temprano en Göreme. Las banderas de la mañana suelen aparecer hacia el amanecer (${sunrise}), y esta página las revisa cada 10 minutos.`,
+          `Todavía es temprano en Göreme. Las banderas de la mañana suelen aparecer hacia el amanecer (${sunrise}). Deja esta página abierta: consulta la página oficial cada 5 minutos.`,
       },
       noData: {
         headline: 'Aún no hay estado',
@@ -83,12 +82,12 @@ export default {
     source: 'Fuente: Centro de Servicios de Slots (oficial)',
     sunrise: (time) => `Amanecer ${time}`,
     checkedAt: (time) => `Comprobado a las ${time}`,
-    stale: 'Puede que esté desactualizado. Recarga la página.',
+    liveAt: (time) => `En directo de la página oficial: ${time}`,
+    stale: 'No se pudo acceder a la página oficial; puede que esto esté desactualizado.',
     mapTitle: 'Zonas de vuelo: sectores A, B y C',
     mapIntro: (window) => `Banderas de la franja ${window}, hora de Turquía.`,
     mapIntroEarlier: (date, window) =>
       `Últimas banderas publicadas: ${date}, ${window}. Las de hoy aparecerán aquí en cuanto salgan.`,
-    officialUpdate: (time) => `Fijada por el Centro de Servicios de Slots a las ${time}`,
     secondaryTitle: 'Regiones secundarias',
     secondaryIntro: 'Zonas más pequeñas alrededor de los valles principales, que necesitan su propia autorización de despegue.',
     region: (id) => `Región ${id}`,
@@ -99,7 +98,7 @@ export default {
     recentTitle: 'Vuelos en globo de las últimas dos semanas',
     allHistory: 'Todos los días registrados',
     sourceNote:
-      'Directamente de la página oficial de banderas del Centro de Servicios de Slots de Capadocia, revisada cada 10 minutos durante la mañana.',
+      'Directamente de la página oficial de banderas del Centro de Servicios de Slots de Capadocia: esta página la lee en directo al abrirla y cada 5 minutos mientras siga abierta.',
     guidesTitle: 'Conviene saber',
     faqTitle: 'Preguntas frecuentes',
     faq: [

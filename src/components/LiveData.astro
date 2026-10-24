@@ -1,0 +1,35 @@
+---
+// Hands the recorded status to src/scripts/live.ts, which reads the official
+// page from the visitor's browser and updates the page to the minute.
+
+import type { Locale } from '../i18n/locales.ts';
+import { loadHistory, loadLatest, type Area } from '../lib/status.ts';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const history = loadHistory();
+const latest = loadLatest(history);
+const slim = (areas: Area[]) =>
+  areas.map(({ id, flag, title, message, updatedAt, window }) => ({ id, flag, title, message, updatedAt, window }));
+
+// Days are filed under their window's date, so the newest can already be
+// tomorrow's; two days always include today's morning.
+const data = {
+  locale,
+  latest: latest && { ...latest, sectors: slim(latest.sectors), secondary: slim(latest.secondary) },
+  days: history.slice(0, 2).map((day) => ({
+    date: day.date,
+    states: day.states.map((s) => ({ firstSeenAt: s.firstSeenAt, sectors: slim(s.sectors), secondary: slim(s.secondary) })),
+  })),
+};
+// "<" is escaped so text from the official page can never close this script tag.
+const json = JSON.stringify(data).replace(/</g, '\\u003c');
+---
+
+<script type="application/json" id="live-data" set:html={json} />
+<script>
+  import '../scripts/live.ts';
+</script>

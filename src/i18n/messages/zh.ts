@@ -38,7 +38,6 @@ export default {
   },
 
   home: {
-    title: '今天卡帕多奇亚热气球能飞吗？实时飞行状态',
     titleDated: (date) => `今天卡帕多奇亚热气球能飞吗？实时状态 · ${date}`,
     description:
       '直接来自官方旗帜页面的卡帕多奇亚热气球实时状态：今天早上哪些区域可以飞、明天的展望以及过去每一天的记录。',
@@ -66,7 +65,7 @@ export default {
       },
       waiting: {
         headline: '今天的决定还没出来',
-        detail: (sunrise) => `格雷梅现在还早。早上的旗帜通常在日出（${sunrise}）前后公布，本页面每10分钟检查一次。`,
+        detail: (sunrise) => `格雷梅现在还早。早上的旗帜通常在日出（${sunrise}）前后公布，保持本页面打开，它会每5分钟检查一次官方页面。`,
       },
       noData: {
         headline: '暂无状态',
@@ -80,11 +79,11 @@ export default {
     source: '来源：时刻服务中心（官方）',
     sunrise: (time) => `日出 ${time}`,
     checkedAt: (time) => `${time} 检查`,
-    stale: '信息可能已过时，请刷新页面。',
+    liveAt: (time) => `${time} 实时读取官方页面`,
+    stale: '无法连接官方页面，信息可能已过时。',
     mapTitle: '飞行区域：A、B、C区',
     mapIntro: (window) => `${window}的旗帜（土耳其时间）。`,
     mapIntroEarlier: (date, window) => `最近一次公布的旗帜：${date} ${window}。今天的旗帜一公布就会显示在这里。`,
-    officialUpdate: (time) => `时刻服务中心于 ${time} 设定`,
     secondaryTitle: '次要区域',
     secondaryIntro: '主要山谷周边的较小区域，需要单独的起飞许可。',
     region: (id) => `${id}号区域`,
@@ -94,7 +93,7 @@ export default {
     tomorrowLink: '查看未来7天',
     recentTitle: '最近两周的热气球飞行',
     allHistory: '查看全部记录',
-    sourceNote: '直接来自卡帕多奇亚时刻服务中心（Slot Service Center）的官方旗帜页面，早上每10分钟检查一次。',
+    sourceNote: '直接来自卡帕多奇亚时刻服务中心（Slot Service Center）的官方旗帜页面：打开本页面时实时读取，页面保持打开时每5分钟更新一次。',
     guidesTitle: '实用信息',
     faqTitle: '常见问题',
     faq: [

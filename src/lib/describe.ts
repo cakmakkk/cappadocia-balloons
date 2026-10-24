@@ -1,10 +1,11 @@
-// Turns the home page state into words, for the status card and the page's
-// meta description.
+// Turns the home page state into words, for the status card, the meta
+// description and the live update in the browser. Takes the messages rather
+// than loading them, so the browser only downloads its own language.
 
 import { list, time, timeRange } from '../i18n/format.ts';
-import { messages } from '../i18n/index.ts';
 import type { Locale } from '../i18n/locales.ts';
-import type { HomeState } from './status.ts';
+import type { Messages } from '../i18n/types.ts';
+import type { HomeState } from './status-core.ts';
 
 export interface StatusText {
   tone: 'go' | 'stop' | 'wait';
@@ -14,8 +15,7 @@ export interface StatusText {
   later: string | null;
 }
 
-export function describe(locale: Locale, state: HomeState, sunrise: string): StatusText {
-  const t = messages(locale);
+export function describe(t: Messages, locale: Locale, state: HomeState, sunrise: string): StatusText {
   const s = t.home.status;
   const range = (w: { start: string; end: string }) => timeRange(locale, w.start, w.end);
   const areas = (green: string[]) =>

@@ -3,7 +3,7 @@ title: Banderas y zonas de vuelo de los globos en Capadocia, explicadas
 description: Cómo se decide cada mañana si vuelan los globos en Capadocia, qué significan las banderas verde, amarilla y roja, y qué pueblos están en los sectores A, B y C.
 section: guide
 order: 1
-updated: 2026-10-23
+updated: 2026-10-24
 ---
 
 Cada vuelo en globo sobre Capadocia depende del tiempo, y el tiempo se evalúa de nuevo cada mañana. La decisión la toma la oficina de Nevşehir de la autoridad de aviación civil de Turquía (DGCA, o SHGM en turco). Se publica en la página pública del Centro de Servicios de Slots de Capadocia como una bandera de color para cada parte del cielo.
@@ -34,4 +34,4 @@ Cada bandera indica cuándo se fijó y qué franja horaria cubre, en UTC. Turqu�
 
 ## Cómo lleva la cuenta esta web
 
-Leemos la página oficial cada 10 minutos durante la mañana y una vez por hora el resto del día, y registramos cada cambio. Puedes ver el resultado, día a día, en el [historial](../../history/).
+Cada vez que abres la página de inicio, esta lee la página oficial directamente desde tu navegador, y de nuevo cada 5 minutos mientras siga abierta. Además, la revisamos nosotros mismos varias veces al día y registramos cada cambio que encontramos; puedes ver el resultado, día a día, en el [historial](../../history/).

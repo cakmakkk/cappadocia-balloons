@@ -53,12 +53,12 @@ const towns = TOWNS.map((town) => {
 
 <figure class="sector-map">
   <svg viewBox="0 0 390 470" role="img" aria-labelledby={`map-title-${locale}`}>
-    <title id={`map-title-${locale}`}>
+    <title id={`map-title-${locale}`} data-live="map-title">
       {sectors.map((s) => `${t.sector(s.id)}: ${t.flag[s.flag]}`).join(', ')}
     </title>
     {
       sectors.map((s) => (
-        <g class={`area area-${s.flag}`}>
+        <g class={`area area-${s.flag}`} data-live-area={s.id}>
           <polygon points={s.points} />
           <text x="40" y={s.labelY + 12} class="area-letter">
             {s.id}
@@ -82,7 +82,9 @@ const towns = TOWNS.map((town) => {
       sectors.map((s) => (
         <li>
           <span class="area-name">{t.sector(s.id)}</span>
-          <FlagBadge locale={locale} flag={s.flag} />
+          <span data-live-flag={s.id}>
+            <FlagBadge locale={locale} flag={s.flag} />
+          </span>
           <span class="area-towns">{townsIn(s.id).map((id) => t.towns[id]).join(', ')}</span>
         </li>
       ))

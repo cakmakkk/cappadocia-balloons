@@ -3,7 +3,7 @@ title: Bandiere e zone di volo delle mongolfiere in Cappadocia, spiegate
 description: Come si decide ogni mattina se le mongolfiere volano in Cappadocia, cosa significano le bandiere verde, gialla e rossa e quali paesi si trovano nei settori A, B e C.
 section: guide
 order: 1
-updated: 2026-10-23
+updated: 2026-10-24
 ---
 
 Ogni volo in mongolfiera sulla Cappadocia dipende dal meteo, e il meteo viene valutato di nuovo ogni mattina. La decisione spetta all’ufficio di Nevşehir dell’autorità dell’aviazione civile turca (DGCA, in turco SHGM). Viene pubblicata sulla pagina pubblica dello Slot Service Center della Cappadocia come una bandiera colorata per ogni parte del cielo.
@@ -34,4 +34,4 @@ Ogni bandiera indica quando è stata impostata e quale fascia oraria copre, in U
 
 ## Come teniamo traccia
 
-Leggiamo la pagina ufficiale ogni 10 minuti durante la mattina e una volta all’ora per il resto della giornata, e registriamo ogni cambiamento. Puoi vedere il risultato, giorno per giorno, nello [storico](../../history/).
+Ogni volta che apri la pagina iniziale, questa legge la pagina ufficiale direttamente dal tuo browser, e di nuovo ogni 5 minuti finché resta aperta. Inoltre la controlliamo noi stessi più volte al giorno e registriamo ogni cambiamento che troviamo; puoi vedere il risultato, giorno per giorno, nello [storico](../../history/).

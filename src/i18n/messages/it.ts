@@ -38,7 +38,6 @@ export default {
   },
 
   home: {
-    title: 'Oggi volano le mongolfiere in Cappadocia? Stato in tempo reale',
     titleDated: (date) => `Oggi volano le mongolfiere in Cappadocia? Stato in tempo reale · ${date}`,
     description:
       'Lo stato in tempo reale delle mongolfiere in Cappadocia, direttamente dalla pagina ufficiale delle bandiere: quali zone possono volare stamattina, le previsioni per domani e i giorni passati.',
@@ -69,7 +68,7 @@ export default {
       waiting: {
         headline: 'La decisione di oggi non è ancora uscita',
         detail: (sunrise) =>
-          `A Göreme è ancora presto. Le bandiere del mattino di solito compaiono verso l’alba (${sunrise}) e questa pagina controlla ogni 10 minuti.`,
+          `A Göreme è ancora presto. Le bandiere del mattino di solito compaiono verso l’alba (${sunrise}). Lascia aperta questa pagina: controlla la pagina ufficiale ogni 5 minuti.`,
       },
       noData: {
         headline: 'Nessuno stato per ora',
@@ -83,12 +82,12 @@ export default {
     source: 'Fonte: Slot Service Center (ufficiale)',
     sunrise: (time) => `Alba ${time}`,
     checkedAt: (time) => `Controllato alle ${time}`,
-    stale: 'Potrebbe non essere aggiornato. Ricarica la pagina.',
+    liveAt: (time) => `In diretta dalla pagina ufficiale: ${time}`,
+    stale: 'Non è stato possibile raggiungere la pagina ufficiale: potrebbe non essere aggiornato.',
     mapTitle: 'Zone di volo: settori A, B e C',
     mapIntro: (window) => `Bandiere per la fascia ${window}, ora turca.`,
     mapIntroEarlier: (date, window) =>
       `Ultime bandiere pubblicate: ${date}, ${window}. Quelle di oggi compariranno qui appena escono.`,
-    officialUpdate: (time) => `Impostata dallo Slot Service Center alle ${time}`,
     secondaryTitle: 'Zone secondarie',
     secondaryIntro: 'Aree più piccole intorno alle valli principali, che richiedono un’autorizzazione al decollo separata.',
     region: (id) => `Zona ${id}`,
@@ -99,7 +98,7 @@ export default {
     recentTitle: 'Voli in mongolfiera nelle ultime due settimane',
     allHistory: 'Tutti i giorni registrati',
     sourceNote:
-      'Direttamente dalla pagina ufficiale delle bandiere dello Slot Service Center della Cappadocia, controllata ogni 10 minuti durante la mattina.',
+      'Direttamente dalla pagina ufficiale delle bandiere dello Slot Service Center della Cappadocia: questa pagina la legge in diretta quando la apri e ogni 5 minuti finché resta aperta.',
     guidesTitle: 'Da sapere',
     faqTitle: 'Domande frequenti',
     faq: [

@@ -3,14 +3,14 @@ title: Acerca del estado de los globos en Capadocia
 description: Qué hace esta web, de dónde sale el estado de los vuelos en globo, cada cuánto se comprueba y cuáles son sus límites.
 section: about
 order: 9
-updated: 2026-10-23
+updated: 2026-10-24
 ---
 
 Esta web responde a una sola pregunta, en lenguaje claro: ¿volarán los globos esta mañana?
 
 ## De dónde sale la información
 
-Las banderas vienen de la página pública del Centro de Servicios de Slots de Capadocia, donde se publican las decisiones diarias de vuelo de la autoridad de aviación civil de Turquía. Revisamos esa página cada 10 minutos durante la mañana y una vez por hora el resto del día, registramos cada cambio y mostramos todas las horas en hora de Turquía.
+Las banderas vienen de la página pública del Centro de Servicios de Slots de Capadocia, donde se publican las decisiones diarias de vuelo de la autoridad de aviación civil de Turquía. La página de inicio la lee en directo desde tu navegador al abrirla y cada 5 minutos mientras siga abierta. Para el historial, también la revisamos nosotros varias veces al día, y todas las horas se muestran en hora de Turquía.
 
 La previsión de las próximas mañanas usa datos meteorológicos de [Open-Meteo.com](https://open-meteo.com/). Es una previsión, no una decisión.
 
@@ -21,4 +21,4 @@ Esta web no vende vuelos en globo y no la gestionan la autoridad de aviación ci
 ## Límites
 
 - Una bandera verde permite el despegue, pero tu piloto y tu empresa de globos siguen decidiendo si tu vuelo sale.
-- Entre nuestras comprobaciones, el estado oficial puede haber cambiado. Tu empresa de globos siempre tiene la última palabra.
+- Si no se puede acceder a la página oficial, la página de inicio muestra las últimas banderas que registramos y cuándo las comprobamos. Tu empresa de globos siempre tiene la última palabra.

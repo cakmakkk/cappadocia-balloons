@@ -3,7 +3,7 @@ title: Ballonflaggen und Fluggebiete in Kappadokien, einfach erklärt
 description: Wie jeden Morgen über die Ballonflüge in Kappadokien entschieden wird, was grüne, gelbe und rote Flaggen bedeuten und welche Orte in den Sektoren A, B und C liegen.
 section: guide
 order: 1
-updated: 2026-10-23
+updated: 2026-10-24
 ---
 
 Jeder Ballonflug über Kappadokien hängt vom Wetter ab, und das Wetter wird jeden Morgen neu bewertet. Die Entscheidung trifft das Büro der türkischen Zivilluftfahrtbehörde (DGCA, auf Türkisch SHGM) in Nevşehir. Sie wird auf der öffentlichen Seite des Kapadokya Slot Service Center als farbige Flagge für jeden Teil des Himmels veröffentlicht.
@@ -34,4 +34,4 @@ Zu jeder Flagge steht, wann sie gesetzt wurde und für welches Zeitfenster sie g
 
 ## Wie diese Seite Buch führt
 
-Wir lesen die offizielle Seite morgens alle 10 Minuten und den Rest des Tages einmal pro Stunde und speichern jede Änderung. Das Ergebnis siehst du Tag für Tag im [Verlauf](../../history/).
+Jedes Mal, wenn du die Startseite öffnest, liest sie die offizielle Seite direkt in deinem Browser, und danach alle 5 Minuten, solange sie offen bleibt. Außerdem prüfen wir sie selbst mehrmals am Tag und speichern jede Änderung, die wir finden. Das Ergebnis siehst du Tag für Tag im [Verlauf](../../history/).

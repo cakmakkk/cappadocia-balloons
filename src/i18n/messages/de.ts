@@ -38,7 +38,6 @@ export default {
   },
 
   home: {
-    title: 'Fliegen heute die Ballons in Kappadokien? Live-Status',
     titleDated: (date) => `Fliegen heute die Ballons in Kappadokien? Live-Status · ${date}`,
     description:
       'Live-Status der Heißluftballons in Kappadokien, direkt von der offiziellen Flaggenseite: welche Gebiete heute Morgen fliegen dürfen, die Aussichten für morgen und alle vergangenen Tage.',
@@ -68,7 +67,7 @@ export default {
       waiting: {
         headline: 'Die heutige Entscheidung ist noch nicht da',
         detail: (sunrise) =>
-          `In Göreme ist es noch früh. Die Flaggen für den Morgen erscheinen meist gegen Sonnenaufgang (${sunrise}), und diese Seite prüft alle 10 Minuten.`,
+          `In Göreme ist es noch früh. Die Flaggen für den Morgen erscheinen meist gegen Sonnenaufgang (${sunrise}). Lass diese Seite offen: Sie prüft die offizielle Seite alle 5 Minuten.`,
       },
       noData: {
         headline: 'Noch kein Status',
@@ -82,12 +81,12 @@ export default {
     source: 'Quelle: Slot Service Center (offiziell)',
     sunrise: (time) => `Sonnenaufgang ${time}`,
     checkedAt: (time) => `Geprüft um ${time}`,
-    stale: 'Möglicherweise veraltet. Seite neu laden.',
+    liveAt: (time) => `Live von der offiziellen Seite: ${time}`,
+    stale: 'Die offizielle Seite war nicht erreichbar, daher ist das möglicherweise veraltet.',
     mapTitle: 'Fluggebiete: Sektoren A, B und C',
     mapIntro: (window) => `Flaggen für ${window}, türkische Zeit.`,
     mapIntroEarlier: (date, window) =>
       `Zuletzt veröffentlichte Flaggen: ${date}, ${window}. Die von heute erscheinen hier, sobald sie da sind.`,
-    officialUpdate: (time) => `Vom Slot Service Center gesetzt um ${time}`,
     secondaryTitle: 'Nebengebiete',
     secondaryIntro: 'Kleinere Gebiete rund um die Haupttäler, die eine eigene Startfreigabe brauchen.',
     region: (id) => `Gebiet ${id}`,
@@ -98,7 +97,7 @@ export default {
     recentTitle: 'Ballonflüge der letzten zwei Wochen',
     allHistory: 'Alle erfassten Tage',
     sourceNote:
-      'Direkt von der offiziellen Flaggenseite des Kapadokya Slot Service Center, morgens alle 10 Minuten geprüft.',
+      'Direkt von der offiziellen Flaggenseite des Kapadokya Slot Service Center: Diese Seite liest sie live, wenn du sie öffnest, und alle 5 Minuten, solange sie offen bleibt.',
     guidesTitle: 'Gut zu wissen',
     faqTitle: 'Häufige Fragen',
     faq: [

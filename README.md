@@ -6,8 +6,9 @@ Live: <https://cakmakkk.github.io/cappadocia-balloons/>
 
 The official flight flags (green, yellow, red per sector) are published by the Kapadokya Slot Service Center at
 <https://shmkapadokya.kapadokya.edu.tr/en/>. A scheduled GitHub Action reads that page and a weather forecast,
-records every change, and the Astro site turns the records into a live status page, a 7-day outlook, a day-by-day
-history and short guides.
+records every change, and the Astro site turns the records into a status page, a 7-day outlook, a day-by-day
+history and short guides. In the visitor's browser, the home page then reads the official page itself, so the answer
+is current to the minute even when the last build is not.
 
 ## Commands
 
@@ -26,8 +27,14 @@ history and short guides.
 - `scripts/lib/parse-shm.mjs` parses the official page; `scripts/fetch-status.mjs` records state changes.
 - `scripts/lib/forecast.mjs` rates each morning's weather from Open-Meteo; `scripts/fetch-forecast.mjs` saves it and
   keeps the outlook we gave the evening before each morning, so we can check our record.
-- `src/lib/status.ts` decides what today looks like: the morning window is the one that opens within an hour of
-  sunrise, and a morning "flew" if any sector was green during it.
+- `src/lib/status-core.ts` decides what today looks like: the morning window is the one that opens within an hour of
+  sunrise, and a morning "flew" if any sector was green during it. It has no file access, so the build
+  (`src/lib/status.ts` adds the loaders) and the browser run the same rules.
+- `src/scripts/live.ts` runs on the home page and the flags guide. The official page allows cross-origin requests, so
+  the browser fetches it, parses it with `src/lib/parse-shm-dom.ts` (kept in step with the build parser by
+  `parse-shm-dom.test.ts`) and updates the status card, timeline, hero photo, map and regions in place, every 5
+  minutes while the tab is visible. Elements it fills carry `data-live` attributes. If the official page can't be
+  read, it keeps the recorded flags and, after two hours, says they may be out of date.
 - `src/data/sectors.ts` holds the official polygons of sectors A, B and C and the towns in them.
 - Pages are thin routes in `src/pages/` (English at the root, other languages under `src/pages/[locale]/`) that render
   views from `src/views/`.
@@ -63,8 +70,11 @@ Chinese.
 
 ## Schedule
 
-`.github/workflows/fetch-status.yml` runs every 10 minutes from 00:03 to 07:53 UTC (03:03–10:53 Türkiye time), when
-the morning decisions are made, and hourly otherwise. GitHub may start scheduled runs a few minutes late.
+`.github/workflows/fetch-status.yml` is scheduled every 10 minutes from 00:03 to 07:53 UTC (03:03–10:53 Türkiye
+time), when the morning decisions are made, and hourly otherwise. In practice GitHub skips or delays many scheduled
+runs, so the records and the search snippet can lag; the live read in the browser covers visitors. For a steady
+rebuild, trigger the workflow from an external scheduler (for example cron-job.org calling the `workflow_dispatch`
+API with a fine-grained token that has Actions: read and write on this repository).
 
 ## Deploying and SEO
 

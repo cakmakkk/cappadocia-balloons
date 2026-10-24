@@ -3,7 +3,7 @@ title: Bandeiras e áreas de voo dos balões na Capadócia, explicadas
 description: Como se decide a cada manhã se os balões voam na Capadócia, o que significam as bandeiras verde, amarela e vermelha e quais cidades ficam nos setores A, B e C.
 section: guide
 order: 1
-updated: 2026-10-23
+updated: 2026-10-24
 ---
 
 Todo voo de balão sobre a Capadócia depende do tempo, e o tempo é avaliado de novo a cada manhã. A decisão é do escritório de Nevşehir da autoridade de aviação civil da Turquia (DGCA, ou SHGM em turco). Ela é publicada na página pública do Slot Service Center da Capadócia como uma bandeira colorida para cada parte do céu.
@@ -34,4 +34,4 @@ Cada bandeira informa quando foi definida e qual janela de horário cobre, em UT
 
 ## Como este site acompanha tudo
 
-Lemos a página oficial a cada 10 minutos durante a manhã e uma vez por hora no resto do dia, e registramos cada mudança. Você pode ver o resultado, dia a dia, no [histórico](../../history/).
+Sempre que você abre a página inicial, ela lê a página oficial direto do seu navegador, e de novo a cada 5 minutos enquanto continuar aberta. Além disso, nós mesmos a verificamos várias vezes ao dia e registramos cada mudança que encontramos; você pode ver o resultado, dia a dia, no [histórico](../../history/).

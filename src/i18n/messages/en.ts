@@ -38,7 +38,6 @@ export default {
   },
 
   home: {
-    title: 'Are Cappadocia balloons flying today? Live balloon status',
     titleDated: (date) => `Are Cappadocia balloons flying today? Live status · ${date}`,
     description:
       'Live hot air balloon status for Cappadocia, straight from the official flag page: which areas can fly this morning, the outlook for tomorrow and every past day.',
@@ -68,7 +67,7 @@ export default {
       waiting: {
         headline: "Today's decision isn't out yet",
         detail: (sunrise) =>
-          `It's still early in Göreme. The flags for the morning usually appear around sunrise (${sunrise}), and this page checks every 10 minutes.`,
+          `It's still early in Göreme. The flags for the morning usually appear around sunrise (${sunrise}). Keep this page open: it checks the official page every 5 minutes.`,
       },
       noData: {
         headline: 'No status yet',
@@ -82,12 +81,12 @@ export default {
     source: 'Source: Slot Service Center (official)',
     sunrise: (time) => `Sunrise ${time}`,
     checkedAt: (time) => `Checked at ${time}`,
-    stale: 'This may be out of date. Refresh the page.',
+    liveAt: (time) => `Live from the official page: ${time}`,
+    stale: 'The official page couldn’t be reached, so this may be out of date.',
     mapTitle: 'Flight areas: sectors A, B and C',
     mapIntro: (window) => `Flags for ${window}, Türkiye time.`,
     mapIntroEarlier: (date, window) =>
       `The last flags published, for ${date}, ${window}. Today's will show here as soon as they're out.`,
-    officialUpdate: (time) => `Set by the Slot Service Center at ${time}`,
     secondaryTitle: 'Secondary regions',
     secondaryIntro: 'Smaller areas around the main valleys, which need their own take-off approval.',
     region: (id) => `Region ${id}`,
@@ -98,7 +97,7 @@ export default {
     recentTitle: 'Balloon flights in the last two weeks',
     allHistory: 'Every recorded day',
     sourceNote:
-      'Straight from the official flag page of the Kapadokya Slot Service Center, checked every 10 minutes through the morning.',
+      'Straight from the official flag page of the Kapadokya Slot Service Center: this page reads it live when you open it, and every 5 minutes while it stays open.',
     guidesTitle: 'Good to know',
     faqTitle: 'Questions people ask',
     faq: [

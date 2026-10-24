@@ -2,10 +2,11 @@
 import DayStrip from '../components/DayStrip.astro';
 import FlagBadge from '../components/FlagBadge.astro';
 import ForecastCard from '../components/ForecastCard.astro';
+import LiveData from '../components/LiveData.astro';
 import { Picture } from 'astro:assets';
 import SectorMap from '../components/SectorMap.astro';
 import StatusCard from '../components/StatusCard.astro';
-import { PHOTOS } from '../data/photos.ts';
+import { PHOTOS, type Photo } from '../data/photos.ts';
 import { longDate, timeRange } from '../i18n/format.ts';
 import { messages } from '../i18n/index.ts';
 import { localeInfo, type Locale } from '../i18n/locales.ts';
@@ -14,7 +15,7 @@ import { describe } from '../lib/describe.ts';
 import { docsIn, slugOf } from '../lib/docs.ts';
 import { loadForecast } from '../lib/forecast.ts';
 import { absolute, href } from '../lib/paths.ts';
-import { homeState, loadHistory, loadLatest, localDate, officialUpdates, outcomeOf, sceneOf } from '../lib/status.ts';
+import { homeState, loadHistory, loadLatest, localDate, officialUpdates, outcomeOf, sceneOf, type Scene } from '../lib/status.ts';
 import { sunriseOn } from '../lib/sun.ts';
 
 interface Props {
@@ -29,7 +30,9 @@ const history = loadHistory();
 const latest = loadLatest(history);
 const state = homeState(latest, history, now);
 const scene = sceneOf(state);
-const photo = PHOTOS[scene];
+// All three photos are in the page so the live update can switch to the one
+// that fits; only the current one loads straight away.
+const scenes = Object.entries(PHOTOS) as [Scene, Photo][];
 const today = localDate(now);
 const todaysUpdates = officialUpdates(history.find((day) => day.date === today) ?? { date: today, states: [] });
 
@@ -40,6 +43,8 @@ const mapIntro =
   (mapWindow.date === today
     ? t.home.mapIntro(timeRange(locale, mapWindow.start, mapWindow.end))
     : t.home.mapIntroEarlier(longDate(locale, mapWindow.date), timeRange(locale, mapWindow.start, mapWindow.end)));
+// The regions read as one line when they all share a flag.
+const sharedFlag = new Set(latest?.secondary.map((area) => area.flag)).size === 1;
 const next = loadForecast()?.mornings.find((m) => Date.parse(m.window.start) > now.getTime()) ?? null;
 const recent = history
   .slice(0, 14)
@@ -50,7 +55,7 @@ const guides = await docsIn(locale, 'guide');
 // The title carries today's date and the description today's answer, so a
 // search result shows the current status before anyone clicks.
 const sunrise = sunriseOn(today);
-const status = describe(locale, state, sunrise);
+const status = describe(t, locale, state, sunrise);
 const title = t.home.titleDated(longDate(locale, today));
 const description = `${status.headline}. ${status.detail}`;
 
@@ -95,22 +100,30 @@ const structuredData = [
   structuredData={structuredData}
 >
   <section slot="hero" class="hero">
-    <Picture
-      src={photo.src}
-      alt={t.photoAlt[scene]}
-      widths={[640, 1024, 1440, 1800]}
-      sizes="100vw"
-      formats={['avif', 'webp']}
-      loading="eager"
-      fetchpriority="high"
-      class="hero-photo"
-      style={`object-position: ${photo.position}`}
-    />
+    {
+      scenes.map(([name, photo]) => (
+        <div class="hero-scene" data-live-scene={name} hidden={name !== scene}>
+          <Picture
+            src={photo.src}
+            alt={t.photoAlt[name]}
+            widths={[640, 1024, 1440, 1800]}
+            sizes="100vw"
+            formats={['avif', 'webp']}
+            loading={name === scene ? 'eager' : 'lazy'}
+            fetchpriority={name === scene ? 'high' : 'auto'}
+            class="hero-photo"
+            style={`object-position: ${photo.position}`}
+          />
+          <a class="hero-credit" href={photo.source} rel="nofollow">
+            {t.photoCredit(photo.author, photo.license)}
+          </a>
+        </div>
+      ))
+    }
     <div class="hero-text">
-      <p class="hero-date">{longDate(locale, today)}</p>
+      <p class="hero-date" data-live="date">{longDate(locale, today)}</p>
       <h1>{t.home.h1}</h1>
     </div>
-    <a class="hero-credit" href={photo.source} rel="nofollow">{t.photoCredit(photo.author, photo.license)}</a>
   </section>
 
   <div class="lift">
@@ -141,7 +154,9 @@ const structuredData = [
     mapWindow && (
       <section>
         <h2>{t.home.mapTitle}</h2>
-        <p class="muted">{mapIntro}</p>
+        <p class="muted" data-live="map-intro">
+          {mapIntro}
+        </p>
         <SectorMap locale={locale} flags={mapFlags} />
       </section>
     )
@@ -152,23 +167,20 @@ const structuredData = [
       <section>
         <h2>{t.home.secondaryTitle}</h2>
         <p class="muted">{t.home.secondaryIntro}</p>
-        {new Set(latest.secondary.map((area) => area.flag)).size === 1 ? (
-          <p class="regions-all">
-            <span>
-              {t.home.regions(`${latest.secondary[0].id}–${latest.secondary.at(-1)!.id}`)}
-            </span>
-            <FlagBadge locale={locale} flag={latest.secondary[0].flag} />
-          </p>
-        ) : (
-          <ul class="regions">
-            {latest.secondary.map((area) => (
-              <li>
-                <span>{t.home.region(area.id)}</span>
+        <p class="regions-all" data-live="regions-all" hidden={!sharedFlag}>
+          <span>{t.home.regions(`${latest.secondary[0].id}–${latest.secondary.at(-1)!.id}`)}</span>
+          <FlagBadge locale={locale} flag={latest.secondary[0].flag} />
+        </p>
+        <ul class="regions" data-live="regions-list" hidden={sharedFlag}>
+          {latest.secondary.map((area) => (
+            <li>
+              <span>{t.home.region(area.id)}</span>
+              <span data-live-region={area.id}>
                 <FlagBadge locale={locale} flag={area.flag} />
-              </li>
-            ))}
-          </ul>
-        )}
+              </span>
+            </li>
+          ))}
+        </ul>
       </section>
     )
   }
@@ -211,6 +223,8 @@ const structuredData = [
       ))
     }
   </section>
+
+  <LiveData locale={locale} />
 </Base>
 
 <style>
@@ -219,6 +233,12 @@ const structuredData = [
     height: clamp(300px, 46vw, 460px);
     overflow: hidden;
     background: #2a241f;
+  }
+
+  .hero-scene[hidden],
+  .regions[hidden],
+  .regions-all[hidden] {
+    display: none;
   }
 
   .hero :global(.hero-photo) {

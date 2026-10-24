@@ -1,5 +1,6 @@
 ---
 import { render } from 'astro:content';
+import LiveData from '../components/LiveData.astro';
 import SectorMap from '../components/SectorMap.astro';
 import SunriseTable from '../components/SunriseTable.astro';
 import { fullDate } from '../i18n/format.ts';
@@ -79,6 +80,7 @@ const structuredData = [
         <div class="map card">
           <SectorMap locale={locale} flags={mapFlags} />
           <p class="muted caption">{t.guides.mapCaption}</p>
+          <LiveData locale={locale} />
         </div>
       )
     }

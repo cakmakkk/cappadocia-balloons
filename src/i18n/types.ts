@@ -1,6 +1,6 @@
 import type { TownId } from '../data/sectors.ts';
 import type { Rating } from '../lib/forecast.ts';
-import type { DayOutcome, Flag, Scene } from '../lib/status.ts';
+import type { DayOutcome, Flag, Scene } from '../lib/status-core.ts';
 
 /**
  * Every piece of interface text. Each language file must provide all of it
@@ -35,7 +35,6 @@ export interface Messages {
   photoAlt: Record<Scene, string>;
 
   home: {
-    title: string;
     /** The page title with today's date, e.g. "… · Saturday 24 October". */
     titleDated: (date: string) => string;
     description: string;
@@ -56,12 +55,13 @@ export interface Messages {
     source: string;
     sunrise: (time: string) => string;
     checkedAt: (time: string) => string;
+    /** Shown after the browser has read the official page itself. */
+    liveAt: (time: string) => string;
     stale: string;
     mapTitle: string;
     mapIntro: (window: string) => string;
     /** When today's flags aren't out yet and the map shows an earlier day's. */
     mapIntroEarlier: (date: string, window: string) => string;
-    officialUpdate: (time: string) => string;
     secondaryTitle: string;
     secondaryIntro: string;
     region: (id: string) => string;

@@ -38,7 +38,6 @@ export default {
   },
 
   home: {
-    title: '今日カッパドキアの気球は飛ぶ？リアルタイム運航状況',
     titleDated: (date) => `今日カッパドキアの気球は飛ぶ？運航状況 · ${date}`,
     description:
       '公式の旗のページから直接取得した、カッパドキアの熱気球のリアルタイム運航状況。今朝どのエリアで飛べるか、明日の見通し、過去の記録がわかります。',
@@ -68,7 +67,7 @@ export default {
       waiting: {
         headline: '今日の決定はまだ出ていません',
         detail: (sunrise) =>
-          `ギョレメはまだ早朝です。朝の旗はふつう日の出（${sunrise}）ごろに出ます。このページは10分ごとに確認しています。`,
+          `ギョレメはまだ早朝です。朝の旗はふつう日の出（${sunrise}）ごろに出ます。このページを開いたままにしておくと、5分ごとに公式ページを確認します。`,
       },
       noData: {
         headline: 'まだ情報がありません',
@@ -82,12 +81,12 @@ export default {
     source: '出典：スロット・サービス・センター（公式）',
     sunrise: (time) => `日の出 ${time}`,
     checkedAt: (time) => `${time} 確認`,
-    stale: '情報が古い可能性があります。ページを再読み込みしてください。',
+    liveAt: (time) => `${time} 公式ページからリアルタイム取得`,
+    stale: '公式ページに接続できなかったため、情報が古い可能性があります。',
     mapTitle: '飛行エリア：セクターA・B・C',
     mapIntro: (window) => `${window}の旗（トルコ時間）。`,
     mapIntroEarlier: (date, window) =>
       `最後に発表された旗：${date} ${window}。今日の旗が出たらすぐここに表示されます。`,
-    officialUpdate: (time) => `スロット・サービス・センター発表 ${time}`,
     secondaryTitle: 'サブエリア',
     secondaryIntro: '主要な谷の周辺にある小さなエリアで、個別の離陸承認が必要です。',
     region: (id) => `エリア${id}`,
@@ -97,7 +96,7 @@ export default {
     tomorrowLink: 'この先7日間を見る',
     recentTitle: '直近2週間の気球フライト',
     allHistory: 'すべての記録を見る',
-    sourceNote: 'カッパドキアのスロット・サービス・センターの公式な旗のページから直接取得し、朝の間は10分ごとに確認しています。',
+    sourceNote: 'カッパドキアのスロット・サービス・センターの公式な旗のページから直接取得しています。ページを開いたときにリアルタイムで読み込み、開いている間は5分ごとに確認します。',
     guidesTitle: '知っておきたいこと',
     faqTitle: 'よくある質問',
     faq: [

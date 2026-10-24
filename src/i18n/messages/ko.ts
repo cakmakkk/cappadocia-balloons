@@ -38,7 +38,6 @@ export default {
   },
 
   home: {
-    title: '오늘 카파도키아 열기구 뜨나요? 실시간 비행 현황',
     titleDated: (date) => `오늘 카파도키아 열기구 뜨나요? 실시간 현황 · ${date}`,
     description:
       '공식 깃발 페이지에서 바로 가져온 카파도키아 열기구 실시간 현황. 오늘 아침 어느 구역이 비행할 수 있는지, 내일 전망과 지난 기록까지 확인하세요.',
@@ -68,7 +67,7 @@ export default {
       waiting: {
         headline: '오늘 결정은 아직 나오지 않았어요',
         detail: (sunrise) =>
-          `괴레메는 아직 이른 시간이에요. 아침 깃발은 보통 해 뜰 무렵(${sunrise})에 올라오고, 이 페이지는 10분마다 확인해요.`,
+          `괴레메는 아직 이른 시간이에요. 아침 깃발은 보통 해 뜰 무렵(${sunrise})에 올라와요. 이 페이지를 열어 두면 5분마다 공식 페이지를 확인해요.`,
       },
       noData: {
         headline: '아직 현황이 없어요',
@@ -82,12 +81,12 @@ export default {
     source: '출처: 슬롯 서비스 센터(공식)',
     sunrise: (time) => `일출 ${time}`,
     checkedAt: (time) => `${time} 확인`,
-    stale: '정보가 오래됐을 수 있어요. 페이지를 새로고침하세요.',
+    liveAt: (time) => `${time} 공식 페이지 실시간 확인`,
+    stale: '공식 페이지에 연결하지 못해 정보가 오래됐을 수 있어요.',
     mapTitle: '비행 구역: A·B·C 구역',
     mapIntro: (window) => `${window} 깃발, 튀르키예 시간 기준.`,
     mapIntroEarlier: (date, window) =>
       `마지막으로 발표된 깃발: ${date} ${window}. 오늘 깃발이 나오면 바로 여기에 표시돼요.`,
-    officialUpdate: (time) => `슬롯 서비스 센터 발표 ${time}`,
     secondaryTitle: '보조 구역',
     secondaryIntro: '주요 계곡 주변의 작은 구역으로, 따로 이륙 승인을 받아야 해요.',
     region: (id) => `${id}번 구역`,
@@ -97,7 +96,7 @@ export default {
     tomorrowLink: '앞으로 7일 보기',
     recentTitle: '최근 2주 열기구 비행',
     allHistory: '전체 기록 보기',
-    sourceNote: '카파도키아 슬롯 서비스 센터의 공식 깃발 페이지에서 바로 가져오며, 아침에는 10분마다 확인해요.',
+    sourceNote: '카파도키아 슬롯 서비스 센터의 공식 깃발 페이지에서 바로 가져와요. 페이지를 열 때 실시간으로 읽고, 열려 있는 동안 5분마다 다시 확인해요.',
     guidesTitle: '알아두면 좋은 정보',
     faqTitle: '자주 묻는 질문',
     faq: [
