@@ -29,8 +29,8 @@ interface LiveData {
 }
 
 const REFRESH_EVERY = 5 * 60_000;
-// The official page often takes several seconds to answer.
-const TIMEOUT = 15_000;
+// The official page often takes several seconds to answer, sometimes more than 15.
+const TIMEOUT = 25_000;
 const RETRY_AFTER = 30_000;
 const STALE_AFTER = 120 * 60_000;
 const FLAGS: Flag[] = ['green', 'yellow', 'red', 'unknown'];
