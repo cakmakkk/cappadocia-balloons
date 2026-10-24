@@ -30,6 +30,7 @@ export default {
     some: (list) => `${list} 구역`,
   },
   turkeyTime: '튀르키예 시간',
+  photoCredit: (author, license) => `사진: ${author}, ${license}`,
 
   home: {
     title: '오늘 카파도키아 열기구 뜨나요? 실시간 비행 현황',
@@ -52,7 +53,7 @@ export default {
       },
       groundedThisMorning: {
         headline: '오늘 아침에는 열기구가 뜨지 않았어요',
-        detail: (window) => `아침 비행 시간대 내내 모든 구역이 닫혀 있었어요 (${window}). 오늘은 바람이 이겼네요.`,
+        detail: (window) => `아침 비행 시간대 내내 모든 구역이 닫혀 있었어요 (${window}).`,
       },
       morningNotRecorded: {
         headline: '오늘 아침 결정은 기록하지 못했어요',
@@ -70,6 +71,9 @@ export default {
     },
     laterWindow: (window, cleared) =>
       cleared ? `이후 시간대 (${window}): 다시 이륙 가능.` : `남은 시간대 (${window}): 이륙 불가.`,
+    quickAnswer: '한눈에 보기',
+    timelineTitle: '오늘의 공식 업데이트',
+    source: '출처: 슬롯 서비스 센터(공식)',
     sunrise: (time) => `일출 ${time}`,
     checkedAt: (time) => `${time} 확인`,
     stale: '정보가 오래됐을 수 있어요. 페이지를 새로고침하세요.',

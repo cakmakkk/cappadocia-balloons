@@ -32,6 +32,12 @@ history and short guides.
 - Pages are thin routes in `src/pages/` (English at the root, other languages under `src/pages/[locale]/`) that render
   views from `src/views/`.
 
+## Photos
+
+Hero photos are from Wikimedia Commons under CC BY-SA licences, credited on the page (`src/data/photos.ts`):
+Wolfgang Moroder (balloons flying), Bernard Gagnon (valley near Uçhisar) and MusikAnimal (sunrise, also used mirrored
+in `public/og.png`). Wolfgang Moroder asks not to use his photo on social media, so it stays out of the share image.
+
 ## Data
 
 - `data/history/YYYY-MM-DD.json`: every distinct state seen that day. Committed when something changes.

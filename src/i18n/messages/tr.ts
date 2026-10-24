@@ -30,6 +30,7 @@ export default {
     some: (list) => `${list} bölgesinde`,
   },
   turkeyTime: 'Türkiye saati',
+  photoCredit: (author, license) => `Fotoğraf: ${author}, ${license}`,
 
   home: {
     title: "Kapadokya'da balonlar bugün uçuyor mu? Canlı balon durumu",
@@ -52,7 +53,7 @@ export default {
       },
       groundedThisMorning: {
         headline: 'Bu sabah balon uçmadı',
-        detail: (window) => `Sabah penceresi boyunca (${window}) bütün bölgeler kapalı kaldı. Bugün rüzgâr kazandı.`,
+        detail: (window) => `Sabah penceresi boyunca (${window}) bütün bölgeler kapalı kaldı.`,
       },
       morningNotRecorded: {
         headline: 'Bu sabahki kararı kaçırdık',
@@ -70,6 +71,9 @@ export default {
     },
     laterWindow: (window, cleared) =>
       cleared ? `Günün devamı (${window}): kalkışa yine izin var.` : `Günün geri kalanı (${window}): kalkış yok.`,
+    quickAnswer: 'Kısa cevap',
+    timelineTitle: 'Bugünkü resmî güncellemeler',
+    source: 'Kaynak: Slot Hizmet Merkezi (resmî)',
     sunrise: (time) => `Gün doğumu ${time}`,
     checkedAt: (time) => `Son kontrol: ${time}`,
     stale: 'Bu bilgi eskimiş olabilir. Sayfayı yenileyin.',

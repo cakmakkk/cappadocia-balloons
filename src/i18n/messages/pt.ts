@@ -30,6 +30,7 @@ export default {
     some: (list, count) => (count === 1 ? `o setor ${list}` : `os setores ${list}`),
   },
   turkeyTime: 'horário da Turquia',
+  photoCredit: (author, license) => `Foto: ${author}, ${license}`,
 
   home: {
     title: 'Os balões da Capadócia voam hoje? Status ao vivo',
@@ -52,7 +53,7 @@ export default {
       },
       groundedThisMorning: {
         headline: 'Nada de balões nesta manhã',
-        detail: (window) => `Todas as áreas ficaram fechadas durante a janela da manhã (${window}). Hoje o vento venceu.`,
+        detail: (window) => `Todas as áreas ficaram fechadas durante a janela da manhã (${window}).`,
       },
       morningNotRecorded: {
         headline: 'Perdemos a decisão desta manhã',
@@ -70,6 +71,9 @@ export default {
     },
     laterWindow: (window, cleared) =>
       cleared ? `Mais tarde (${window}): decolagem liberada de novo.` : `Resto do dia (${window}): sem decolagens.`,
+    quickAnswer: 'Resposta rápida',
+    timelineTitle: 'Atualizações oficiais de hoje',
+    source: 'Fonte: Slot Service Center (oficial)',
     sunrise: (time) => `Nascer do sol ${time}`,
     checkedAt: (time) => `Verificado às ${time}`,
     stale: 'Pode estar desatualizado. Recarregue a página.',

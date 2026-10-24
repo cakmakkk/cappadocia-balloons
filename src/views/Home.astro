@@ -2,9 +2,10 @@
 import DayStrip from '../components/DayStrip.astro';
 import FlagBadge from '../components/FlagBadge.astro';
 import ForecastCard from '../components/ForecastCard.astro';
+import { Picture } from 'astro:assets';
 import SectorMap from '../components/SectorMap.astro';
-import Skyline from '../components/Skyline.astro';
 import StatusCard from '../components/StatusCard.astro';
+import { PHOTOS } from '../data/photos.ts';
 import { longDate, timeRange } from '../i18n/format.ts';
 import { messages } from '../i18n/index.ts';
 import { localeInfo, type Locale } from '../i18n/locales.ts';
@@ -12,7 +13,7 @@ import Base from '../layouts/Base.astro';
 import { docsIn, slugOf } from '../lib/docs.ts';
 import { loadForecast } from '../lib/forecast.ts';
 import { absolute, href } from '../lib/paths.ts';
-import { homeState, loadHistory, loadLatest, localDate, outcomeOf, sceneOf } from '../lib/status.ts';
+import { homeState, loadHistory, loadLatest, localDate, officialUpdates, outcomeOf, sceneOf } from '../lib/status.ts';
 import { sunriseOn } from '../lib/sun.ts';
 
 interface Props {
@@ -27,7 +28,9 @@ const history = loadHistory();
 const latest = loadLatest(history);
 const state = homeState(latest, history, now);
 const scene = sceneOf(state);
+const photo = PHOTOS[scene];
 const today = localDate(now);
+const todaysUpdates = officialUpdates(history.find((day) => day.date === today) ?? { date: today, states: [] });
 
 const mapWindow = latest?.sectors[0]?.window ?? null;
 const mapFlags = Object.fromEntries((latest?.sectors ?? []).map((s) => [s.id, s.flag]));
@@ -63,16 +66,33 @@ const structuredData = [
 ---
 
 <Base locale={locale} path="/" title={t.home.title} description={t.home.description} structuredData={structuredData}>
-  <section slot="hero" class={`hero hero-${scene}`}>
-    <Skyline scene={scene} />
+  <section slot="hero" class="hero">
+    <Picture
+      src={photo.src}
+      alt=""
+      widths={[640, 1024, 1440, 1800]}
+      sizes="100vw"
+      formats={['avif', 'webp']}
+      loading="eager"
+      fetchpriority="high"
+      class="hero-photo"
+      style={`object-position: ${photo.position}`}
+    />
     <div class="hero-text">
-      <h1>{t.home.h1}</h1>
       <p class="hero-date">{longDate(locale, today)}</p>
+      <h1>{t.home.h1}</h1>
     </div>
+    <a class="hero-credit" href={photo.source} rel="nofollow">{t.photoCredit(photo.author, photo.license)}</a>
   </section>
 
   <div class="lift">
-    <StatusCard locale={locale} state={state} checkedAt={latest?.checkedAt ?? null} sunrise={sunriseOn(today)} />
+    <StatusCard
+      locale={locale}
+      state={state}
+      checkedAt={latest?.checkedAt ?? null}
+      sunrise={sunriseOn(today)}
+      updates={todaysUpdates}
+    />
   </div>
 
   {
@@ -156,37 +176,69 @@ const structuredData = [
 <style>
   .hero {
     position: relative;
+    height: clamp(300px, 46vw, 460px);
+    overflow: hidden;
+    background: #2a241f;
+  }
+
+  .hero :global(.hero-photo) {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* Darken the bottom so the heading stays readable on any photo. */
+  .hero::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgb(12 10 8 / 0.78) 0%, rgb(12 10 8 / 0.35) 45%, rgb(12 10 8 / 0.05) 75%);
   }
 
   .hero-text {
     position: absolute;
-    inset: 0 0 auto;
+    z-index: 1;
+    left: 0;
+    right: 0;
+    bottom: 4.75rem;
     max-width: 48rem;
     margin: 0 auto;
-    padding: clamp(0.75rem, 3vw, 2rem) 16px 0;
-    color: #2b2118;
-    text-shadow: 0 1px 12px rgb(255 245 230 / 0.8);
-  }
-
-  .hero-night .hero-text {
-    color: #fff7ec;
-    text-shadow: 0 1px 12px rgb(10 10 30 / 0.7);
+    padding: 0 16px;
+    color: #fff;
   }
 
   .hero-text h1 {
     margin: 0;
-    max-width: 18ch;
+    max-width: 20ch;
+    text-shadow: 0 2px 18px rgb(0 0 0 / 0.35);
   }
 
   .hero-date {
-    margin: 0.4rem 0 0;
-    font-weight: 600;
-    opacity: 0.85;
+    margin: 0 0 0.35rem;
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    opacity: 0.9;
+  }
+
+  .hero-credit {
+    position: absolute;
+    z-index: 1;
+    right: 10px;
+    top: 8px;
+    font-size: 0.7rem;
+    color: rgb(255 255 255 / 0.85);
+    text-decoration: none;
+    text-shadow: 0 1px 4px rgb(0 0 0 / 0.6);
   }
 
   .lift {
     margin-top: -3.5rem;
     position: relative;
+    z-index: 2;
   }
 
   .card-link {

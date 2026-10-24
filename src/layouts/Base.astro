@@ -1,5 +1,5 @@
 ---
-import '@fontsource-variable/lora/wght.css';
+import '@fontsource-variable/inter/wght.css';
 import LanguageSwitcher from '../components/LanguageSwitcher.astro';
 import { messages } from '../i18n/index.ts';
 import { DEFAULT_LOCALE, LOCALES, localeInfo, type Locale } from '../i18n/locales.ts';
@@ -70,8 +70,8 @@ const ogImage = new URL(asset('/og.png'), Astro.site).href;
     }
     <link rel="icon" type="image/svg+xml" href={asset('/favicon.svg')} />
     <link rel="sitemap" href={asset('/sitemap.xml')} />
-    <meta name="theme-color" content="#faf3ea" media="(prefers-color-scheme: light)" />
-    <meta name="theme-color" content="#15131c" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#f6f4f1" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#121110" media="(prefers-color-scheme: dark)" />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content={t.siteName} />
     <meta property="og:title" content={title} />
@@ -114,11 +114,6 @@ const ogImage = new URL(asset('/og.png'), Astro.site).href;
     </main>
 
     <footer class="site-footer">
-      <svg class="ridge" viewBox="0 0 600 40" preserveAspectRatio="none" aria-hidden="true">
-        <path
-          d="M0,40 L0,30 C40,30 46,8 58,8 C70,8 74,30 110,30 C150,30 160,14 170,14 C180,14 186,30 240,30 C290,30 300,2 314,2 C328,2 334,30 380,30 C420,30 430,16 440,16 C450,16 456,30 500,30 C540,30 548,10 560,10 C572,10 576,30 600,30 L600,40 Z"
-        />
-      </svg>
       <div class="footer-inner">
         <p>{t.footer.independent}</p>
         <p class="footer-links">
@@ -161,62 +156,64 @@ const ogImage = new URL(asset('/og.png'), Astro.site).href;
 
 <style is:global>
   :root {
-    --bg: #faf3ea;
-    --surface: #fffaf3;
-    --ink: #2b2118;
-    --muted: #74655a;
-    --line: #eadccb;
-    --accent: #b9532f;
-    --go: #2d7a4d;
-    --go-bg: #dff0e4;
-    --hold: #9a6400;
-    --hold-bg: #fbecc9;
-    --stop: #b0402c;
-    --stop-bg: #fbe1da;
-    --font-display: 'Lora Variable', Georgia, 'Times New Roman', serif;
-    --font-body: system-ui, -apple-system, 'Segoe UI', Roboto, 'Noto Sans', 'Apple SD Gothic Neo', 'Hiragino Sans',
-      'PingFang SC', 'Microsoft YaHei', sans-serif;
+    --bg: #f6f4f1;
+    --surface: #ffffff;
+    --ink: #1d1a17;
+    --muted: #6a635b;
+    --line: #e6e1da;
+    --accent: #a8451f;
+    --go: #17803d;
+    --go-bg: #e3f4e9;
+    --hold: #9a5b00;
+    --hold-bg: #fcefd8;
+    --stop: #b42318;
+    --stop-bg: #fde9e7;
+    --font-display: 'Inter Variable', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    --font-body: 'Inter Variable', system-ui, -apple-system, 'Segoe UI', Roboto, 'Noto Sans', 'Apple SD Gothic Neo',
+      'Hiragino Sans', 'PingFang SC', 'Microsoft YaHei', sans-serif;
     color-scheme: light;
   }
 
   @media (prefers-color-scheme: dark) {
     :root:not([data-theme='light']) {
-      --bg: #15131c;
-      --surface: #1f1c28;
-      --ink: #f3ebe2;
-      --muted: #b9aea4;
-      --line: #353043;
-      --accent: #ef9a6f;
-      --go: #7fd3a0;
-      --go-bg: #1c3426;
-      --hold: #f1c46a;
-      --hold-bg: #3a2f15;
-      --stop: #ff9a85;
-      --stop-bg: #3d201c;
+      --bg: #121110;
+      --surface: #1b1a18;
+      --ink: #f2efea;
+      --muted: #a9a29a;
+      --line: #2e2b28;
+      --accent: #f08a5d;
+      --go: #5fd08a;
+      --go-bg: #15301f;
+      --hold: #f2b84b;
+      --hold-bg: #382a10;
+      --stop: #ff8a7a;
+      --stop-bg: #3a1a17;
       color-scheme: dark;
     }
   }
 
   :root[data-theme='dark'] {
-    --bg: #15131c;
-    --surface: #1f1c28;
-    --ink: #f3ebe2;
-    --muted: #b9aea4;
-    --line: #353043;
-    --accent: #ef9a6f;
-    --go: #7fd3a0;
-    --go-bg: #1c3426;
-    --hold: #f1c46a;
-    --hold-bg: #3a2f15;
-    --stop: #ff9a85;
-    --stop-bg: #3d201c;
+    --bg: #121110;
+    --surface: #1b1a18;
+    --ink: #f2efea;
+    --muted: #a9a29a;
+    --line: #2e2b28;
+    --accent: #f08a5d;
+    --go: #5fd08a;
+    --go-bg: #15301f;
+    --hold: #f2b84b;
+    --hold-bg: #382a10;
+    --stop: #ff8a7a;
+    --stop-bg: #3a1a17;
     color-scheme: dark;
   }
 
-  /* Korean, Japanese and Chinese headings use the system's own fonts. */
+  /* Korean, Japanese and Chinese use the system's own fonts. */
   :root:lang(ko),
   :root:lang(ja),
   :root:lang(zh-Hans) {
+    --font-body: system-ui, -apple-system, 'Apple SD Gothic Neo', 'Malgun Gothic', 'Hiragino Sans', 'Yu Gothic UI',
+      'PingFang SC', 'Microsoft YaHei', sans-serif;
     --font-display: var(--font-body);
   }
 
@@ -254,24 +251,25 @@ const ogImage = new URL(asset('/og.png'), Astro.site).href;
   h2,
   h3 {
     font-family: var(--font-display);
-    font-weight: 600;
+    font-weight: 700;
     line-height: 1.2;
+    letter-spacing: -0.02em;
   }
 
   h1 {
-    font-size: clamp(1.9rem, 6vw, 2.8rem);
+    font-size: clamp(1.85rem, 6vw, 2.6rem);
     margin: 0.5rem 0 1rem;
   }
 
   h2 {
-    font-size: 1.45rem;
+    font-size: 1.3rem;
     margin: 2.5rem 0 0.75rem;
   }
 
   .card {
     background: var(--surface);
     border: 1px solid var(--line);
-    border-radius: 16px;
+    border-radius: 14px;
     padding: 1.25rem;
   }
 
@@ -418,20 +416,14 @@ const ogImage = new URL(asset('/og.png'), Astro.site).href;
   .site-footer {
     margin-top: 4rem;
     color: var(--muted);
-    font-size: 0.9rem;
-  }
-
-  .ridge {
-    display: block;
-    width: 100%;
-    height: 40px;
-    fill: var(--line);
+    font-size: 0.88rem;
+    border-top: 1px solid var(--line);
+    background: var(--surface);
   }
 
   .footer-inner {
-    padding-top: 1rem;
+    padding-top: 1.25rem;
     padding-bottom: 2.5rem;
-    background: var(--line);
     max-width: none;
   }
 

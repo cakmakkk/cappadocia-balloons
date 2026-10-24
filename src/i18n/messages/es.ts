@@ -30,6 +30,7 @@ export default {
     some: (list, count) => (count === 1 ? `el sector ${list}` : `los sectores ${list}`),
   },
   turkeyTime: 'hora de Turquía',
+  photoCredit: (author, license) => `Foto: ${author}, ${license}`,
 
   home: {
     title: '¿Vuelan hoy los globos en Capadocia? Estado en directo',
@@ -53,7 +54,7 @@ export default {
       groundedThisMorning: {
         headline: 'Esta mañana no volaron globos',
         detail: (window) =>
-          `Todas las zonas siguieron cerradas durante la ventana de la mañana (${window}). Hoy ganó el viento.`,
+          `Todas las zonas siguieron cerradas durante la ventana de la mañana (${window}).`,
       },
       morningNotRecorded: {
         headline: 'Nos perdimos la decisión de esta mañana',
@@ -71,6 +72,9 @@ export default {
     },
     laterWindow: (window, cleared) =>
       cleared ? `Más tarde (${window}): se vuelve a permitir el despegue.` : `Resto del día (${window}): sin despegues.`,
+    quickAnswer: 'Respuesta rápida',
+    timelineTitle: 'Actualizaciones oficiales de hoy',
+    source: 'Fuente: Centro de Servicios de Slots (oficial)',
     sunrise: (time) => `Amanecer ${time}`,
     checkedAt: (time) => `Comprobado a las ${time}`,
     stale: 'Puede que esté desactualizado. Recarga la página.',

@@ -30,6 +30,7 @@ export default {
     some: (list, count) => (count === 1 ? `сектором ${list}` : `секторами ${list}`),
   },
   turkeyTime: 'время в Турции',
+  photoCredit: (author, license) => `Фото: ${author}, ${license}`,
 
   home: {
     title: 'Летают ли сегодня воздушные шары в Каппадокии? Статус онлайн',
@@ -52,7 +53,7 @@ export default {
       },
       groundedThisMorning: {
         headline: 'Этим утром шары не летали',
-        detail: (window) => `Все зоны оставались закрытыми в утреннее окно (${window}). Сегодня победил ветер.`,
+        detail: (window) => `Все зоны оставались закрытыми в утреннее окно (${window}).`,
       },
       morningNotRecorded: {
         headline: 'Мы пропустили сегодняшнее утреннее решение',
@@ -70,6 +71,9 @@ export default {
     },
     laterWindow: (window, cleared) =>
       cleared ? `Позже (${window}): взлёт снова разрешён.` : `До конца дня (${window}): взлётов нет.`,
+    quickAnswer: 'Коротко',
+    timelineTitle: 'Официальные обновления за сегодня',
+    source: 'Источник: Slot Service Center (официально)',
     sunrise: (time) => `Рассвет ${time}`,
     checkedAt: (time) => `Проверено в ${time}`,
     stale: 'Данные могли устареть. Обновите страницу.',

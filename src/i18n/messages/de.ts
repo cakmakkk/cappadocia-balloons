@@ -30,6 +30,7 @@ export default {
     some: (list, count) => (count === 1 ? `Sektor ${list}` : `den Sektoren ${list}`),
   },
   turkeyTime: 'türkische Zeit',
+  photoCredit: (author, license) => `Foto: ${author}, ${license}`,
 
   home: {
     title: 'Fliegen heute die Ballons in Kappadokien? Live-Status',
@@ -52,7 +53,7 @@ export default {
       },
       groundedThisMorning: {
         headline: 'Heute Morgen keine Ballons',
-        detail: (window) => `Alle Gebiete blieben im Morgenfenster geschlossen (${window}). Heute hat der Wind gewonnen.`,
+        detail: (window) => `Alle Gebiete blieben im Morgenfenster geschlossen (${window}).`,
       },
       morningNotRecorded: {
         headline: 'Die Entscheidung von heute Morgen haben wir verpasst',
@@ -70,6 +71,9 @@ export default {
     },
     laterWindow: (window, cleared) =>
       cleared ? `Später am Tag (${window}): Starts wieder erlaubt.` : `Rest des Tages (${window}): keine Starts.`,
+    quickAnswer: 'Kurz gesagt',
+    timelineTitle: 'Heutige offizielle Updates',
+    source: 'Quelle: Slot Service Center (offiziell)',
     sunrise: (time) => `Sonnenaufgang ${time}`,
     checkedAt: (time) => `Geprüft um ${time}`,
     stale: 'Möglicherweise veraltet. Seite neu laden.',

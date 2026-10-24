@@ -30,6 +30,7 @@ export default {
     some: (list, count) => (count === 1 ? `sector ${list}` : `sectors ${list}`),
   },
   turkeyTime: 'Türkiye time',
+  photoCredit: (author, license) => `Photo: ${author}, ${license}`,
 
   home: {
     title: 'Are Cappadocia balloons flying today? Live balloon status',
@@ -52,7 +53,7 @@ export default {
       },
       groundedThisMorning: {
         headline: 'No balloons this morning',
-        detail: (window) => `Every area stayed closed during the morning window (${window}). The wind won today.`,
+        detail: (window) => `Every area stayed closed during the morning window (${window}).`,
       },
       morningNotRecorded: {
         headline: "We missed this morning's decision",
@@ -70,6 +71,9 @@ export default {
     },
     laterWindow: (window, cleared) =>
       cleared ? `Later today (${window}): take-off allowed again.` : `Rest of the day (${window}): no take-off.`,
+    quickAnswer: 'Quick answer',
+    timelineTitle: "Today's official updates",
+    source: 'Source: Slot Service Center (official)',
     sunrise: (time) => `Sunrise ${time}`,
     checkedAt: (time) => `Checked at ${time}`,
     stale: 'This may be out of date. Refresh the page.',

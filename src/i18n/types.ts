@@ -30,6 +30,7 @@ export interface Messages {
   /** "all three areas" or "sectors A and B". */
   areas: { all: string; some: (list: string, count: number) => string };
   turkeyTime: string;
+  photoCredit: (author: string, license: string) => string;
 
   home: {
     title: string;
@@ -45,6 +46,10 @@ export interface Messages {
       noData: { headline: string; detail: string };
     };
     laterWindow: (window: string, cleared: boolean) => string;
+    quickAnswer: string;
+    timelineTitle: string;
+    /** Link text to the official page. */
+    source: string;
     sunrise: (time: string) => string;
     checkedAt: (time: string) => string;
     stale: string;

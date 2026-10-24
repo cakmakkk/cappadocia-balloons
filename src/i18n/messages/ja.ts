@@ -30,6 +30,7 @@ export default {
     some: (list) => `セクター${list}`,
   },
   turkeyTime: 'トルコ時間',
+  photoCredit: (author, license) => `写真：${author}、${license}`,
 
   home: {
     title: '今日カッパドキアの気球は飛ぶ？リアルタイム運航状況',
@@ -52,7 +53,7 @@ export default {
       },
       groundedThisMorning: {
         headline: '今朝は気球が飛びませんでした',
-        detail: (window) => `朝の時間帯（${window}）はすべてのエリアが閉鎖されたままでした。今日は風の勝ちです。`,
+        detail: (window) => `朝の時間帯（${window}）はすべてのエリアが閉鎖されたままでした。`,
       },
       morningNotRecorded: {
         headline: '今朝の決定は記録できませんでした',
@@ -70,6 +71,9 @@ export default {
     },
     laterWindow: (window, cleared) =>
       cleared ? `その後（${window}）：再び離陸可能。` : `この日の残り（${window}）：離陸不可。`,
+    quickAnswer: '結論',
+    timelineTitle: '今日の公式発表',
+    source: '出典：スロット・サービス・センター（公式）',
     sunrise: (time) => `日の出 ${time}`,
     checkedAt: (time) => `${time} 確認`,
     stale: '情報が古い可能性があります。ページを再読み込みしてください。',

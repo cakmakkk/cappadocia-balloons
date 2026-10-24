@@ -30,6 +30,7 @@ export default {
     some: (list) => `${list}区`,
   },
   turkeyTime: '土耳其时间',
+  photoCredit: (author, license) => `照片：${author}，${license}`,
 
   home: {
     title: '今天卡帕多奇亚热气球能飞吗？实时飞行状态',
@@ -51,7 +52,7 @@ export default {
       },
       groundedThisMorning: {
         headline: '今天早上热气球没有飞',
-        detail: (window) => `早上的飞行时段（${window}）所有区域都保持关闭。今天风赢了。`,
+        detail: (window) => `早上的飞行时段（${window}）所有区域都保持关闭。`,
       },
       morningNotRecorded: {
         headline: '我们错过了今天早上的决定',
@@ -68,6 +69,9 @@ export default {
     },
     laterWindow: (window, cleared) =>
       cleared ? `之后（${window}）：再次允许起飞。` : `当天其余时间（${window}）：不能起飞。`,
+    quickAnswer: '简要回答',
+    timelineTitle: '今天的官方更新',
+    source: '来源：时刻服务中心（官方）',
     sunrise: (time) => `日出 ${time}`,
     checkedAt: (time) => `${time} 检查`,
     stale: '信息可能已过时，请刷新页面。',

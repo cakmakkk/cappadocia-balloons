@@ -90,6 +90,28 @@ export function windowsOf(day: DayHistory): WindowRecord[] {
   return [...byWindow.values()].sort((a, b) => a.window.start.localeCompare(b.window.start));
 }
 
+export interface OfficialUpdate {
+  /** When the Slot Service Center set these flags (falls back to when we first saw them). */
+  at: string;
+  window: Window | null;
+  flags: { id: string; flag: Flag }[];
+}
+
+/** Each distinct decision published on a day, oldest first. */
+export function officialUpdates(day: DayHistory): OfficialUpdate[] {
+  const seen = new Set<string>();
+  const updates: OfficialUpdate[] = [];
+  for (const state of day.states) {
+    const first = state.sectors[0];
+    const at = first?.updatedAt ?? state.firstSeenAt;
+    const key = `${at}/${first?.window?.start}/${state.sectors.map((s) => s.flag).join()}`;
+    if (seen.has(key)) continue;
+    seen.add(key);
+    updates.push({ at, window: first?.window ?? null, flags: state.sectors.map(({ id, flag }) => ({ id, flag })) });
+  }
+  return updates.sort((a, b) => a.at.localeCompare(b.at));
+}
+
 export function localDate(date: Date): string {
   // en-CA formats as YYYY-MM-DD.
   return new Intl.DateTimeFormat('en-CA', { timeZone: TIME_ZONE }).format(date);

@@ -30,6 +30,7 @@ export default {
     some: (list, count) => (count === 1 ? `il settore ${list}` : `i settori ${list}`),
   },
   turkeyTime: 'ora turca',
+  photoCredit: (author, license) => `Foto: ${author}, ${license}`,
 
   home: {
     title: 'Oggi volano le mongolfiere in Cappadocia? Stato in tempo reale',
@@ -53,7 +54,7 @@ export default {
       groundedThisMorning: {
         headline: 'Stamattina niente mongolfiere',
         detail: (window) =>
-          `Tutte le zone sono rimaste chiuse durante la finestra del mattino (${window}). Oggi ha vinto il vento.`,
+          `Tutte le zone sono rimaste chiuse durante la finestra del mattino (${window}).`,
       },
       morningNotRecorded: {
         headline: 'Ci siamo persi la decisione di stamattina',
@@ -71,6 +72,9 @@ export default {
     },
     laterWindow: (window, cleared) =>
       cleared ? `Più tardi (${window}): di nuovo via libera al decollo.` : `Resto della giornata (${window}): nessun decollo.`,
+    quickAnswer: 'Risposta rapida',
+    timelineTitle: 'Aggiornamenti ufficiali di oggi',
+    source: 'Fonte: Slot Service Center (ufficiale)',
     sunrise: (time) => `Alba ${time}`,
     checkedAt: (time) => `Controllato alle ${time}`,
     stale: 'Potrebbe non essere aggiornato. Ricarica la pagina.',

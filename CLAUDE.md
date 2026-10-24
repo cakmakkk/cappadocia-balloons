@@ -25,5 +25,9 @@ outlook for the coming mornings. See README.md for how the pieces fit together.
 
 ## Design
 
+- The look is a calm, professional status tool: Inter, neutral stone colours, one terracotta accent, real photos.
+  No illustrations or cartoon styling.
 - Colours are tokens on `:root` in `src/layouts/Base.astro`, redefined for dark mode. Use them, not raw colours.
+- Hero photos come from Wikimedia Commons and are listed with their credits in `src/data/photos.ts`; every photo
+  shown must carry its credit. Wolfgang Moroder's photo must not be used in the share image or on social media.
 - Keep pages light: no client-side frameworks and no third-party scripts. Small inline scripts are fine.
