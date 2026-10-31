@@ -122,6 +122,128 @@
           }
         }
       ]
+    },
+    {
+      "firstSeenAt": "2026-10-31T11:10:06.543Z",
+      "sectors": [
+        {
+          "id": "A",
+          "flag": "red",
+          "code": 3,
+          "title": "SECTOR A NOT AVAILABLE",
+          "message": "Meteorological conditions have been considered unsuitable for flight for the set margin of time..",
+          "updatedAt": "2026-10-31T07:23:00Z",
+          "window": {
+            "date": "2026-10-31",
+            "start": "2026-10-31T07:30:00Z",
+            "end": "2026-10-31T14:45:00Z"
+          },
+          "raw": {
+            "updatedAt": "31.10.2026 - 07:23",
+            "window": "31.10.2026 - 07:30 - 14:45"
+          }
+        },
+        {
+          "id": "B",
+          "flag": "red",
+          "code": 3,
+          "title": "SECTOR B NOT AVAILABLE",
+          "message": "Meteorological conditions have been considered unsuitable for flight for the set margin of time..",
+          "updatedAt": "2026-10-31T07:23:00Z",
+          "window": {
+            "date": "2026-10-31",
+            "start": "2026-10-31T07:30:00Z",
+            "end": "2026-10-31T14:45:00Z"
+          },
+          "raw": {
+            "updatedAt": "31.10.2026 - 07:23",
+            "window": "31.10.2026 - 07:30 - 14:45"
+          }
+        },
+        {
+          "id": "C",
+          "flag": "red",
+          "code": 3,
+          "title": "SECTOR C NOT AVAILABLE",
+          "message": "Meteorological conditions have been considered unsuitable for flight for the set margin of time..",
+          "updatedAt": "2026-10-31T07:23:00Z",
+          "window": {
+            "date": "2026-10-31",
+            "start": "2026-10-31T07:30:00Z",
+            "end": "2026-10-31T14:45:00Z"
+          },
+          "raw": {
+            "updatedAt": "31.10.2026 - 07:23",
+            "window": "31.10.2026 - 07:30 - 14:45"
+          }
+        }
+      ],
+      "secondary": [
+        {
+          "id": "2",
+          "flag": "red",
+          "title": "2.AREA",
+          "message": "Meteorological conditions have been considered 2.BÖLGE is unsuitable For secondary flights. Departure suitability requests can't. be received within the specified time range.",
+          "updatedAt": "2026-10-31T07:23:00Z",
+          "window": {
+            "date": "2026-10-31",
+            "start": "2026-10-31T07:30:00Z",
+            "end": "2026-10-31T14:45:00Z"
+          },
+          "raw": {
+            "updatedAt": "31.10.2026 - 07:23",
+            "window": "31.10.2026 - 07:30 - 14:45"
+          }
+        },
+        {
+          "id": "3",
+          "flag": "red",
+          "title": "3.AREA",
+          "message": "Meteorological conditions have been considered 3.BÖLGE is unsuitable For secondary flights. Departure suitability requests can't. be received within the specified time range.",
+          "updatedAt": "2026-10-31T07:23:00Z",
+          "window": {
+            "date": "2026-10-31",
+            "start": "2026-10-31T07:30:00Z",
+            "end": "2026-10-31T14:45:00Z"
+          },
+          "raw": {
+            "updatedAt": "31.10.2026 - 07:23",
+            "window": "31.10.2026 - 07:30 - 14:45"
+          }
+        },
+        {
+          "id": "4",
+          "flag": "red",
+          "title": "4.AREA",
+          "message": "Meteorological conditions have been considered 4.BÖLGE is unsuitable For secondary flights. Departure suitability requests can't. be received within the specified time range.",
+          "updatedAt": "2026-10-31T07:23:00Z",
+          "window": {
+            "date": "2026-10-31",
+            "start": "2026-10-31T07:30:00Z",
+            "end": "2026-10-31T14:45:00Z"
+          },
+          "raw": {
+            "updatedAt": "31.10.2026 - 07:23",
+            "window": "31.10.2026 - 07:30 - 14:45"
+          }
+        },
+        {
+          "id": "5",
+          "flag": "red",
+          "title": "5.AREA",
+          "message": "Meteorological conditions have been considered 5.BÖLGE is unsuitable For secondary flights. Departure suitability requests can't. be received within the specified time range.",
+          "updatedAt": "2026-10-31T07:23:00Z",
+          "window": {
+            "date": "2026-10-31",
+            "start": "2026-10-31T07:30:00Z",
+            "end": "2026-10-31T14:45:00Z"
+          },
+          "raw": {
+            "updatedAt": "31.10.2026 - 07:23",
+            "window": "31.10.2026 - 07:30 - 14:45"
+          }
+        }
+      ]
     }
   ]
 }
