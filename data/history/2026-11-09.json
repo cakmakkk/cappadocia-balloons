@@ -1,0 +1,127 @@
+{
+  "date": "2026-11-09",
+  "states": [
+    {
+      "firstSeenAt": "2026-11-09T06:04:49.153Z",
+      "sectors": [
+        {
+          "id": "A",
+          "flag": "green",
+          "code": 1,
+          "title": "SECTOR A AVAILABLE",
+          "message": "Meteorological conditions have been considered suitable for flight for the set margin of time..",
+          "updatedAt": "2026-11-09T03:39:00Z",
+          "window": {
+            "date": "2026-11-09",
+            "start": "2026-11-09T03:45:00Z",
+            "end": "2026-11-09T07:00:00Z"
+          },
+          "raw": {
+            "updatedAt": "09.11.2026 - 03:39",
+            "window": "09.11.2026 - 03:45 - 07:00"
+          }
+        },
+        {
+          "id": "B",
+          "flag": "green",
+          "code": 1,
+          "title": "SECTOR B AVAILABLE",
+          "message": "Meteorological conditions have been considered suitable for flight for the set margin of time..",
+          "updatedAt": "2026-11-09T03:39:00Z",
+          "window": {
+            "date": "2026-11-09",
+            "start": "2026-11-09T03:45:00Z",
+            "end": "2026-11-09T07:00:00Z"
+          },
+          "raw": {
+            "updatedAt": "09.11.2026 - 03:39",
+            "window": "09.11.2026 - 03:45 - 07:00"
+          }
+        },
+        {
+          "id": "C",
+          "flag": "green",
+          "code": 1,
+          "title": "SECTOR C AVAILABLE",
+          "message": "Meteorological conditions have been considered suitable for flight for the set margin of time..",
+          "updatedAt": "2026-11-09T03:39:00Z",
+          "window": {
+            "date": "2026-11-09",
+            "start": "2026-11-09T03:45:00Z",
+            "end": "2026-11-09T07:00:00Z"
+          },
+          "raw": {
+            "updatedAt": "09.11.2026 - 03:39",
+            "window": "09.11.2026 - 03:45 - 07:00"
+          }
+        }
+      ],
+      "secondary": [
+        {
+          "id": "2",
+          "flag": "green",
+          "title": "2.AREA",
+          "message": "Meteorological conditions have been considered 2.BÖLGE is suitable For secondary flights. Departure suitability requests can. be received within the specified time range.",
+          "updatedAt": "2026-11-09T04:13:00Z",
+          "window": {
+            "date": "2026-11-09",
+            "start": "2026-11-09T04:15:00Z",
+            "end": "2026-11-09T07:00:00Z"
+          },
+          "raw": {
+            "updatedAt": "09.11.2026 - 04:13",
+            "window": "09.11.2026 - 04:15 - 07:00"
+          }
+        },
+        {
+          "id": "3",
+          "flag": "green",
+          "title": "3.AREA",
+          "message": "Meteorological conditions have been considered 3.BÖLGE is suitable For secondary flights. Departure suitability requests can. be received within the specified time range.",
+          "updatedAt": "2026-11-09T04:13:00Z",
+          "window": {
+            "date": "2026-11-09",
+            "start": "2026-11-09T04:15:00Z",
+            "end": "2026-11-09T07:00:00Z"
+          },
+          "raw": {
+            "updatedAt": "09.11.2026 - 04:13",
+            "window": "09.11.2026 - 04:15 - 07:00"
+          }
+        },
+        {
+          "id": "4",
+          "flag": "green",
+          "title": "4.AREA",
+          "message": "Meteorological conditions have been considered 4.BÖLGE is suitable For secondary flights. Departure suitability requests can. be received within the specified time range.",
+          "updatedAt": "2026-11-09T04:13:00Z",
+          "window": {
+            "date": "2026-11-09",
+            "start": "2026-11-09T04:15:00Z",
+            "end": "2026-11-09T07:00:00Z"
+          },
+          "raw": {
+            "updatedAt": "09.11.2026 - 04:13",
+            "window": "09.11.2026 - 04:15 - 07:00"
+          }
+        },
+        {
+          "id": "5",
+          "flag": "green",
+          "title": "5.AREA",
+          "message": "Meteorological conditions have been considered 5.BÖLGE is suitable For secondary flights. Departure suitability requests can. be received within the specified time range.",
+          "updatedAt": "2026-11-09T04:13:00Z",
+          "window": {
+            "date": "2026-11-09",
+            "start": "2026-11-09T04:15:00Z",
+            "end": "2026-11-09T07:00:00Z"
+          },
+          "raw": {
+            "updatedAt": "09.11.2026 - 04:13",
+            "window": "09.11.2026 - 04:15 - 07:00"
+          }
+        }
+      ]
+    }
+  ]
+}
