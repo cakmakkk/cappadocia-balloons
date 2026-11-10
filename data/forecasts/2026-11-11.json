@@ -1,0 +1,18 @@
+{
+  "issuedAt": "2026-11-10T22:18:21.183Z",
+  "date": "2026-11-11",
+  "sunrise": "2026-11-11T04:18:00Z",
+  "window": {
+    "start": "2026-11-11T03:48:00.000Z",
+    "end": "2026-11-11T06:18:00.000Z"
+  },
+  "maxWind": 5.4,
+  "maxGust": 10.1,
+  "minVisibility": 25580,
+  "precipitation": 0,
+  "codes": [
+    2,
+    1
+  ],
+  "rating": "good"
+}
