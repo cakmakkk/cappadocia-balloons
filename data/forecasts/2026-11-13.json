@@ -1,0 +1,17 @@
+{
+  "issuedAt": "2026-11-12T22:41:16.319Z",
+  "date": "2026-11-13",
+  "sunrise": "2026-11-13T04:20:00Z",
+  "window": {
+    "start": "2026-11-13T03:50:00.000Z",
+    "end": "2026-11-13T06:20:00.000Z"
+  },
+  "maxWind": 9.1,
+  "maxGust": 25.2,
+  "minVisibility": 37940,
+  "precipitation": 0,
+  "codes": [
+    3
+  ],
+  "rating": "borderline"
+}
